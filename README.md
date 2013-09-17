@@ -1,2 +1,3 @@
-intelliij-mybatis-plugin
+Intellij-mybatis-plugin
 ========================
+Rewrite

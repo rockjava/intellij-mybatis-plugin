@@ -76,7 +76,7 @@ public abstract class IdBasedTagConverter extends ResolvingConverter<XmlTag> {
   }
 
   private TraverseStrategy selectStrategy(ConvertContext context) {
-    return false == crossMapperSupported ? new InsideMapperStrategy(context) : new CrossMapperStrategy(context);
+    return crossMapperSupported ? new CrossMapperStrategy(context) : new InsideMapperStrategy(context);
   }
 
   /**

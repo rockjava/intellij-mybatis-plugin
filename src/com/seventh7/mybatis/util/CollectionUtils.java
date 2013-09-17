@@ -12,7 +12,7 @@ public final class CollectionUtils {
   }
 
   public static boolean isEmpty(Collection collection) {
-    return null == collection || collection.size() == 0;
+    return null == collection || 0 == collection.size();
   }
 
   public static boolean isNotEmpty(Collection collection) {

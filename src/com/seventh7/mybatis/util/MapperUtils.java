@@ -3,9 +3,14 @@ package com.seventh7.mybatis.util;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.xml.XmlElement;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.xml.DomElement;
@@ -15,7 +20,6 @@ import com.intellij.util.xml.DomUtil;
 import com.seventh7.mybatis.dom.model.IdDomElement;
 import com.seventh7.mybatis.dom.model.Mapper;
 
-import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,10 +37,15 @@ public final class MapperUtils {
     throw new UnsupportedOperationException();
   }
 
+  public static boolean isWithinMybatisFile(@NotNull PsiElement element) {
+    return element instanceof XmlElement
+           && element.getContainingFile() instanceof XmlFile
+           && isMybatisFile(((XmlFile) element.getContainingFile()));
+  }
+
   public static boolean isMybatisFile(@NotNull XmlFile file) {
     XmlTag rootTag = file.getRootTag();
-    return null != rootTag &&
-           rootTag.getName().equals("mapper");
+    return null != rootTag && rootTag.getName().equals("mapper");
   }
 
   @NotNull @NonNls
@@ -49,6 +58,33 @@ public final class MapperUtils {
         return element.getRootElement();
       }
     });
+  }
+
+  @NotNull @NonNls
+  public static Collection<Mapper> findMappers(@NotNull Project project, @NotNull String namespace) {
+    List<Mapper> result = Lists.newArrayList();
+    for (Mapper mapper : findMappers(project)) {
+      if (getNamespace(mapper).equals(namespace)) {
+        result.add(mapper);
+      }
+    }
+    return result;
+  }
+
+  @NotNull @NonNls
+  public static Optional<Mapper> findFirstMapper(@NotNull Project project, @NotNull String namespace) {
+    Collection<Mapper> mappers = findMappers(project, namespace);
+    return CollectionUtils.isEmpty(mappers) ? Optional.<Mapper>absent() : Optional.of(mappers.iterator().next());
+  }
+
+  @NotNull @NonNls
+  public static Optional<Mapper> findFirstMapper(@NotNull Project project, @NotNull PsiClass clzz) {
+    return findFirstMapper(project, clzz.getQualifiedName());
+  }
+
+  @NotNull @NonNls
+  public static Optional<Mapper> findFirstMapper(@NotNull Project project, @NotNull PsiMethod method) {
+    return findFirstMapper(project, method.getContainingClass());
   }
 
   @SuppressWarnings("unchecked")
@@ -74,10 +110,7 @@ public final class MapperUtils {
 
   @NonNls
   public static boolean isMapperWithSameNamespace(@Nullable Mapper mapper, @Nullable Mapper target) {
-    if (null != mapper && null != target) {
-      return getNamespace(mapper).equals(getNamespace(target));
-    }
-    return false;
+    return null != mapper && null != target ? getNamespace(mapper).equals(getNamespace(target)) : false;
   }
 
   @NotNull @NonNls
@@ -85,6 +118,7 @@ public final class MapperUtils {
     return domElement.getId().getRawText();
   }
 
+  @NotNull @NonNls
   public static <T extends IdDomElement> String getIdSignature(@NotNull T domElement) {
     return getNamespace(domElement) + "." + getId(domElement);
   }
