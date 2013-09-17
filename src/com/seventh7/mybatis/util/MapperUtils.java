@@ -37,7 +37,7 @@ public final class MapperUtils {
     throw new UnsupportedOperationException();
   }
 
-  public static boolean isWithinMybatisFile(@NotNull PsiElement element) {
+  public static boolean isElementWithinMybatisFile(@NotNull PsiElement element) {
     return element instanceof XmlElement
            && element.getContainingFile() instanceof XmlFile
            && isMybatisFile(((XmlFile) element.getContainingFile()));

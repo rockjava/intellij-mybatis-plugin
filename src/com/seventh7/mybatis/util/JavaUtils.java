@@ -24,7 +24,7 @@ public final class JavaUtils {
     throw new UnsupportedOperationException();
   }
 
-  public static boolean isWithinInterface(@NotNull PsiTypeParameterListOwner owner) {
+  public static boolean isElementWithinInterface(@NotNull PsiTypeParameterListOwner owner) {
     if (owner instanceof PsiClass)
       return ((PsiClass)owner).isInterface();
 
@@ -33,7 +33,7 @@ public final class JavaUtils {
   }
 
   public static boolean isWithinInterface(@NotNull PsiElement element) {
-    return element instanceof PsiTypeParameterListOwner && isWithinInterface((PsiTypeParameterListOwner)element);
+    return element instanceof PsiTypeParameterListOwner && isElementWithinInterface((PsiTypeParameterListOwner) element);
   }
 
   public static Optional<PsiMethod> findMethod(@NotNull Project project, @Nullable String clzzName, @Nullable String methodName) {

@@ -39,7 +39,7 @@ public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag
 
   @Override
   public boolean isTheElement(@NotNull PsiElement element) {
-    return MapperUtils.isWithinMybatisFile(element) && isTargetType(element);
+    return MapperUtils.isElementWithinMybatisFile(element) && isTargetType(element);
   }
 
   @NotNull @Override
