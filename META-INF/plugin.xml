@@ -1,0 +1,54 @@
+<idea-plugin version="2">
+    <id>com.seventh7.plugin.mybatis</id>
+    <name>MyBatis plugin</name>
+    <version>1.44</version>
+    <vendor email="insist.day@gmail.com" url="https://github.com/seventh7">Yanglin</vendor>
+
+  <description><![CDATA[
+          Simple mybatis plugin for self usage <br/>
+          Based on mapper scan and type alias <br/>
+          Anyway, sorry for bad english <br/>
+          <h3>Features</h3>
+          <ul>
+            <li>Auto add @Param annotation for method and parameter(Action under idea "Tools" menu)</li>
+            <li>Auto completion for extends of resutlMap in mapper.xml</li>
+            <li>Auto completion for include tag in mapper.xml</li>
+            <li>Quick document with statement for mapper method(keystroke F1)</li>
+            <li>
+                Parameter auto completion in mapper.xml
+                (based on @Param with parameters of mapper method)
+            </li>
+            <li>Parameter auto completion of test condition in mapper.xml</li>
+            <li>Parameter auto completion of #{parameter} in mapper.xml</li>
+            <li>Result map auto completion in mapper.xml</li>
+            <li>Result map and result type reference</li>
+            <li>Add line marker for java mapper and statement in xml</li>
+            <li>Auto to generate statement from mapper method</li>
+            <li>Type alias completion for resultType in mapper.xml</li>
+            <li>Navigation from statement to method of java mapper</li>
+            <li>Navigation from method of java mapper to statement</li>
+          </ul>
+
+          <h3>Generate new statement</h3>
+          <ul>
+            <li>Focus on a mapper method, then idea "Tools" -> "Generate Statement"</li>
+            <li>It will do nothing if the method has be annotated with mybatis annotation, such as @Select, @Update, ...</li>
+            <li>It will do nothing if the method has already referenced to a statement</li>
+            <li>The pattern of method name for generating statment is configurable with idea "Preference" -> "Mybatis"</li>
+          </ul>
+      ]]></description>
+
+  <change-notes><![CDATA[
+      Add change notes here.<br>
+      <h4>1.46</h4>
+      <ul>
+          <li>Rewrite</li>
+      </ul>
+      ]]>
+  </change-notes>
+
+  <idea-version since-build="107.105"/>
+  <extensions defaultExtensionNs="com.intellij">
+      <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.MapperDescription" />
+  </extensions>
+</idea-plugin>

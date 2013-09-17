@@ -1,0 +1,98 @@
+package com.seventh7.mybatis.util;
+
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
+import com.google.common.collect.Collections2;
+
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.xml.XmlFile;
+import com.intellij.psi.xml.XmlTag;
+import com.intellij.util.xml.DomElement;
+import com.intellij.util.xml.DomFileElement;
+import com.intellij.util.xml.DomService;
+import com.intellij.util.xml.DomUtil;
+import com.seventh7.mybatis.dom.model.IdDomElement;
+import com.seventh7.mybatis.dom.model.Mapper;
+
+import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
+import java.util.List;
+
+
+/**
+ * @author yanglin
+ */
+public final class MapperUtils {
+
+  private MapperUtils() {
+    throw new UnsupportedOperationException();
+  }
+
+  public static boolean isMybatisFile(@NotNull XmlFile file) {
+    XmlTag rootTag = file.getRootTag();
+    return null != rootTag &&
+           rootTag.getName().equals("mapper");
+  }
+
+  @NotNull @NonNls
+  public static Collection<Mapper> findMappers(@NotNull Project project) {
+    GlobalSearchScope scope = GlobalSearchScope.allScope(project);
+    List<DomFileElement<Mapper>> elements = DomService.getInstance().getFileElements(Mapper.class, project, scope);
+    return Collections2.transform(elements, new Function<DomFileElement<Mapper>, Mapper>() {
+      @Override
+      public Mapper apply(DomFileElement<Mapper> element) {
+        return element.getRootElement();
+      }
+    });
+  }
+
+  @SuppressWarnings("unchecked")
+  @NotNull @NonNls
+  public static Mapper getMapper(@NotNull DomElement element) {
+    Optional<Mapper> optional = Optional.fromNullable(DomUtil.getParentOfType(element, Mapper.class, true));
+    if (optional.isPresent()) {
+      return optional.get();
+    } else {
+      throw new IllegalStateException("Unknown element");
+    }
+  }
+
+  @NotNull @NonNls
+  public static String getNamespace(@NotNull Mapper mapper) {
+    return mapper.getNamespace().getRawText();
+  }
+
+  @NotNull @NonNls
+  public static String getNamespace(@NotNull DomElement element) {
+    return getNamespace(getMapper(element));
+  }
+
+  @NonNls
+  public static boolean isMapperWithSameNamespace(@Nullable Mapper mapper, @Nullable Mapper target) {
+    if (null != mapper && null != target) {
+      return getNamespace(mapper).equals(getNamespace(target));
+    }
+    return false;
+  }
+
+  @NotNull @NonNls
+  public static <T extends IdDomElement> String getId(@NotNull T domElement) {
+    return domElement.getId().getRawText();
+  }
+
+  public static <T extends IdDomElement> String getIdSignature(@NotNull T domElement) {
+    return getNamespace(domElement) + "." + getId(domElement);
+  }
+
+  @NotNull @NonNls
+  public static <T extends IdDomElement> String getIdSignature(@NotNull T domElement, @NotNull Mapper mapper) {
+    Mapper contextMapper = getMapper(domElement);
+    return isMapperWithSameNamespace(contextMapper, mapper) ? getId(domElement) : getIdSignature(domElement);
+  }
+
+}
