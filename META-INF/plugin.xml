@@ -32,7 +32,7 @@
       <h4>1.46</h4>
       <ul>
           <li>Rewrite</li>
-          <li>Change the keystroke for generate @Param and statement with Alt + Enter(Windows) | Option + Enter(Mac)</li>
+          <li>Change the keystroke for generate @Param and new statement with Alt + Enter(Windows) | Option + Enter(Mac)</li>
       </ul>
       ]]>
   </change-notes>
