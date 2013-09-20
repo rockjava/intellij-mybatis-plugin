@@ -2,19 +2,15 @@ package com.seventh7.mybatis.util;
 
 import com.google.common.base.Optional;
 
-import com.intellij.formatting.FormatTextRanges;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiImportStatement;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifierListOwner;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.impl.source.codeStyle.CodeFormatterFacade;
+import com.intellij.psi.PsiParameter;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.seventh7.mybatis.Annotation;
@@ -55,7 +51,7 @@ public final class JavaUtils {
     return Optional.absent();
   }
 
-  public static boolean isAnnotationPresent(@NotNull PsiModifierListOwner target, @NotNull Annotation annotation) {
+  public static boolean isAnnotationPresent(@NotNull PsiParameter target, @NotNull Annotation annotation) {
     PsiAnnotation[] annotations = target.getModifierList().getAnnotations();
     for (PsiAnnotation ann : annotations) {
       if (ann.getQualifiedName().equals(annotation.getQualifiedName())) {
@@ -63,6 +59,16 @@ public final class JavaUtils {
       }
     }
     return false;
+  }
+
+  public static boolean isAllParameterWithAnnotation(@NotNull PsiMethod method, @NotNull Annotation annotation) {
+    PsiParameter[] parameters = method.getParameterList().getParameters();
+    for (PsiParameter parameter : parameters) {
+      if (!isAnnotationPresent(parameter, annotation)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   public static boolean hasImportClzz(PsiJavaFile file, String clzzName) {
