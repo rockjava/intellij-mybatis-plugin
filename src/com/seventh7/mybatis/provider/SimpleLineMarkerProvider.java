@@ -29,6 +29,7 @@ public abstract class SimpleLineMarkerProvider<F extends PsiElement, T> implemen
   public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {
   }
 
+  @SuppressWarnings("unchecked")
   @Nullable @Override
   public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element) {
     if (!isTheElement(element)) return null;
@@ -45,7 +46,7 @@ public abstract class SimpleLineMarkerProvider<F extends PsiElement, T> implemen
     ) : null;
   }
 
-  public Function<F, String> getTooltipProvider(final T target) {
+  private Function<F, String> getTooltipProvider(final T target) {
     return new Function<F, String>() {
       @Override
       public String fun(F from) {

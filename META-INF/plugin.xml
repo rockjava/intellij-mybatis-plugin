@@ -5,12 +5,9 @@
     <vendor email="insist.day@gmail.com" url="https://github.com/seventh7">Yanglin</vendor>
 
   <description><![CDATA[
-          Simple mybatis plugin for self usage <br/>
-          Based on mapper scan and type alias <br/>
-          Anyway, sorry for bad english <br/>
           <h3>Features</h3>
           <ul>
-            <li>Auto add @Param annotation for method and parameter(Action under idea "Tools" menu)</li>
+            <li>Auto add @Param annotation for method and parameter(Alt + Enter for Windows, Option + Enter for Mac)</li>
             <li>Auto completion for extends of resutlMap in mapper.xml</li>
             <li>Auto completion for include tag in mapper.xml</li>
             <li>Quick document with statement for mapper method(keystroke F1)</li>
@@ -23,18 +20,10 @@
             <li>Result map auto completion in mapper.xml</li>
             <li>Result map and result type reference</li>
             <li>Add line marker for java mapper and statement in xml</li>
-            <li>Auto to generate statement from mapper method</li>
+            <li>Auto to generate statement for dao method(Alt + Enter for Windows, Option + Enter for Mac)</li>
             <li>Type alias completion for resultType in mapper.xml</li>
             <li>Navigation from statement to method of java mapper</li>
             <li>Navigation from method of java mapper to statement</li>
-          </ul>
-
-          <h3>Generate new statement</h3>
-          <ul>
-            <li>Focus on a mapper method, then idea "Tools" -> "Generate Statement"</li>
-            <li>It will do nothing if the method has be annotated with mybatis annotation, such as @Select, @Update, ...</li>
-            <li>It will do nothing if the method has already referenced to a statement</li>
-            <li>The pattern of method name for generating statment is configurable with idea "Preference" -> "Mybatis"</li>
           </ul>
       ]]></description>
 
@@ -43,6 +32,7 @@
       <h4>1.46</h4>
       <ul>
           <li>Rewrite</li>
+          <li>Change the keystroke for generate @Param and statement with Alt + Enter(Windows) | Option + Enter(Mac)</li>
       </ul>
       ]]>
   </change-notes>
@@ -54,5 +44,8 @@
       <projectService serviceImplementation="com.seventh7.mybatis.service.JavaService" />
       <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.seventh7.mybatis.provider.MapperLineMarkerProvider" />
       <codeInsight.lineMarkerProvider language="XML" implementationClass="com.seventh7.mybatis.provider.StatementLineMarkerProvider" />
+      <intentionAction order="first">
+          <className>com.seventh7.mybatis.GenerateParamAnnotationIntention</className>
+      </intentionAction>
   </extensions>
 </idea-plugin>

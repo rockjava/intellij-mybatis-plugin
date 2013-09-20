@@ -38,9 +38,7 @@ public final class MapperUtils {
   }
 
   public static boolean isElementWithinMybatisFile(@NotNull PsiElement element) {
-    return element instanceof XmlElement
-           && element.getContainingFile() instanceof XmlFile
-           && isMybatisFile(((XmlFile) element.getContainingFile()));
+    return element instanceof XmlElement && isMybatisFile(((XmlFile) element.getContainingFile()));
   }
 
   public static boolean isMybatisFile(@NotNull XmlFile file) {

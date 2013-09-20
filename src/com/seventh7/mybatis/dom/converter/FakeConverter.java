@@ -15,12 +15,12 @@ import java.util.Collections;
 public abstract class FakeConverter<T> extends ResolvingConverter<T> {
 
   @NotNull @Override
-  public Collection<? extends T> getVariants(ConvertContext context) {
+  public final Collection<? extends T> getVariants(ConvertContext context) {
     return Collections.emptyList();
   }
 
   @Nullable @Override
-  public String toString(@Nullable T t, ConvertContext context) {
+  public final String toString(@Nullable T t, ConvertContext context) {
     throw new UnsupportedOperationException();
   }
 

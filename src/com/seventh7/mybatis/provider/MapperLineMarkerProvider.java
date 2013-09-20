@@ -6,8 +6,8 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiTypeParameterListOwner;
-import com.intellij.util.CommonProcessors;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiTypeElement;
 import com.intellij.util.xml.DomElement;
 import com.seventh7.mybatis.service.JavaService;
 import com.seventh7.mybatis.util.JavaUtils;
@@ -19,30 +19,30 @@ import javax.swing.*;
 /**
  * @author yanglin
  */
-public class MapperLineMarkerProvider extends SimpleLineMarkerProvider<PsiTypeParameterListOwner, DomElement> {
+public class MapperLineMarkerProvider extends SimpleLineMarkerProvider<PsiTypeElement, DomElement> {
 
   private final Icon icon = IconLoader.getIcon("/gutter/implementedMethod.png");
 
   @Override
   public boolean isTheElement(@NotNull PsiElement element) {
-    return JavaUtils.isWithinInterface(element);
+    return element instanceof PsiTypeElement
+           && element.getParent() instanceof PsiMethod
+           && JavaUtils.isElementWithinInterface(element);
   }
 
   @NotNull @Override
-  public Optional<DomElement> apply(@NotNull PsiTypeParameterListOwner from) {
-    CommonProcessors.FindFirstProcessor<DomElement> processor = new CommonProcessors.FindFirstProcessor<DomElement>();
+  public Optional<DomElement> apply(@NotNull PsiTypeElement from) {
     JavaService javaService = ServiceManager.getService(from.getProject(), JavaService.class);
-    javaService.process(from, processor);
-    return processor.isFound() ? Optional.of(processor.getFoundValue()) : Optional.<DomElement>absent();
+    return javaService.findWithFindFristProcessor(from.getParent());
   }
 
   @NotNull @Override
-  public Navigatable getNavigatable(@NotNull PsiTypeParameterListOwner from, @NotNull DomElement target) {
+  public Navigatable getNavigatable(@NotNull PsiTypeElement from, @NotNull DomElement target) {
     return (Navigatable)target.getXmlElement();
   }
 
   @NotNull @Override
-  public String getTooltip(@NotNull PsiTypeParameterListOwner from, @NotNull DomElement target) {
+  public String getTooltip(@NotNull PsiTypeElement from, @NotNull DomElement target) {
     return "Statement found in - " + target.getXmlElement().getContainingFile().getName();
   }
 

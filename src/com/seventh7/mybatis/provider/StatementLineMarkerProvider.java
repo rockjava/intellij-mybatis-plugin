@@ -39,7 +39,9 @@ public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag
 
   @Override
   public boolean isTheElement(@NotNull PsiElement element) {
-    return MapperUtils.isElementWithinMybatisFile(element) && isTargetType(element);
+    return element instanceof XmlTag
+           && MapperUtils.isElementWithinMybatisFile(element)
+           && isTargetType(element);
   }
 
   @NotNull @Override
@@ -51,8 +53,6 @@ public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag
   }
 
   private boolean isTargetType(PsiElement element) {
-    if (!(element instanceof XmlTag))
-      return false;
     DomElement domElement = DomUtil.getDomElement(element);
     for (Class<?> clzz : targetTypes) {
       if(clzz.isInstance(domElement))
@@ -68,7 +68,7 @@ public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag
 
   @NotNull @Override
   public String getTooltip(@NotNull XmlTag from, @NotNull PsiMethod target) {
-    return "Data access object found in - " + target.getContainingClass().getQualifiedName();
+    return "Data access object found - " + target.getContainingClass().getQualifiedName();
   }
 
   @NotNull @Override

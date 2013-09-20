@@ -4,8 +4,9 @@ import com.google.common.base.Optional;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiTypeParameterListOwner;
+import com.intellij.util.CommonProcessors;
 import com.intellij.util.Processor;
 import com.seventh7.mybatis.dom.model.IdDomElement;
 import com.seventh7.mybatis.dom.model.Mapper;
@@ -42,12 +43,18 @@ public class JavaService {
     }
   }
 
-  public void process(@NotNull PsiTypeParameterListOwner target, @NotNull Processor processor) {
+  public void process(@NotNull PsiElement target, @NotNull Processor processor) {
     if (target instanceof PsiMethod) {
-      process((PsiMethod)target, processor);
+      process((PsiMethod) target, processor);
     } else if (target instanceof PsiClass){
       process((PsiClass)target, processor);
     }
+  }
+
+  public <T> Optional<T> findWithFindFristProcessor(@NotNull PsiElement target) {
+    CommonProcessors.FindFirstProcessor<T> processor = new CommonProcessors.FindFirstProcessor<T>();
+    process(target, processor);
+    return Optional.fromNullable(processor.getFoundValue());
   }
 
 }
