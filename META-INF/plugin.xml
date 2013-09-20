@@ -45,7 +45,8 @@
       <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.seventh7.mybatis.provider.MapperLineMarkerProvider" />
       <codeInsight.lineMarkerProvider language="XML" implementationClass="com.seventh7.mybatis.provider.StatementLineMarkerProvider" />
       <intentionAction order="first">
-          <className>com.seventh7.mybatis.GenerateParamAnnotationIntention</className>
+          <className>com.seventh7.mybatis.intention.GenerateParamAnnotationIntention</className>
+          <className>com.seventh7.mybatis.intention.GenerateStatementIntention</className>
       </intentionAction>
   </extensions>
 </idea-plugin>

@@ -16,6 +16,15 @@ public class Annotation implements Cloneable{
 
   public static final Annotation PARAM = new Annotation("@Param", "org.apache.ibatis.annotations.Param");
 
+  public static final Annotation SELECT = new Annotation("@Select", "org.apache.ibatis.annotations.Select");
+
+  public static final Annotation UPDATE = new Annotation("@Update", "org.apache.ibatis.annotations.Update");
+
+  public static final Annotation INSERT = new Annotation("@Insert", "org.apache.ibatis.annotations.Insert");
+
+  public static final Annotation DELETE = new Annotation("@Delete", "org.apache.ibatis.annotations.Delete");
+
+
   private final String label;
 
   private final String qualifiedName;
