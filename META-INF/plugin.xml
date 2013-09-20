@@ -45,8 +45,10 @@
       <projectService serviceImplementation="com.seventh7.mybatis.service.AnnotationManager" />
       <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.seventh7.mybatis.provider.MapperLineMarkerProvider" />
       <codeInsight.lineMarkerProvider language="XML" implementationClass="com.seventh7.mybatis.provider.StatementLineMarkerProvider" />
-      <intentionAction order="first">
+      <intentionAction>
           <className>com.seventh7.mybatis.intention.GenerateParamAnnotationIntention</className>
+      </intentionAction>
+      <intentionAction>
           <className>com.seventh7.mybatis.intention.GenerateStatementIntention</className>
       </intentionAction>
   </extensions>
