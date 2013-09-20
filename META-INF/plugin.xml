@@ -42,6 +42,7 @@
       <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.MapperDescription" />
       <definitionsSearch implementation="com.seventh7.mybatis.definitionsearch.MapperDefinitionSearch"/>
       <projectService serviceImplementation="com.seventh7.mybatis.service.JavaService" />
+      <projectService serviceImplementation="com.seventh7.mybatis.AnnotationManager" />
       <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.seventh7.mybatis.provider.MapperLineMarkerProvider" />
       <codeInsight.lineMarkerProvider language="XML" implementationClass="com.seventh7.mybatis.provider.StatementLineMarkerProvider" />
       <intentionAction order="first">

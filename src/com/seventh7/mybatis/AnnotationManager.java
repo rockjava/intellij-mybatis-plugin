@@ -1,5 +1,6 @@
 package com.seventh7.mybatis;
 
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiAnnotation;
@@ -20,12 +21,12 @@ public class AnnotationManager {
 
   private Project project;
 
-  private AnnotationManager(Project project) {
+  public AnnotationManager(Project project) {
     this.project = project;
   }
 
   public static final AnnotationManager getInstance(@NotNull Project project) {
-    return new AnnotationManager(project);
+    return ServiceManager.getService(project, AnnotationManager.class);
   }
 
   public void addAnnotation(@NotNull PsiElement target, @NotNull Annotation annotation) {

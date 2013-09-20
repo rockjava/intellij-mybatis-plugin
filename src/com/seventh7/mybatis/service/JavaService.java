@@ -2,6 +2,7 @@ package com.seventh7.mybatis.service;
 
 import com.google.common.base.Optional;
 
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -23,6 +24,10 @@ public class JavaService {
 
   public JavaService(Project project) {
     this.project = project;
+  }
+
+  public static final JavaService getInstance(@NotNull Project project) {
+    return ServiceManager.getService(project, JavaService.class);
   }
 
   public void process(@NotNull PsiMethod method, @NotNull Processor processor) {

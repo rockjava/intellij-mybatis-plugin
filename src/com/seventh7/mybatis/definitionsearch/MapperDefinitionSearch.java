@@ -1,7 +1,6 @@
 package com.seventh7.mybatis.definitionsearch;
 
 import com.intellij.openapi.application.QueryExecutorBase;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiTypeParameterListOwner;
 import com.intellij.psi.xml.XmlElement;
@@ -33,8 +32,6 @@ public class MapperDefinitionSearch extends QueryExecutorBase<XmlElement, PsiEle
       }
     };
 
-    JavaService javaService = ServiceManager.getService(element.getProject(), JavaService.class);
-    javaService.process(element, processor);
-
+    JavaService.getInstance(element.getProject()).process(element, processor);
   }
 }

@@ -2,7 +2,6 @@ package com.seventh7.mybatis.provider;
 
 import com.google.common.base.Optional;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
@@ -32,8 +31,7 @@ public class MapperLineMarkerProvider extends SimpleLineMarkerProvider<PsiTypeEl
 
   @NotNull @Override
   public Optional<DomElement> apply(@NotNull PsiTypeElement from) {
-    JavaService javaService = ServiceManager.getService(from.getProject(), JavaService.class);
-    return javaService.findWithFindFristProcessor(from.getParent());
+    return JavaService.getInstance(from.getProject()).findWithFindFristProcessor(from.getParent());
   }
 
   @NotNull @Override
