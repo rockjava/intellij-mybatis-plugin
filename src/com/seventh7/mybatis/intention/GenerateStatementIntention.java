@@ -1,24 +1,24 @@
 package com.seventh7.mybatis.intention;
 
-import com.google.common.base.Optional;
-
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.ui.components.JBList;
 import com.intellij.util.IncorrectOperationException;
 import com.seventh7.mybatis.Annotation;
-import com.seventh7.mybatis.generate.GeneratorDialog;
 import com.seventh7.mybatis.generate.StatementGenerator;
+import com.seventh7.mybatis.service.EditorService;
 import com.seventh7.mybatis.service.JavaService;
 import com.seventh7.mybatis.util.JavaUtils;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
+import javax.swing.*;
 
 /**
  * @author yanglin
@@ -46,21 +46,21 @@ public class GenerateStatementIntention extends GenericJavaFileIntention {
   }
 
   @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(@NotNull final Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
-    PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
-    StatementGenerator[] generators = StatementGenerator.getGenerators(method);
+    final PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
+    final StatementGenerator[] generators = StatementGenerator.getGenerators(method);
     if (1 == generators.length) {
       generators[0].execute(method);
     } else {
-      GeneratorDialog dialog = new GeneratorDialog(project, Arrays.asList(generators));
-      dialog.show();
-      if (dialog.isOK()) {
-        Optional<StatementGenerator> generatorOptional = dialog.getSelected();
-        if (generatorOptional.isPresent()) {
-          generatorOptional.get().execute(method);
+      final JList list = new JBList(generators);
+      JBPopup popup = EditorService.getInstance(project).createSimpleListPopupChooser("[ Select target statement ]", list, new Runnable() {
+        @Override
+        public void run() {
+          generators[list.getSelectedIndex()].execute(method);
         }
-      }
+      });
+      popup.showInBestPositionFor(editor);
     }
   }
 

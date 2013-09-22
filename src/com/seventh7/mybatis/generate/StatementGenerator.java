@@ -69,10 +69,15 @@ public abstract class StatementGenerator {
     target.getId().setStringValue(method.getName());
     target.setValue(" ");
     XmlTag tag = target.getXmlTag();
-    int offset = (tag.getTextOffset() + tag.getTextLength()) - tag.getName().length() + 1;
+    int offset = tag.getTextOffset() + tag.getTextLength() - tag.getName().length() + 1;
     EditorService editorService = EditorService.getInstance(method.getProject());
     editorService.format(tag);
     editorService.scrollTo(tag, offset);
+  }
+
+  @Override
+  public String toString() {
+    return this.getDisplayText();
   }
 
   @NotNull
