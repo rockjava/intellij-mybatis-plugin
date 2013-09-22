@@ -71,20 +71,17 @@ public class JavaService {
   }
 
   public void importClzz(PsiJavaFile file, String clzzName) {
-    if (JavaUtils.hasImportClzz(file, clzzName)) {
-      return;
-    }
-    Optional<PsiClass> clzz = JavaUtils.findClzz(project, clzzName);
-    if (!clzz.isPresent()) {
-      return;
-    }
-    PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
-    PsiImportStatement statement = elementFactory.createImportStatement(clzz.get());
-    file.getImportList().add(statement);
+    if (!JavaUtils.hasImportClzz(file, clzzName)) {
+      Optional<PsiClass> clzz = JavaUtils.findClzz(project, clzzName);
+      if (clzz.isPresent()) {
+        PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
+        PsiImportStatement statement = elementFactory.createImportStatement(clzz.get());
+        file.getImportList().add(statement);
 
-    CodeFormatterFacade formatter = new CodeFormatterFacade(new CodeStyleSettings());
-    formatter.processText(file, new FormatTextRanges(statement.getTextRange(), true), true);
+        CodeFormatterFacade formatter = new CodeFormatterFacade(new CodeStyleSettings());
+        formatter.processText(file, new FormatTextRanges(statement.getTextRange(), true), true);
+      }
+    }
   }
-
 }
 

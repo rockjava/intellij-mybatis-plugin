@@ -59,10 +59,9 @@ public abstract class StatementGenerator {
 
   public void execute(@NotNull PsiMethod method) {
     Optional<Mapper> mapper = MapperUtils.findFirstMapper(method.getProject(), method.getContainingClass());
-    if (!mapper.isPresent()) {
-      return;
+    if (mapper.isPresent()) {
+      setupTag(method, mapper);
     }
-    setupTag(method, mapper);
   }
 
   private void setupTag(PsiMethod method, Optional<Mapper> mapper) {
