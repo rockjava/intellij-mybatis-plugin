@@ -5,6 +5,7 @@ import com.google.common.collect.Iterables;
 
 import com.intellij.ide.util.ChooseElementsDialog;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.IconLoader;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +19,8 @@ import javax.swing.*;
  */
 public class GeneratorDialog extends ChooseElementsDialog<StatementGenerator> {
 
+  private final Icon icon = IconLoader.getIcon("/modules/edit.png");
+
   public GeneratorDialog(Project project, List<? extends StatementGenerator> items) {
     super(project, items, "Choose target", "Choose the statement to generate");
     this.myChooser.setSingleSelectionMode();
@@ -30,7 +33,7 @@ public class GeneratorDialog extends ChooseElementsDialog<StatementGenerator> {
 
   @Nullable @Override
   protected Icon getItemIcon(StatementGenerator item) {
-    return null;
+    return icon;
   }
 
   @NotNull
