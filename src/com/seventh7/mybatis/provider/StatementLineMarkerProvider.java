@@ -47,9 +47,7 @@ public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag
   @NotNull @Override
   public Optional<PsiMethod> apply(@NotNull XmlTag from) {
       DomElement domElement = DomUtil.getDomElement(from);
-      return JavaUtils.findMethod(from.getProject(),
-                                  MapperUtils.getNamespace(domElement),
-                                  MapperUtils.getId((IdDomElement) domElement));
+    return JavaUtils.findMethod(from.getProject(), (IdDomElement)domElement);
   }
 
   private boolean isTargetType(PsiElement element) {

@@ -15,6 +15,7 @@ import com.intellij.psi.PsiParameter;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.seventh7.mybatis.Annotation;
+import com.seventh7.mybatis.dom.model.IdDomElement;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -52,14 +53,16 @@ public final class JavaUtils {
     return Optional.absent();
   }
 
+  public static Optional<PsiMethod> findMethod(@NotNull Project project, @NotNull IdDomElement element) {
+    return findMethod(project, MapperUtils.getNamespace(element), MapperUtils.getId(element));
+  }
+
   public static boolean isAnnotationPresent(@NotNull PsiModifierListOwner target, @NotNull Annotation annotation) {
-    PsiAnnotation[] annotations = target.getModifierList().getAnnotations();
-    for (PsiAnnotation ann : annotations) {
-      if (ann.getQualifiedName().equals(annotation.getQualifiedName())) {
-        return true;
-      }
-    }
-    return false;
+    return null != target.getModifierList().findAnnotation(annotation.getQualifiedName());
+  }
+
+  public static Optional<PsiAnnotation> getPsiAnnotation(@NotNull PsiModifierListOwner target, @NotNull Annotation annotation) {
+    return Optional.fromNullable(target.getModifierList().findAnnotation(annotation.getQualifiedName()));
   }
 
   public static boolean isAnyAnnotationPresent(@NotNull PsiModifierListOwner target, @NotNull Annotation[] annotations) {
