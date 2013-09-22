@@ -7,6 +7,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiParameter;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.seventh7.mybatis.Annotation;
@@ -31,13 +32,17 @@ public class GenerateStatementIntention extends GenericJavaFileIntention {
 
   @Override
   public boolean isAvailable(@NotNull PsiElement element) {
+    PsiParameter parameter = PsiTreeUtil.getParentOfType(element, PsiParameter.class);
+    if (null != parameter) {
+      return false;
+    }
     PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
     if (null == method) {
       return false;
     }
     JavaService javaService = JavaService.getInstance(element.getProject());
-    return !JavaUtils.isAnyAnnotationPresent(method, Annotation.STATEMENT_SYMMETRIES) &&
-           !javaService.findWithFindFristProcessor(method).isPresent();
+    return !JavaUtils.isAnyAnnotationPresent(method, Annotation.STATEMENT_SYMMETRIES)
+           && !javaService.findWithFindFristProcessor(method).isPresent();
   }
 
   @Override

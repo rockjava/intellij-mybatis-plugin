@@ -28,6 +28,7 @@
       <codeInsight.lineMarkerProvider language="XML" implementationClass="com.seventh7.mybatis.provider.StatementLineMarkerProvider" />
       <applicationConfigurable instance="com.seventh7.mybatis.setting.MybatisConfigurable" />
       <applicationService serviceInterface="com.seventh7.mybatis.setting.MybatisSetting" serviceImplementation="com.seventh7.mybatis.setting.MybatisSetting"/>
+      <completion.contributor language="XML" implementationClass="com.seventh7.mybatis.contributor.TestConditionContributor"/>
       <intentionAction>
           <className>com.seventh7.mybatis.intention.GenerateParamAnnotationIntention</className>
       </intentionAction>
