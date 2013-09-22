@@ -24,6 +24,7 @@ public class Annotation implements Cloneable{
 
   public static final Annotation DELETE = new Annotation("@Delete", "org.apache.ibatis.annotations.Delete");
 
+  public static final Annotation[] STATEMENT_SYMMETRIES = {SELECT, UPDATE, INSERT, DELETE};
 
   private final String label;
 
@@ -103,7 +104,7 @@ public class Annotation implements Cloneable{
       builder.append(attributePairs.get(value).toString());
       builder.append(")");
       return Optional.of(builder.toString());
-    } catch (IllegalArgumentException e) {
+    } catch (Exception e) {
       return Optional.absent();
     }
   }

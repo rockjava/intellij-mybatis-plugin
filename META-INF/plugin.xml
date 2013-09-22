@@ -28,7 +28,6 @@
       ]]></description>
 
   <change-notes><![CDATA[
-      Add change notes here.<br>
       <h4>1.46</h4>
       <ul>
           <li>Rewrite</li>
@@ -42,9 +41,12 @@
       <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.MapperDescription" />
       <definitionsSearch implementation="com.seventh7.mybatis.definitionsearch.MapperDefinitionSearch"/>
       <projectService serviceImplementation="com.seventh7.mybatis.service.JavaService" />
-      <projectService serviceImplementation="com.seventh7.mybatis.service.AnnotationManager" />
+      <projectService serviceImplementation="com.seventh7.mybatis.service.AnnotationService" />
+      <projectService serviceImplementation="com.seventh7.mybatis.service.EditorService" />
       <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.seventh7.mybatis.provider.MapperLineMarkerProvider" />
       <codeInsight.lineMarkerProvider language="XML" implementationClass="com.seventh7.mybatis.provider.StatementLineMarkerProvider" />
+      <applicationConfigurable instance="com.seventh7.mybatis.setting.MybatisConfigurable" />
+      <applicationService serviceInterface="com.seventh7.mybatis.setting.MybatisSetting" serviceImplementation="com.seventh7.mybatis.setting.MybatisSetting"/>
       <intentionAction>
           <className>com.seventh7.mybatis.intention.GenerateParamAnnotationIntention</className>
       </intentionAction>

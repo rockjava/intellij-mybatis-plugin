@@ -53,4 +53,15 @@ public interface Mapper extends DomElement {
   @SubTagList("select")
   public List<Select> getSelects();
 
+  @SubTagList("select")
+  public Select addSelect();
+
+  @SubTagList("update")
+  public Update addUpdate();
+
+  @SubTagList("insert")
+  public Insert addInsert();
+
+  @SubTagList("delete")
+  public Delete addDelete();
 }

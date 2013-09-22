@@ -92,7 +92,7 @@ public final class MapperUtils {
     if (optional.isPresent()) {
       return optional.get();
     } else {
-      throw new IllegalStateException("Unknown element");
+      throw new IllegalArgumentException("Unknown element");
     }
   }
 
@@ -111,7 +111,7 @@ public final class MapperUtils {
     return null != mapper && null != target ? getNamespace(mapper).equals(getNamespace(target)) : false;
   }
 
-  @NotNull @NonNls
+  @Nullable @NonNls
   public static <T extends IdDomElement> String getId(@NotNull T domElement) {
     return domElement.getId().getRawText();
   }

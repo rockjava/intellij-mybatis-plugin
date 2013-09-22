@@ -25,8 +25,6 @@ public interface GroupTwo extends GroupOne, IdDomElement{
   @Convert(ParameterMapConverter.class)
   public GenericAttributeValue<XmlTag> getParameterMap();
 
-  @Required
-  @NotNull
   @Attribute("id")
   @Convert(DaoMethodConverter.class)
   public GenericAttributeValue<String> getId();

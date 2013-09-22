@@ -18,4 +18,6 @@ public interface Select extends GroupTwo{
   @Convert(ResultMapConverter.class)
   public GenericAttributeValue<XmlTag> getResultMap();
 
+  @Attribute("resultType")
+  public GenericAttributeValue<String> getResultType();
 }

@@ -21,7 +21,8 @@ public abstract class FakeConverter<T> extends ResolvingConverter<T> {
 
   @Nullable @Override
   public final String toString(@Nullable T t, ConvertContext context) {
-    throw new UnsupportedOperationException();
+//    throw new UnsupportedOperationException();
+    return null;
   }
 
 }

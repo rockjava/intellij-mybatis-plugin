@@ -9,7 +9,7 @@ import com.intellij.psi.PsiParameter;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.seventh7.mybatis.Annotation;
-import com.seventh7.mybatis.service.AnnotationManager;
+import com.seventh7.mybatis.service.AnnotationService;
 import com.seventh7.mybatis.util.JavaUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -21,15 +21,15 @@ public class GenerateParamAnnotationIntention extends GenericJavaFileIntention {
 
   @NotNull @Override
   public String getText() {
-    return "Generate @Param for DAO of Mybatis";
+    return "[Mybatis] Generate @Param";
   }
 
   @Override
   public boolean isAvailable(@NotNull PsiElement element) {
     PsiParameter parameter = PsiTreeUtil.getParentOfType(element, PsiParameter.class);
     PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
-    return ((null != parameter && !JavaUtils.isAnnotationPresent(parameter, Annotation.PARAM)) ||
-            (null != method && !JavaUtils.isAllParameterWithAnnotation(method, Annotation.PARAM)));
+    return (null != parameter && !JavaUtils.isAnnotationPresent(parameter, Annotation.PARAM)) ||
+           (null != method && !JavaUtils.isAllParameterWithAnnotation(method, Annotation.PARAM));
   }
 
   @Override
@@ -37,18 +37,18 @@ public class GenerateParamAnnotationIntention extends GenericJavaFileIntention {
     PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
     PsiParameter parameter = PsiTreeUtil.getParentOfType(element, PsiParameter.class);
     if (null != parameter) {
-      addAnnotationWithParameterValue(project, parameter);
+      addAnnotationWithParameterName(project, parameter);
     } else {
       PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
       PsiParameter[] parameters = method.getParameterList().getParameters();
       for (PsiParameter param : parameters) {
-        addAnnotationWithParameterValue(project, param);
+        addAnnotationWithParameterName(project, param);
       }
     }
   }
 
-  private void addAnnotationWithParameterValue(Project project, PsiParameter parameter) {
-    AnnotationManager annotationManager = AnnotationManager.getInstance(project);
+  private void addAnnotationWithParameterName(Project project, PsiParameter parameter) {
+    AnnotationService annotationManager = AnnotationService.getInstance(project);
     annotationManager.addAnnotation(parameter, Annotation.PARAM.withValue(new Annotation.StringValue(parameter.getName())));
   }
 

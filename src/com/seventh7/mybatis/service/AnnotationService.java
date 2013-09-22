@@ -4,11 +4,9 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiParameter;
+import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.seventh7.mybatis.Annotation;
 import com.seventh7.mybatis.util.JavaUtils;
@@ -18,34 +16,19 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  */
-public class AnnotationManager {
+public class AnnotationService {
 
   private Project project;
 
-  public AnnotationManager(Project project) {
+  public AnnotationService(Project project) {
     this.project = project;
   }
 
-  public static final AnnotationManager getInstance(@NotNull Project project) {
-    return ServiceManager.getService(project, AnnotationManager.class);
+  public static final AnnotationService getInstance(@NotNull Project project) {
+    return ServiceManager.getService(project, AnnotationService.class);
   }
 
-  public void addAnnotation(@NotNull PsiElement target, @NotNull Annotation annotation) {
-    if (target instanceof PsiParameter) {
-      addAnnotation((PsiParameter)target, annotation);
-    } else if (target instanceof PsiMethod) {
-      addAnnotation((PsiMethod)target, annotation);
-    }
-  }
-
-  private void addAnnotation(@NotNull PsiMethod method, @NotNull Annotation annotation) {
-    PsiParameter[] parameters = method.getParameterList().getParameters();
-    for (PsiParameter psiParameter : parameters) {
-      addAnnotation(psiParameter, annotation);
-    }
-  }
-
-  private void addAnnotation(@NotNull PsiParameter parameter, @NotNull Annotation annotation) {
+  public void addAnnotation(@NotNull PsiModifierListOwner parameter, @NotNull Annotation annotation) {
     if (JavaUtils.isAnnotationPresent(parameter, annotation)) {
       return;
     }

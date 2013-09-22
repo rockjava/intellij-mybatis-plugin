@@ -10,6 +10,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiImportStatement;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -51,10 +52,19 @@ public final class JavaUtils {
     return Optional.absent();
   }
 
-  public static boolean isAnnotationPresent(@NotNull PsiParameter target, @NotNull Annotation annotation) {
+  public static boolean isAnnotationPresent(@NotNull PsiModifierListOwner target, @NotNull Annotation annotation) {
     PsiAnnotation[] annotations = target.getModifierList().getAnnotations();
     for (PsiAnnotation ann : annotations) {
       if (ann.getQualifiedName().equals(annotation.getQualifiedName())) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public static boolean isAnyAnnotationPresent(@NotNull PsiModifierListOwner target, @NotNull Annotation[] annotations) {
+    for (Annotation annotation : annotations) {
+      if (isAnnotationPresent(target, annotation)) {
         return true;
       }
     }
