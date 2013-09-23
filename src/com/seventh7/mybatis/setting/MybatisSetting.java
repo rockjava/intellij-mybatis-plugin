@@ -36,6 +36,10 @@ public class MybatisSetting implements PersistentStateComponent<Element> {
 
   private Type gsonTypeToken = new TypeToken<Set<String>>() {}.getType();
 
+  public MybatisSetting() {
+    statementGenerateModel = GenerateModel.START_WITH_MODEL;
+  }
+
   public static MybatisSetting getInstance() {
     return ServiceManager.getService(MybatisSetting.class);
   }
@@ -57,7 +61,7 @@ public class MybatisSetting implements PersistentStateComponent<Element> {
     loadState(state, DELETE_GENERATOR);
     loadState(state, UPDATE_GENERATOR);
     loadState(state, SELECT_GENERATOR);
-    statementGenerateModel = GenerateModel.getInstance(Integer.valueOf(state.getAttributeValue("statementGenerateModel")));
+    statementGenerateModel = GenerateModel.getInstance(state.getAttributeValue("statementGenerateModel"));
   }
 
   private void loadState(Element state, StatementGenerator generator) {
