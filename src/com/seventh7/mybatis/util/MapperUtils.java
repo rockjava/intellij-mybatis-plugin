@@ -108,7 +108,7 @@ public final class MapperUtils {
 
   @NonNls
   public static boolean isMapperWithSameNamespace(@Nullable Mapper mapper, @Nullable Mapper target) {
-    return null != mapper && null != target ? getNamespace(mapper).equals(getNamespace(target)) : false;
+    return null != mapper && null != target && getNamespace(mapper).equals(getNamespace(target));
   }
 
   @Nullable @NonNls

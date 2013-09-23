@@ -13,7 +13,7 @@ public abstract class GenerateModel {
 
   public static final GenerateModel CONTAIN_MODEL = new ContainModel();
 
-  public static final GenerateModel getInstance(int identifier) {
+  public static GenerateModel getInstance(int identifier) {
     switch (identifier) {
       case 1:
         return END_WITH_MODEL;
@@ -31,7 +31,7 @@ public abstract class GenerateModel {
       }
     }
     return false;
-  };
+  }
 
   public boolean matchAny(Collection<String> patterns, String target) {
     return matchAny(patterns.toArray(new String[patterns.size()]), target);

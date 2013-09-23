@@ -28,14 +28,14 @@ public abstract class StatementGenerator {
 
   public static final StatementGenerator SELECT_GENERATOR = new SelectGenerator("select", "get", "look", "find", "list", "search", "count");
 
-  public static final StatementGenerator DELETE_GENERATOR = new DeleteGenerator("delete", "del", "cancel");
+  public static final StatementGenerator DELETE_GENERATOR = new DeleteGenerator("del", "cancel");
 
   public static final StatementGenerator INSERT_GENERATOR = new InsertGenerator("insert", "add", "new");
 
   public static final StatementGenerator[] ALL = {UPDATE_GENERATOR, SELECT_GENERATOR, DELETE_GENERATOR, INSERT_GENERATOR};
 
   @NotNull
-  public static final StatementGenerator[] getGenerators(@NotNull PsiMethod method) {
+  public static StatementGenerator[] getGenerators(@NotNull PsiMethod method) {
     GenerateModel delegate = MybatisSetting.getInstance().getStatementGenerateModel();
     String target = method.getName();
     List<StatementGenerator> result = Lists.newArrayList();
@@ -49,11 +49,8 @@ public abstract class StatementGenerator {
 
   private Set<String> patterns;
 
-  public StatementGenerator(String pattern, String... patterns) {
-    this.patterns = Sets.newHashSet(pattern);
-    if (!ArrayUtils.isEmpty(patterns)) {
-      this.patterns.addAll(Lists.newArrayList(patterns));
-    }
+  public StatementGenerator(String... patterns) {
+    this.patterns = Sets.newHashSet(patterns);
   }
 
   public void execute(@NotNull PsiMethod method) {

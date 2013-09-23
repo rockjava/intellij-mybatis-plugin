@@ -11,8 +11,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class DeleteGenerator extends StatementGenerator{
 
-  public DeleteGenerator(String pattern, String... patterns) {
-    super(pattern, patterns);
+  public DeleteGenerator(String... patterns) {
+    super(patterns);
   }
 
   @NotNull @Override

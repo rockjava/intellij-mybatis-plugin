@@ -26,9 +26,9 @@ import java.util.List;
  */
 public abstract class IdBasedTagConverter extends ResolvingConverter<XmlTag> {
 
-  protected boolean crossMapperSupported;
+  protected final boolean crossMapperSupported;
 
-  private Function<DomElement, XmlTag> function = new Function<DomElement, XmlTag>() {
+  private final Function<DomElement, XmlTag> function = new Function<DomElement, XmlTag>() {
     @Override
     public XmlTag apply(DomElement element) {
       return element.getXmlTag();

@@ -6,6 +6,7 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.seventh7.mybatis.Annotation;
@@ -24,12 +25,13 @@ public class AnnotationService {
     this.project = project;
   }
 
-  public static final AnnotationService getInstance(@NotNull Project project) {
+  public static AnnotationService getInstance(@NotNull Project project) {
     return ServiceManager.getService(project, AnnotationService.class);
   }
 
   public void addAnnotation(@NotNull PsiModifierListOwner parameter, @NotNull Annotation annotation) {
-    if (JavaUtils.isAnnotationPresent(parameter, annotation)) {
+    PsiModifierList modifierList = parameter.getModifierList();
+    if (JavaUtils.isAnnotationPresent(parameter, annotation) || null == modifierList) {
       return;
     }
     JavaService javaService = JavaService.getInstance(parameter.getProject());
@@ -37,7 +39,7 @@ public class AnnotationService {
     
     PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
     PsiAnnotation psiAnnotation = elementFactory.createAnnotationFromText(annotation.toString(), parameter);
-    parameter.getModifierList().add(psiAnnotation);
+    modifierList.add(psiAnnotation);
     JavaCodeStyleManager.getInstance(project).shortenClassReferences(psiAnnotation.getParent());
   }
 

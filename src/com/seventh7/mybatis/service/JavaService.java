@@ -9,6 +9,7 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementFactory;
+import com.intellij.psi.PsiImportList;
 import com.intellij.psi.PsiImportStatement;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiMethod;
@@ -34,10 +35,11 @@ public class JavaService {
     this.project = project;
   }
 
-  public static final JavaService getInstance(@NotNull Project project) {
+  public static JavaService getInstance(@NotNull Project project) {
     return ServiceManager.getService(project, JavaService.class);
   }
 
+  @SuppressWarnings("unchecked")
   public void process(@NotNull PsiMethod method, @NotNull Processor processor) {
     Optional<Mapper> mapper = MapperUtils.findFirstMapper(project, method);
     if (mapper.isPresent()) {
@@ -49,6 +51,7 @@ public class JavaService {
     }
   }
 
+  @SuppressWarnings("unchecked")
   public void process(@NotNull PsiClass clzz, @NotNull Processor processor) {
     Optional<Mapper> mapper = MapperUtils.findFirstMapper(project, clzz);
     if (mapper.isPresent()) {
@@ -73,10 +76,11 @@ public class JavaService {
   public void importClzz(PsiJavaFile file, String clzzName) {
     if (!JavaUtils.hasImportClzz(file, clzzName)) {
       Optional<PsiClass> clzz = JavaUtils.findClzz(project, clzzName);
-      if (clzz.isPresent()) {
+      PsiImportList importList = file.getImportList();
+      if (clzz.isPresent() && null != importList) {
         PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
         PsiImportStatement statement = elementFactory.createImportStatement(clzz.get());
-        file.getImportList().add(statement);
+        importList.add(statement);
 
         CodeFormatterFacade formatter = new CodeFormatterFacade(new CodeStyleSettings());
         formatter.processText(file, new FormatTextRanges(statement.getTextRange(), true), true);

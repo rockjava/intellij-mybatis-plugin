@@ -30,7 +30,7 @@ public class EditorService {
     this.project = project;
   }
 
-  public static final EditorService getInstance(@NotNull Project project) {
+  public static EditorService getInstance(@NotNull Project project) {
     return ServiceManager.getService(project, EditorService.class);
   }
 
@@ -42,13 +42,15 @@ public class EditorService {
   public void scrollTo(@NotNull PsiElement element, int offset) {
     NavigationUtil.activateFileWithPsiElement(element, true);
     Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-    editor.getCaretModel().moveToOffset(offset);
-    editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
+    if (null != editor) {
+      editor.getCaretModel().moveToOffset(offset);
+      editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
+    }
   }
 
   public JBPopup createSimpleListPopupChooser(@NotNull String title, @NotNull JList list, @Nullable final Runnable runnable) {
     PopupChooserBuilder builder = new PopupChooserBuilder(list);
-    builder.setTitle(title);
+    builder.setTitle("[ Select target statement ]");
     if (null != runnable) {
       builder.setItemChoosenCallback(new Runnable() {
         @Override

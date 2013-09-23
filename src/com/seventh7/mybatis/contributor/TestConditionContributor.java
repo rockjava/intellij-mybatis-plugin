@@ -41,6 +41,7 @@ public class TestConditionContributor extends ParameterCompletionContributor{
     }
   };
 
+  @SuppressWarnings("unchecked")
   public TestConditionContributor() {
     extend(CompletionType.BASIC, XmlPatterns.psiElement().inside(XmlPatterns.xmlAttributeValue().inside(XmlPatterns.xmlAttribute().withName("test"))), provider);
   }
