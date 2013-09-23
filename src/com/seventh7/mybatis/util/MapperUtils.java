@@ -77,12 +77,14 @@ public final class MapperUtils {
 
   @NotNull @NonNls
   public static Optional<Mapper> findFirstMapper(@NotNull Project project, @NotNull PsiClass clzz) {
-    return findFirstMapper(project, clzz.getQualifiedName());
+    String qualifiedName = clzz.getQualifiedName();
+    return null != qualifiedName ? findFirstMapper(project, qualifiedName) : Optional.<Mapper>absent();
   }
 
   @NotNull @NonNls
   public static Optional<Mapper> findFirstMapper(@NotNull Project project, @NotNull PsiMethod method) {
-    return findFirstMapper(project, method.getContainingClass());
+    PsiClass containingClass = method.getContainingClass();
+    return null != containingClass ? findFirstMapper(project, containingClass) : Optional.<Mapper>absent();
   }
 
   @SuppressWarnings("unchecked")
