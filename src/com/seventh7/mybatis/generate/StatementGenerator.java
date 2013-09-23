@@ -34,14 +34,13 @@ public abstract class StatementGenerator {
 
   public static final StatementGenerator[] ALL = {UPDATE_GENERATOR, SELECT_GENERATOR, DELETE_GENERATOR, INSERT_GENERATOR};
 
-  private static final GenerateModel MODEL = MybatisSetting.getInstance().getStatementGenerateModel();
-
   @NotNull
   public static final StatementGenerator[] getGenerators(@NotNull PsiMethod method) {
+    GenerateModel delegate = MybatisSetting.getInstance().getStatementGenerateModel();
     String target = method.getName();
     List<StatementGenerator> result = Lists.newArrayList();
     for (StatementGenerator generator : ALL) {
-      if (MODEL.matchAny(generator.getPatterns(), target)) {
+      if (delegate.matchAny(generator.getPatterns(), target)) {
         result.add(generator);
       }
     }

@@ -30,7 +30,7 @@ import static com.seventh7.mybatis.generate.StatementGenerator.UPDATE_GENERATOR;
     storages = @Storage(id = "other", file = "$APP_CONFIG$/mybatis.xml"))
 public class MybatisSetting implements PersistentStateComponent<Element> {
 
-  private GenerateModel statementGenerateModel = GenerateModel.START_WITH_MODEL;
+  private GenerateModel statementGenerateModel;
 
   private Gson gson = new GsonBuilder().create();
 

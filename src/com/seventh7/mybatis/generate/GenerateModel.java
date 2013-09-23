@@ -15,14 +15,12 @@ public abstract class GenerateModel {
 
   public static final GenerateModel getInstance(int identifier) {
     switch (identifier) {
-      case 0:
-        return START_WITH_MODEL;
       case 1:
         return END_WITH_MODEL;
       case 2:
         return CONTAIN_MODEL;
       default:
-        throw new AssertionError();
+        return START_WITH_MODEL;
     }
   }
 
