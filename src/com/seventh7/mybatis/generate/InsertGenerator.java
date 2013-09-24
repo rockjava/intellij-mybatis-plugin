@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class InsertGenerator extends StatementGenerator{
 
-  public InsertGenerator(String... patterns) {
+  public InsertGenerator(@NotNull String... patterns) {
     super(patterns);
   }
 

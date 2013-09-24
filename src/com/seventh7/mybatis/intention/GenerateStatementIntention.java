@@ -2,47 +2,25 @@ package com.seventh7.mybatis.intention;
 
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiParameter;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.ui.components.JBList;
 import com.intellij.util.IncorrectOperationException;
-import com.seventh7.mybatis.Annotation;
 import com.seventh7.mybatis.generate.StatementGenerator;
-import com.seventh7.mybatis.service.EditorService;
-import com.seventh7.mybatis.service.JavaService;
-import com.seventh7.mybatis.util.JavaUtils;
+import com.seventh7.mybatis.ui.ListSelectionListener;
+import com.seventh7.mybatis.ui.UiComponentFacade;
 
 import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
 
 /**
  * @author yanglin
  */
-public class GenerateStatementIntention extends GenericJavaFileIntention {
+public class GenerateStatementIntention extends GenericIntention {
 
   @NotNull @Override
   public String getText() {
     return "[Mybatis] Generage new statement";
-  }
-
-  @Override
-  public boolean isAvailable(@NotNull PsiElement element) {
-    PsiParameter parameter = PsiTreeUtil.getParentOfType(element, PsiParameter.class);
-    if (null != parameter) {
-      return false;
-    }
-    PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
-    if (null == method) {
-      return false;
-    }
-    JavaService javaService = JavaService.getInstance(element.getProject());
-    return !JavaUtils.isAnyAnnotationPresent(method, Annotation.STATEMENT_SYMMETRIES)
-           && !javaService.findWithFindFristProcessor(method).isPresent();
   }
 
   @Override
@@ -53,15 +31,23 @@ public class GenerateStatementIntention extends GenericJavaFileIntention {
     if (1 == generators.length) {
       generators[0].execute(method);
     } else {
-      final JList list = new JBList(generators);
-      JBPopup popup = EditorService.getInstance(project).createSimpleListPopupChooser("[ Select target statement ]", list, new Runnable() {
+      UiComponentFacade.getInstance(project).showListPopup("[ Select target statement ]", new ListSelectionListener() {
         @Override
-        public void run() {
-          generators[list.getSelectedIndex()].execute(method);
+        public void selected(int index) {
+          generators[index].execute(method);
         }
-      });
-      popup.showInBestPositionFor(editor);
+
+        @Override
+        public boolean isWriteAction() {
+          return true;
+        }
+
+      }, generators);
     }
   }
 
+  @Override @NotNull
+  public IntentionChooser getIntentionChooser() {
+    return JavaFileIntentionChooser.GENERATE_STATEMENT_CHOOSER;
+  }
 }

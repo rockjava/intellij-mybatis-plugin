@@ -9,6 +9,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiTypeElement;
 import com.intellij.util.xml.DomElement;
 import com.seventh7.mybatis.service.JavaService;
+import com.seventh7.mybatis.util.Icons;
 import com.seventh7.mybatis.util.JavaUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,8 +20,6 @@ import javax.swing.*;
  * @author yanglin
  */
 public class MapperLineMarkerProvider extends SimpleLineMarkerProvider<PsiTypeElement, DomElement> {
-
-  private final Icon icon = IconLoader.getIcon("/gutter/implementedMethod.png");
 
   @Override
   public boolean isTheElement(@NotNull PsiElement element) {
@@ -46,7 +45,7 @@ public class MapperLineMarkerProvider extends SimpleLineMarkerProvider<PsiTypeEl
 
   @NotNull @Override
   public Icon getIcon() {
-    return icon;
+    return Icons.MAPPER_LINE_MARKER_ICON;
   }
 
 }

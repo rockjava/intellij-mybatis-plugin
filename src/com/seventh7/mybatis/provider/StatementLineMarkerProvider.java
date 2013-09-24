@@ -3,7 +3,6 @@ package com.seventh7.mybatis.provider;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 
-import com.intellij.openapi.util.IconLoader;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
@@ -16,6 +15,7 @@ import com.seventh7.mybatis.dom.model.IdDomElement;
 import com.seventh7.mybatis.dom.model.Insert;
 import com.seventh7.mybatis.dom.model.Select;
 import com.seventh7.mybatis.dom.model.Update;
+import com.seventh7.mybatis.util.Icons;
 import com.seventh7.mybatis.util.JavaUtils;
 import com.seventh7.mybatis.util.MapperUtils;
 
@@ -34,8 +34,6 @@ public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag
       Insert.class,
       Delete.class
   );
-
-  private final Icon icon = IconLoader.getIcon("/gutter/overridingMethod.png");
 
   @Override
   public boolean isTheElement(@NotNull PsiElement element) {
@@ -71,7 +69,7 @@ public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag
 
   @NotNull @Override
   public Icon getIcon() {
-    return icon;
+    return Icons.STATEMENT_LINE_MARKER_ICON;
   }
 
 }

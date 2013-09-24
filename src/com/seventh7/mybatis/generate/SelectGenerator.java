@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SelectGenerator extends StatementGenerator{
 
-  public SelectGenerator(String... patterns) {
+  public SelectGenerator(@NotNull String... patterns) {
     super(patterns);
   }
 

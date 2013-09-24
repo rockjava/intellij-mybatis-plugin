@@ -36,11 +36,11 @@ public abstract class StatementGenerator {
 
   @NotNull
   public static StatementGenerator[] getGenerators(@NotNull PsiMethod method) {
-    GenerateModel delegate = MybatisSetting.getInstance().getStatementGenerateModel();
+    GenerateModel model = MybatisSetting.getInstance().getStatementGenerateModel();
     String target = method.getName();
     List<StatementGenerator> result = Lists.newArrayList();
     for (StatementGenerator generator : ALL) {
-      if (delegate.matchAny(generator.getPatterns(), target)) {
+      if (model.matchAny(generator.getPatterns(), target)) {
         result.add(generator);
       }
     }
@@ -49,7 +49,7 @@ public abstract class StatementGenerator {
 
   private Set<String> patterns;
 
-  public StatementGenerator(String... patterns) {
+  public StatementGenerator(@NotNull String... patterns) {
     this.patterns = Sets.newHashSet(patterns);
   }
 

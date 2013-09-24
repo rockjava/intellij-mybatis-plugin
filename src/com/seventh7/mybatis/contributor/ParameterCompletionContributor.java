@@ -12,6 +12,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.util.PlatformIcons;
 import com.seventh7.mybatis.Annotation;
+import com.seventh7.mybatis.util.Icons;
 import com.seventh7.mybatis.util.JavaUtils;
 
 /**
@@ -26,7 +27,7 @@ public abstract class ParameterCompletionContributor extends CompletionContribut
         PsiAnnotationMemberValue value = psiAnnotation.get().findDeclaredAttributeValue("value");
         if (null != value) {
           LookupElementBuilder builder = LookupElementBuilder.create(value.getText().replaceAll("\"", ""))
-              .setIcon(PlatformIcons.PARAMETER_ICON);
+              .setIcon(Icons.PARAM_COMPLECTION_ICON);
           result.addElement(PrioritizedLookupElement.withPriority(builder, 5000.0));
         }
       }

@@ -5,8 +5,12 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
+import com.intellij.ide.fileTemplates.FileTemplate;
+import com.intellij.ide.fileTemplates.FileTemplateManager;
+import com.intellij.ide.fileTemplates.FileTemplateUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -26,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Properties;
 
 
 /**
@@ -35,6 +40,24 @@ public final class MapperUtils {
 
   private MapperUtils() {
     throw new UnsupportedOperationException();
+  }
+
+  public static PsiElement createMapperFromFileTemplate(@NotNull String fileTemplateName,
+                                                        @NotNull String fileName,
+                                                        @NotNull PsiDirectory directory,
+                                                        @Nullable Properties pops) throws Exception {
+    FileTemplate fileTemplate = FileTemplateManager.getInstance().getJ2eeTemplate(fileTemplateName);
+    return FileTemplateUtil.createFromTemplate(fileTemplate, fileName, pops, directory);
+  }
+
+  @NotNull
+  public static Collection<PsiDirectory> findMapperDirectories(@NotNull Project project) {
+    return Collections2.transform(findMappers(project), new Function<Mapper, PsiDirectory>() {
+      @Override
+      public PsiDirectory apply(Mapper input) {
+        return input.getXmlElement().getContainingFile().getContainingDirectory();
+      }
+    });
   }
 
   public static boolean isElementWithinMybatisFile(@NotNull PsiElement element) {
