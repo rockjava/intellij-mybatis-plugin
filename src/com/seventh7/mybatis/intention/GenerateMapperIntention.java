@@ -106,7 +106,8 @@ public class GenerateMapperIntention extends GenericIntention {
 
   private void handleChooseNewFolder(Project project, Editor editor, PsiClass clzz) {
     UiComponentFacade uiComponentFacade = UiComponentFacade.getInstance(project);
-    VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("Select target folder", project.getBaseDir(), project.getBaseDir());
+    VirtualFile baseDir = project.getBaseDir();
+    VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("Select target folder", baseDir, baseDir);
     if (null != vf) {
       PsiManager psiManager = PsiManager.getInstance(project);
       processGenerate(editor, clzz, psiManager.findDirectory(vf));
