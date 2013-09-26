@@ -1,4 +1,4 @@
-package com.seventh7.mybatis;
+package com.seventh7.mybatis.annotation;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;

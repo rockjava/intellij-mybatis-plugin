@@ -10,8 +10,7 @@ import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiAnnotationMemberValue;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
-import com.intellij.util.PlatformIcons;
-import com.seventh7.mybatis.Annotation;
+import com.seventh7.mybatis.annotation.Annotation;
 import com.seventh7.mybatis.util.Icons;
 import com.seventh7.mybatis.util.JavaUtils;
 

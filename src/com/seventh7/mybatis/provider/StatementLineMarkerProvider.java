@@ -28,7 +28,7 @@ import javax.swing.*;
  */
 public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag, PsiMethod>{
 
-  private ImmutableList<Class<? extends GroupTwo>> targetTypes = ImmutableList.of(
+  private static final ImmutableList<Class<? extends GroupTwo>> TARGET_TYPES = ImmutableList.of(
       Select.class,
       Update.class,
       Insert.class,
@@ -50,7 +50,7 @@ public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag
 
   private boolean isTargetType(PsiElement element) {
     DomElement domElement = DomUtil.getDomElement(element);
-    for (Class<?> clzz : targetTypes) {
+    for (Class<?> clzz : TARGET_TYPES) {
       if(clzz.isInstance(domElement))
         return true;
     }

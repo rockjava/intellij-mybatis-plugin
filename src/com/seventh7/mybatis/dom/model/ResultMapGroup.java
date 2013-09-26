@@ -1,9 +1,9 @@
 package com.seventh7.mybatis.dom.model;
 
-import com.intellij.psi.PsiClass;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.xml.Attribute;
 import com.intellij.util.xml.Convert;
+import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.GenericAttributeValue;
 import com.seventh7.mybatis.dom.converter.ResultMapConverter;
 
@@ -12,15 +12,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  */
-public interface ResultMap extends GroupFour, IdDomElement{
+public interface ResultMapGroup extends DomElement {
 
   @NotNull
-  @Attribute("extends")
+  @Attribute("resultMap")
   @Convert(ResultMapConverter.class)
-  public GenericAttributeValue<XmlTag> getExtends();
-
-  @NotNull
-  @Attribute("type")
-  public GenericAttributeValue<PsiClass> getType();
-
+  public GenericAttributeValue<XmlTag> getResultMap();
 }

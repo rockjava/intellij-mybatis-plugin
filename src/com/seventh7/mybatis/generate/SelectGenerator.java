@@ -40,7 +40,7 @@ public class SelectGenerator extends StatementGenerator{
           type = (PsiClassReferenceType)parameters[0];
         }
       }
-      resultType.setValue(type.getCanonicalText());
+      resultType.setValue(type.resolve().getQualifiedName());
     }
   }
 

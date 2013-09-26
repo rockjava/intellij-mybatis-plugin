@@ -14,8 +14,8 @@ public class MybatisFileTemplateDescriptorFactory implements FileTemplateGroupDe
 
   @Override
   public FileTemplateGroupDescriptor getFileTemplatesDescriptor() {
-    FileTemplateGroupDescriptor group = new FileTemplateGroupDescriptor("Mybaits", Icons.MYBATIS_LOGON);
-    group.addTemplate(new FileTemplateDescriptor(MYBATIS_MAPPER_XML_TEMPLATE, Icons.MYBATIS_LOGON));
+    FileTemplateGroupDescriptor group = new FileTemplateGroupDescriptor("Mybaits", Icons.MYBATIS_LOGO);
+    group.addTemplate(new FileTemplateDescriptor(MYBATIS_MAPPER_XML_TEMPLATE, Icons.MYBATIS_LOGO));
     return group;
   }
 

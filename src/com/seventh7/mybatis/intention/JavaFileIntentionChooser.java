@@ -9,7 +9,7 @@ import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.seventh7.mybatis.Annotation;
+import com.seventh7.mybatis.annotation.Annotation;
 import com.seventh7.mybatis.service.JavaService;
 import com.seventh7.mybatis.util.JavaUtils;
 

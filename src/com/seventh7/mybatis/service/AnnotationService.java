@@ -11,7 +11,7 @@ import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.seventh7.mybatis.Annotation;
+import com.seventh7.mybatis.annotation.Annotation;
 import com.seventh7.mybatis.util.JavaUtils;
 
 import org.jetbrains.annotations.NotNull;

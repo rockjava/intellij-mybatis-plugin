@@ -7,6 +7,8 @@ import com.google.common.collect.Maps;
 
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -86,7 +88,7 @@ public class GenerateMapperIntention extends GenericIntention {
                                                        popupListener,
                                                        "Choose another",
                                                        getChooseFolderListener(editor, clzz),
-                                                       getPathText(project, keys));
+                                                       getPathText(project, keys, pathMap));
   }
 
   private ClickableListener getChooseFolderListener(final Editor editor, final PsiClass clzz) {
@@ -114,12 +116,13 @@ public class GenerateMapperIntention extends GenericIntention {
     }
   }
 
-  private String[] getPathText(Project project, Collection<String> paths) {
+  private String[] getPathText(Project project, Collection<String> paths, final Map<String, PsiDirectory> pathMap) {
     final String projectBasePath = project.getBasePath();
     Collection<String> transform = Collections2.transform(paths, new Function<String, String>() {
       @Override
       public String apply(String input) {
-        return FileUtil.getRelativePath(projectBasePath, input, File.separatorChar);
+        Module module = ModuleUtil.findModuleForPsiElement(pathMap.get(input));
+        return "[" + module.getName() + "] " + FileUtil.getRelativePath(projectBasePath, input, File.separatorChar);
       }
     });
     return transform.toArray(new String[transform.size()]);
