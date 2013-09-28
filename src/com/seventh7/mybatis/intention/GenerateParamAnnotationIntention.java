@@ -35,7 +35,9 @@ public class GenerateParamAnnotationIntention extends GenericIntention {
       annotationService.addAnnotationWithParameterName(parameter);
     } else {
       PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
-      annotationService.addAnnotationWithParameterNameForMethodParameters(method);
+      if (null != method) {
+        annotationService.addAnnotationWithParameterNameForMethodParameters(method);
+      }
     }
   }
 

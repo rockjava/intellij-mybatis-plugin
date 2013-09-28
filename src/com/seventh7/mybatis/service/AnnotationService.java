@@ -58,7 +58,10 @@ public class AnnotationService {
   }
 
   public void addAnnotationWithParameterName(@NotNull PsiParameter parameter) {
-    AnnotationService annotationManager = AnnotationService.getInstance(project);
-    annotationManager.addAnnotation(parameter, Annotation.PARAM.withValue(new Annotation.StringValue(parameter.getName())));
+    String name = parameter.getName();
+    if (null != name) {
+      AnnotationService annotationManager = AnnotationService.getInstance(project);
+      annotationManager.addAnnotation(parameter, Annotation.PARAM.withValue(new Annotation.StringValue(name)));
+    }
   }
 }

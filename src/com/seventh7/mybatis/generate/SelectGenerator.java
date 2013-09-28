@@ -1,5 +1,6 @@
 package com.seventh7.mybatis.generate;
 
+import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
@@ -40,7 +41,10 @@ public class SelectGenerator extends StatementGenerator{
           type = (PsiClassReferenceType)parameters[0];
         }
       }
-      resultType.setValue(type.resolve().getQualifiedName());
+      PsiClass clzz = type.resolve();
+      if (null != clzz) {
+        resultType.setValue(clzz.getQualifiedName());
+      }
     }
   }
 

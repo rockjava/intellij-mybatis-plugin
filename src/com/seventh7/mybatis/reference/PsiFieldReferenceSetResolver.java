@@ -35,7 +35,9 @@ public class PsiFieldReferenceSetResolver extends ContextReferenceSetResolver<Xm
     PsiType type = current.getType();
     if (type instanceof PsiClassReferenceType && !((PsiClassReferenceType) type).hasParameters()) {
       PsiClass clzz = ((PsiClassReferenceType) type).resolve();
-      return JavaUtils.findSettablePsiField(project, clzz, text);
+      if (null != clzz) {
+        return JavaUtils.findSettablePsiField(project, clzz, text);
+      }
     }
     return Optional.absent();
   }

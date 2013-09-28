@@ -31,6 +31,7 @@ public class GenerateStatementIntention extends GenericIntention {
   public void invoke(@NotNull final Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
     final PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
+    if (null == method) return;
     final StatementGenerator[] generators = StatementGenerator.getGenerators(method);
     if (1 == generators.length) {
       generators[0].execute(method);

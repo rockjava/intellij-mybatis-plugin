@@ -121,8 +121,9 @@ public class GenerateMapperIntention extends GenericIntention {
     Collection<String> result = Collections2.transform(paths, new Function<String, String>() {
       @Override
       public String apply(String input) {
+        String relativePath = FileUtil.getRelativePath(projectBasePath, input, File.separatorChar);
         Module module = ModuleUtil.findModuleForPsiElement(pathMap.get(input));
-        return "[" + module.getName() + "] " + FileUtil.getRelativePath(projectBasePath, input, File.separatorChar);
+        return null == module ? relativePath : ("[" + module.getName() + "] " + relativePath);
       }
     });
     return result.toArray(new String[result.size()]);

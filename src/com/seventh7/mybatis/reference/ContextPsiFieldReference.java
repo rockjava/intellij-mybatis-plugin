@@ -31,6 +31,7 @@ public class ContextPsiFieldReference extends PsiReferenceBase<XmlAttributeValue
     this.index = index;
   }
 
+  @SuppressWarnings("unchecked")
   @Nullable @Override
   public PsiElement resolve() {
     Optional<PsiElement> resolved = resolver.resolve(index);
@@ -43,6 +44,7 @@ public class ContextPsiFieldReference extends PsiReferenceBase<XmlAttributeValue
     return clzz.isPresent() ? JavaUtils.findSettablePsiFields(myElement.getProject(), clzz.get()) : PsiReference.EMPTY_ARRAY;
   }
 
+  @SuppressWarnings("unchecked")
   private Optional<PsiClass> getTargetClzz() {
     if (getElement().getValue().contains(MybatisConstants.DOT_SEPARATOR)) {
       int ind = 0 == index ? 0 : index - 1;

@@ -123,7 +123,7 @@ public final class JavaUtils {
     }
     PsiImportStatement[] statements = importList.getImportStatements();
     for (PsiImportStatement tmp : statements) {
-      if (tmp.getQualifiedName().equals(clzzName)) {
+      if (null != tmp && tmp.getQualifiedName().equals(clzzName)) {
         return true;
       }
     }
