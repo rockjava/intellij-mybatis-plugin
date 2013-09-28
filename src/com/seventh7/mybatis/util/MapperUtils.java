@@ -70,11 +70,14 @@ public final class MapperUtils {
 
   public static boolean isElementWithinMybatisFile(@NotNull PsiElement element) {
     PsiFile psiFile = element.getContainingFile();
-    return element instanceof XmlElement && null != psiFile && isMybatisFile((XmlFile) psiFile);
+    return element instanceof XmlElement && isMybatisFile(psiFile);
   }
 
-  public static boolean isMybatisFile(@NotNull XmlFile file) {
-    XmlTag rootTag = file.getRootTag();
+  public static boolean isMybatisFile(@Nullable PsiFile file) {
+    if (!(file instanceof XmlFile)) {
+      return false;
+    }
+    XmlTag rootTag = ((XmlFile)file).getRootTag();
     return null != rootTag && rootTag.getName().equals("mapper");
   }
 

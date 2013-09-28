@@ -5,6 +5,8 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
+import com.intellij.psi.xml.XmlAttribute;
+import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.xml.ConvertContext;
 import com.intellij.util.xml.DomElement;
@@ -24,14 +26,14 @@ import java.util.List;
 /**
  * @author yanglin
  */
-public abstract class IdBasedTagConverter extends ResolvingConverter<XmlTag> {
+public abstract class IdBasedTagConverter extends ResolvingConverter<XmlAttributeValue> {
 
   protected final boolean crossMapperSupported;
 
-  private final Function<DomElement, XmlTag> function = new Function<DomElement, XmlTag>() {
+  private final Function<IdDomElement, XmlAttributeValue> function = new Function<IdDomElement, XmlAttributeValue>() {
     @Override
-    public XmlTag apply(DomElement element) {
-      return element.getXmlTag();
+    public XmlAttributeValue apply(IdDomElement element) {
+      return element.getId().getXmlAttributeValue();
     }
   };
 
@@ -44,25 +46,25 @@ public abstract class IdBasedTagConverter extends ResolvingConverter<XmlTag> {
   }
 
   @Nullable @Override
-  public XmlTag fromString(@Nullable @NonNls String value, ConvertContext context) {
+  public XmlAttributeValue fromString(@Nullable @NonNls String value, ConvertContext context) {
     return matchIdDomElement(selectStrategy(context).getValue(), value, context).orNull();
   }
 
   @NotNull
-  private Optional<XmlTag> matchIdDomElement(Collection<? extends IdDomElement> idDomElements, String value, ConvertContext context) {
+  private Optional<XmlAttributeValue> matchIdDomElement(Collection<? extends IdDomElement> idDomElements, String value, ConvertContext context) {
     Mapper contextMapper = MapperUtils.getMapper(context.getInvocationElement());
     for (IdDomElement idDomElement : idDomElements) {
       if (MapperUtils.getIdSignature(idDomElement).equals(value) ||
           MapperUtils.getIdSignature(idDomElement, contextMapper).equals(value)) {
-        return Optional.of(idDomElement.getXmlTag());
+        return Optional.of(idDomElement.getId().getXmlAttributeValue());
       }
     }
     return Optional.absent();
   }
 
   @Nullable @Override
-  public String toString(@Nullable XmlTag tag, ConvertContext context) {
-    DomElement domElement = DomUtil.getDomElement(tag);
+  public String toString(@Nullable XmlAttributeValue xmlAttribute, ConvertContext context) {
+    DomElement domElement = DomUtil.getDomElement(xmlAttribute.getParent().getParent());
     if (!(domElement instanceof IdDomElement)) {
       return null;
     }
@@ -71,7 +73,7 @@ public abstract class IdBasedTagConverter extends ResolvingConverter<XmlTag> {
   }
 
   @NotNull @Override
-  public Collection<? extends XmlTag> getVariants(ConvertContext context) {
+  public Collection<? extends XmlAttributeValue> getVariants(ConvertContext context) {
     return Collections2.transform(selectStrategy(context).getValue(), function);
   }
 

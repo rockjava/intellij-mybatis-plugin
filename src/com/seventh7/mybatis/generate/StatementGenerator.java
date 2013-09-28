@@ -25,7 +25,7 @@ public abstract class StatementGenerator {
 
   public static final StatementGenerator UPDATE_GENERATOR = new UpdateGenerator("update", "modify", "set");
 
-  public static final StatementGenerator SELECT_GENERATOR = new SelectGenerator("select", "get", "look", "find", "list", "search", "count");
+  public static final StatementGenerator SELECT_GENERATOR = new SelectGenerator("select", "get", "look", "find", "list", "search", "count", "query");
 
   public static final StatementGenerator DELETE_GENERATOR = new DeleteGenerator("del", "cancel");
 

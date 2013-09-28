@@ -8,7 +8,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomUtil;
@@ -25,7 +24,7 @@ public class SqlParamCompletionContributor extends CompletionContributor {
   public void fillCompletionVariants(CompletionParameters parameters, final CompletionResultSet result) {
     PsiElement position = parameters.getPosition();
     PsiFile topLevelFile = InjectedLanguageUtil.getTopLevelFile(position);
-    if (topLevelFile instanceof XmlFile && MapperUtils.isMybatisFile((XmlFile) topLevelFile)) {
+    if (MapperUtils.isMybatisFile(topLevelFile)) {
       if (shouldAddElement(position.getContainingFile(), parameters.getOffset())) {
         process(topLevelFile, result, position);
       }

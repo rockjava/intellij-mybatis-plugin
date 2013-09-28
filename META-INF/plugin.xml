@@ -15,6 +15,7 @@
           <li>Support property completion for result and id of resultMap、collection、association</li>
           <li>Support parameter completion[ #{param} ] while writting sql(@Param based)</li>
           <li>Support resultMap completion for collection and association of resultMap</li>
+          <li>Support some useful refactor of mapper in xml</li>
       </ul>
       <h4>1.46</h4>
       <ul>
@@ -38,6 +39,7 @@
       <completion.contributor language="XML" implementationClass="com.seventh7.mybatis.contributor.TestConditionContributor"/>
       <completion.contributor language="SQL" implementationClass="com.seventh7.mybatis.contributor.SqlParamCompletionContributor"/>
       <fileTemplateGroup implementation="com.seventh7.mybatis.MybatisFileTemplateDescriptorFactory" />
+      <typedHandler implementation="com.seventh7.mybatis.action.MybatisTypedHandler" id="mybatis"/>
       <intentionAction>
           <className>com.seventh7.mybatis.intention.GenerateParamAnnotationIntention</className>
       </intentionAction>
@@ -48,4 +50,5 @@
           <className>com.seventh7.mybatis.intention.GenerateMapperIntention</className>
       </intentionAction>
   </extensions>
+    <depends>com.intellij.sql</depends>
 </idea-plugin>

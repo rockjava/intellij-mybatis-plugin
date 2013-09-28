@@ -1,7 +1,7 @@
 package com.seventh7.mybatis.dom.model;
 
 import com.intellij.psi.PsiClass;
-import com.intellij.psi.xml.XmlTag;
+import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.util.xml.Attribute;
 import com.intellij.util.xml.Convert;
 import com.intellij.util.xml.GenericAttributeValue;
@@ -17,7 +17,7 @@ public interface ResultMap extends GroupFour, IdDomElement{
   @NotNull
   @Attribute("extends")
   @Convert(ResultMapConverter.class)
-  public GenericAttributeValue<XmlTag> getExtends();
+  public GenericAttributeValue<XmlAttributeValue> getExtends();
 
   @NotNull
   @Attribute("type")
