@@ -24,6 +24,7 @@ import com.seventh7.mybatis.service.EditorService;
 import com.seventh7.mybatis.ui.ClickableListener;
 import com.seventh7.mybatis.ui.ListSelectionListener;
 import com.seventh7.mybatis.ui.UiComponentFacade;
+import com.seventh7.mybatis.util.CollectionUtils;
 import com.seventh7.mybatis.util.MapperUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -35,18 +36,18 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
+ * todo refactor
  * @author yanglin
  */
 public class GenerateMapperIntention extends GenericIntention {
 
+  public GenerateMapperIntention() {
+    super(GenerateMapperChooser.INSTANCE);
+  }
+
   @NotNull @Override
   public String getText() {
     return "[Mybatis] Generate mapper of xml";
-  }
-
-  @Override @NotNull
-  public IntentionChooser getIntentionChooser() {
-    return JavaFileIntentionChooser.GENERATE_MAPPER_CHOOSER;
   }
 
   @Override
@@ -59,7 +60,7 @@ public class GenerateMapperIntention extends GenericIntention {
     PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
     PsiClass clzz = PsiTreeUtil.getParentOfType(element, PsiClass.class);
     Collection<PsiDirectory> directories = MapperUtils.findMapperDirectories(project);
-    if (0 == directories.size()) {
+    if (CollectionUtils.isEmpty(directories)) {
       handleChooseNewFolder(project, editor, clzz);
     } else {
       handleMutilDirectories(project, editor, clzz, directories);
@@ -88,7 +89,7 @@ public class GenerateMapperIntention extends GenericIntention {
                                                        popupListener,
                                                        "Choose another",
                                                        getChooseFolderListener(editor, clzz),
-                                                       getPathText(project, keys, pathMap));
+                                                       getPathTextForShown(project, keys, pathMap));
   }
 
   private ClickableListener getChooseFolderListener(final Editor editor, final PsiClass clzz) {
@@ -111,23 +112,25 @@ public class GenerateMapperIntention extends GenericIntention {
     VirtualFile baseDir = project.getBaseDir();
     VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("Select target folder", baseDir, baseDir);
     if (null != vf) {
-      PsiManager psiManager = PsiManager.getInstance(project);
-      processGenerate(editor, clzz, psiManager.findDirectory(vf));
+      processGenerate(editor, clzz, PsiManager.getInstance(project).findDirectory(vf));
     }
   }
 
-  private String[] getPathText(Project project, Collection<String> paths, final Map<String, PsiDirectory> pathMap) {
+  private String[] getPathTextForShown(Project project, Collection<String> paths, final Map<String, PsiDirectory> pathMap) {
     final String projectBasePath = project.getBasePath();
-    Collection<String> transform = Collections2.transform(paths, new Function<String, String>() {
+    Collection<String> result = Collections2.transform(paths, new Function<String, String>() {
       @Override
       public String apply(String input) {
         Module module = ModuleUtil.findModuleForPsiElement(pathMap.get(input));
         return "[" + module.getName() + "] " + FileUtil.getRelativePath(projectBasePath, input, File.separatorChar);
       }
     });
-    return transform.toArray(new String[transform.size()]);
+    return result.toArray(new String[result.size()]);
   }
 
+  /**
+   * TODO refactor it to official
+   */
   private Map<String, PsiDirectory> getPathMap(Collection<PsiDirectory> directories) {
     Map<String, PsiDirectory> result = Maps.newHashMap();
     for (PsiDirectory directory : directories) {

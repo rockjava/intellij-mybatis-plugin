@@ -12,7 +12,8 @@
       <h4>1.47</h4>
       <ul>
           <li>Support generating mapper of xml</li>
-          <li>Support resultMap completion for collection and association</li>
+          <li>Support property completion for result and id of resultMap、collection、association</li>
+          <li>Support resultMap completion for collection and association of resultMap</li>
       </ul>
       <h4>1.46</h4>
       <ul>

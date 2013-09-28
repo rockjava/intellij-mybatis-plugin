@@ -19,6 +19,9 @@ public final class MapperBacktrackingFacade {
     throw new UnsupportedOperationException();
   }
 
+  /**
+   * TODO refactor to make it much more applicable
+   */
   public static Optional<PsiClass> getResultPropertyClzz(XmlAttributeValue attributeValue) {
     DomElement domElement = DomUtil.getDomElement(attributeValue);
     if (null == domElement) {
@@ -26,14 +29,17 @@ public final class MapperBacktrackingFacade {
     }
     Collection collection = DomUtil.getParentOfType(domElement, Collection.class, true);
     if (null != collection) {
-      return Optional.of(collection.getOfType().getValue());
+      return Optional.fromNullable(collection.getOfType().getValue());
     }
     Association association = DomUtil.getParentOfType(domElement, Association.class, true);
     if (null != association) {
-      return Optional.of(association.getJavaType().getValue());
+      return Optional.fromNullable(association.getJavaType().getValue());
     }
     ResultMap resultMap = DomUtil.getParentOfType(domElement, ResultMap.class, true);
-    return Optional.fromNullable(resultMap.getType().getValue());
+    if (null != resultMap) {
+      return Optional.fromNullable(resultMap.getType().getValue());
+    }
+    return Optional.absent();
   }
 
 }

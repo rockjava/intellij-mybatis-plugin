@@ -23,9 +23,9 @@ public class MapperLineMarkerProvider extends SimpleLineMarkerProvider<PsiTypeEl
 
   @Override
   public boolean isTheElement(@NotNull PsiElement element) {
-    return element instanceof PsiTypeElement
-           && element.getParent() instanceof PsiMethod
-           && JavaUtils.isElementWithinInterface(element);
+    return element instanceof PsiTypeElement &&
+           element.getParent() instanceof PsiMethod &&
+           JavaUtils.isElementWithinInterface(element);
   }
 
   @NotNull @Override
@@ -33,6 +33,7 @@ public class MapperLineMarkerProvider extends SimpleLineMarkerProvider<PsiTypeEl
     return JavaService.getInstance(from.getProject()).findWithFindFristProcessor(from.getParent());
   }
 
+  @SuppressWarnings("unchecked")
   @NotNull @Override
   public Navigatable getNavigatable(@NotNull PsiTypeElement from, @NotNull DomElement target) {
     return (Navigatable)target.getXmlElement();

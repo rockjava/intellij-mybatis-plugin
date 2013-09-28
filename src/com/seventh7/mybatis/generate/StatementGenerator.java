@@ -13,7 +13,6 @@ import com.seventh7.mybatis.setting.MybatisSetting;
 import com.seventh7.mybatis.util.CollectionUtils;
 import com.seventh7.mybatis.util.MapperUtils;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -40,7 +39,7 @@ public abstract class StatementGenerator {
     String target = method.getName();
     List<StatementGenerator> result = Lists.newArrayList();
     for (StatementGenerator generator : ALL) {
-      if (model.matchAny(generator.getPatterns(), target)) {
+      if (model.matchsAny(generator.getPatterns(), target)) {
         result.add(generator);
       }
     }

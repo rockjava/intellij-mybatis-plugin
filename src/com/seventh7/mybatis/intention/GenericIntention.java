@@ -12,6 +12,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class GenericIntention implements IntentionAction{
 
+  protected IntentionChooser chooser;
+
+  public GenericIntention(@NotNull IntentionChooser chooser) {
+    this.chooser = chooser;
+  }
+
   @NotNull @Override
   public String getFamilyName() {
     return getText();
@@ -19,7 +25,7 @@ public abstract class GenericIntention implements IntentionAction{
 
   @Override
   public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
-    return getIntentionChooser().isAvailable(project, editor, file);
+    return chooser.isAvailable(project, editor, file);
   }
 
   @Override
@@ -27,6 +33,4 @@ public abstract class GenericIntention implements IntentionAction{
     return true;
   }
 
-  @NotNull
-  public abstract IntentionChooser getIntentionChooser();
 }

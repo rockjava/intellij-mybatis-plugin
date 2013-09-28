@@ -10,6 +10,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.psi.PsiParameter;
+import com.intellij.psi.PsiParameterList;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.seventh7.mybatis.annotation.Annotation;
 import com.seventh7.mybatis.util.JavaUtils;
@@ -45,8 +46,12 @@ public class AnnotationService {
     JavaCodeStyleManager.getInstance(project).shortenClassReferences(psiAnnotation.getParent());
   }
 
-  public void addAnnotationWithParameterNameForMethod(@NotNull PsiMethod method) {
-    PsiParameter[] parameters = method.getParameterList().getParameters();
+  public void addAnnotationWithParameterNameForMethodParameters(@NotNull PsiMethod method) {
+    PsiParameterList parameterList = method.getParameterList();
+    if (null == parameterList) {
+      return;
+    }
+    PsiParameter[] parameters = parameterList.getParameters();
     for (PsiParameter param : parameters) {
       addAnnotationWithParameterName(param);
     }

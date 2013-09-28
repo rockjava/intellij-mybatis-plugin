@@ -6,41 +6,37 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.ReferenceSetBase;
-import com.seventh7.mybatis.util.LongStoryUtils;
+import com.seventh7.mybatis.util.MybatisConstants;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
  * @author yanglin
  */
-public abstract class ContextReferenceSetResolver<F extends PsiElement, K extends PsiElement> implements ReferenceSetResolver{
+public abstract class ContextReferenceSetResolver<F extends PsiElement, K extends PsiElement> {
 
-  private Splitter splitter = Splitter.on(ReferenceSetBase.DOT_SEPARATOR);
+  private Splitter splitter = Splitter.on(MybatisConstants.DOT_SEPARATOR);
 
   protected Project project;
 
   protected F element;
 
+  protected List<String> texts;
+
   protected ContextReferenceSetResolver(@NotNull F element) {
     this.element = element;
     this.project = element.getProject();
+    this.texts = Lists.newArrayList(splitter.split(getText()));
   }
 
-  @NotNull @Override
-  public Optional<? extends PsiElement> resolve(TextRange range, int index) {
-    List<String> texts = Lists.newArrayList(splitter.split(LongStoryUtils.clearDummyIdentifier(getText())));
-    Optional<K>  startElement = getStartElement(Iterables.getFirst(texts, null));
-    if (!startElement.isPresent()) {
-      return Optional.absent();
-    }
-    return texts.size() > 1 ? parseNext(startElement, texts, index) : startElement;
+  @NotNull
+  public final Optional<? extends PsiElement> resolve(int index) {
+    Optional<K>  startElement = getStartemtnElement();
+    return startElement.isPresent() ? (texts.size() > 1 ? parseNext(startElement, texts, index) : startElement) : Optional.<PsiElement>absent();
   }
 
   private Optional<K> parseNext(Optional<K> current, List<String> texts, int index) {
@@ -56,9 +52,8 @@ public abstract class ContextReferenceSetResolver<F extends PsiElement, K extend
     return current;
   }
 
-  @NotNull @Override
-  public List<String> getCompletions() {
-    return Collections.emptyList();
+  public Optional<K> getStartemtnElement() {
+    return getStartElement(Iterables.getFirst(texts, null));
   }
 
   @NotNull

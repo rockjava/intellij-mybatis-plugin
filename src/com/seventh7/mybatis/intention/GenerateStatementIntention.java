@@ -18,6 +18,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public class GenerateStatementIntention extends GenericIntention {
 
+  public GenerateStatementIntention() {
+    super(GenerateStatementChooser.INSTANCE);
+  }
+
   @NotNull @Override
   public String getText() {
     return "[Mybatis] Generage new statement";
@@ -44,10 +48,5 @@ public class GenerateStatementIntention extends GenericIntention {
 
       }, generators);
     }
-  }
-
-  @Override @NotNull
-  public IntentionChooser getIntentionChooser() {
-    return JavaFileIntentionChooser.GENERATE_STATEMENT_CHOOSER;
   }
 }

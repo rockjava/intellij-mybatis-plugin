@@ -12,6 +12,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.xml.XmlElement;
@@ -38,6 +39,13 @@ import java.util.Properties;
  */
 public final class MapperUtils {
 
+  private  static Function<DomFileElement<Mapper>, Mapper> MAPPER_TRANSFORM_fUNCTION = new Function<DomFileElement<Mapper>, Mapper>() {
+    @Override
+    public Mapper apply(DomFileElement<Mapper> element) {
+      return element.getRootElement();
+    }
+  };
+
   private MapperUtils() {
     throw new UnsupportedOperationException();
   }
@@ -61,7 +69,8 @@ public final class MapperUtils {
   }
 
   public static boolean isElementWithinMybatisFile(@NotNull PsiElement element) {
-    return element instanceof XmlElement && isMybatisFile(((XmlFile) element.getContainingFile()));
+    PsiFile psiFile = element.getContainingFile();
+    return element instanceof XmlElement && null != psiFile && isMybatisFile((XmlFile) psiFile);
   }
 
   public static boolean isMybatisFile(@NotNull XmlFile file) {
@@ -73,12 +82,7 @@ public final class MapperUtils {
   public static Collection<Mapper> findMappers(@NotNull Project project) {
     GlobalSearchScope scope = GlobalSearchScope.allScope(project);
     List<DomFileElement<Mapper>> elements = DomService.getInstance().getFileElements(Mapper.class, project, scope);
-    return Collections2.transform(elements, new Function<DomFileElement<Mapper>, Mapper>() {
-      @Override
-      public Mapper apply(DomFileElement<Mapper> element) {
-        return element.getRootElement();
-      }
-    });
+    return Collections2.transform(elements, MAPPER_TRANSFORM_fUNCTION);
   }
 
   @NotNull @NonNls

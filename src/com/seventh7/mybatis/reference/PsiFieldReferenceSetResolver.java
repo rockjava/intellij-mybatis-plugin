@@ -41,11 +41,6 @@ public class PsiFieldReferenceSetResolver extends ContextReferenceSetResolver<Xm
   }
 
   @NotNull @Override
-  public List<String> getCompletions() {
-    return Collections.emptyList();
-  }
-
-  @NotNull @Override
   public Optional<PsiField> getStartElement(@Nullable String firstText) {
     Optional<PsiClass> clzz = MapperBacktrackingFacade.getResultPropertyClzz(getElement());
     return clzz.isPresent() ? JavaUtils.findSettablePsiField(project, clzz.get(), firstText) : Optional.<PsiField>absent();

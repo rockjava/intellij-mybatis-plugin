@@ -20,8 +20,11 @@ public class EditorService {
 
   private Project project;
 
+  private CodeFormatterFacade codeFormatterFacade;
+
   public EditorService(Project project) {
     this.project = project;
+    this.codeFormatterFacade = new CodeFormatterFacade(new CodeStyleSettings());
   }
 
   public static EditorService getInstance(@NotNull Project project) {
@@ -29,8 +32,7 @@ public class EditorService {
   }
 
   public void format(@NotNull PsiElement element) {
-    CodeFormatterFacade formatter = new CodeFormatterFacade(new CodeStyleSettings());
-    formatter.processText(element.getContainingFile(), new FormatTextRanges(element.getTextRange(), true), true);
+    codeFormatterFacade.processText(element.getContainingFile(), new FormatTextRanges(element.getTextRange(), true), true);
   }
 
   public void scrollTo(@NotNull PsiElement element, int offset) {

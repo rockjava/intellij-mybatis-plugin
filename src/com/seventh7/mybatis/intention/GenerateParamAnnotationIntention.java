@@ -17,6 +17,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public class GenerateParamAnnotationIntention extends GenericIntention {
 
+  public GenerateParamAnnotationIntention() {
+    super(GenerateParamChooser.INSTANCE);
+  }
+
   @NotNull @Override
   public String getText() {
     return "[Mybatis] Generate @Param";
@@ -26,18 +30,13 @@ public class GenerateParamAnnotationIntention extends GenericIntention {
   public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
     PsiParameter parameter = PsiTreeUtil.getParentOfType(element, PsiParameter.class);
-    AnnotationService annotationManager = AnnotationService.getInstance(project);
+    AnnotationService annotationService = AnnotationService.getInstance(project);
     if (null != parameter) {
-      annotationManager.addAnnotationWithParameterName(parameter);
+      annotationService.addAnnotationWithParameterName(parameter);
     } else {
       PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
-      annotationManager.addAnnotationWithParameterNameForMethod(method);
+      annotationService.addAnnotationWithParameterNameForMethodParameters(method);
     }
-  }
-
-  @Override @NotNull
-  public IntentionChooser getIntentionChooser() {
-    return JavaFileIntentionChooser.GENERATE_PARAM_CHOOSER;
   }
 
 }

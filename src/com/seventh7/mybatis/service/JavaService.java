@@ -2,7 +2,6 @@ package com.seventh7.mybatis.service;
 
 import com.google.common.base.Optional;
 
-import com.intellij.formatting.FormatTextRanges;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
@@ -14,9 +13,8 @@ import com.intellij.psi.PsiImportList;
 import com.intellij.psi.PsiImportStatement;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.impl.source.codeStyle.CodeFormatterFacade;
-import com.intellij.psi.util.PropertyUtil;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.Processor;
 import com.seventh7.mybatis.dom.model.IdDomElement;
@@ -39,6 +37,14 @@ public class JavaService {
 
   public static JavaService getInstance(@NotNull Project project) {
     return ServiceManager.getService(project, JavaService.class);
+  }
+
+  public Optional<PsiClass> getReferenceClzzOfPsiField(@NotNull PsiElement field) {
+    if (!(field instanceof PsiField)) {
+      return Optional.absent();
+    }
+    PsiType type = ((PsiField)field).getType();
+    return type instanceof PsiClassReferenceType ? Optional.fromNullable(((PsiClassReferenceType) type).resolve()) : Optional.<PsiClass>absent();
   }
 
   @SuppressWarnings("unchecked")
@@ -83,9 +89,7 @@ public class JavaService {
         PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
         PsiImportStatement statement = elementFactory.createImportStatement(clzz.get());
         importList.add(statement);
-
-        CodeFormatterFacade formatter = new CodeFormatterFacade(new CodeStyleSettings());
-        formatter.processText(file, new FormatTextRanges(statement.getTextRange(), true), true);
+        EditorService.getInstance(file.getProject()).format(statement);
       }
     }
   }

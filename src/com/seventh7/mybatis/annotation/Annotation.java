@@ -50,7 +50,7 @@ public class Annotation implements Cloneable{
 
   }
 
-  public Annotation(String label, String qualifiedName) {
+  public Annotation(@NotNull String label, @NotNull String qualifiedName) {
     this.label = label;
     this.qualifiedName = qualifiedName;
     attributePairs = Maps.newHashMap();
@@ -109,10 +109,12 @@ public class Annotation implements Cloneable{
     }
   }
 
+  @NotNull
   public String getLabel() {
     return label;
   }
 
+  @NotNull
   public String getQualifiedName() {
     return qualifiedName;
   }

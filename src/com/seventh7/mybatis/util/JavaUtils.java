@@ -1,6 +1,7 @@
 package com.seventh7.mybatis.util;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
@@ -8,6 +9,7 @@ import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiImportList;
 import com.intellij.psi.PsiImportStatement;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiMethod;
@@ -25,6 +27,8 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 /**
  * @author yanglin
  */
@@ -40,14 +44,19 @@ public final class JavaUtils {
     return null == propertySetter ? Optional.<PsiField>absent() : Optional.fromNullable(PropertyUtil.findPropertyField(project, clzz, propertyName, false));
   }
 
-  public static boolean hasSettablePsiField(@NotNull PsiClass clzz) {
+  @NotNull
+  public static PsiField[] findSettablePsiFields(@NotNull Project project, @NotNull PsiClass clzz) {
     PsiMethod[] methods = clzz.getAllMethods();
+    List<PsiField> fields = Lists.newArrayList();
     for (PsiMethod method : methods) {
-      if (PropertyUtil.isSimplePropertySetter(method) && null != PropertyUtil.getPropertyNameBySetter(method)) {
-        return true;
+      if (PropertyUtil.isSimplePropertySetter(method)) {
+        Optional<PsiField> psiField = findSettablePsiField(project, clzz, PropertyUtil.getPropertyName(method));
+        if (psiField.isPresent()) {
+          fields.add(psiField.get());
+        }
       }
     }
-    return false;
+    return fields.toArray(new PsiField[fields.size()]);
   }
 
   public static boolean isElementWithinInterface(@Nullable PsiElement element) {
@@ -107,9 +116,12 @@ public final class JavaUtils {
     return true;
   }
 
-  public static boolean hasImportClzz(PsiJavaFile file, String clzzName) {
-    PsiImportStatement[] statements = file.getImportList().getImportStatements();
-
+  public static boolean hasImportClzz(@NotNull PsiJavaFile file, @NotNull String clzzName) {
+    PsiImportList importList = file.getImportList();
+    if (null == importList) {
+      return false;
+    }
+    PsiImportStatement[] statements = importList.getImportStatements();
     for (PsiImportStatement tmp : statements) {
       if (tmp.getQualifiedName().equals(clzzName)) {
         return true;

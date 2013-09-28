@@ -1,6 +1,6 @@
 package com.seventh7.mybatis.util;
 
-import org.jetbrains.annotations.NonNls;
+import com.intellij.psi.util.ReferenceSetBase;
 
 /**
  * @author yanglin
@@ -11,10 +11,8 @@ public final class MybatisConstants {
     throw new UnsupportedOperationException();
   }
 
-  @NonNls
-  public static final String DUMMY_IDENTIFIER = "IntellijIdeaRulezzz ";
+  public static final String DOT_SEPARATOR = String.valueOf(ReferenceSetBase.DOT_SEPARATOR);
 
-  @NonNls
-  public static final String DUMMY_IDENTIFIER_TRIMMED = "IntellijIdeaRulezzz";
+  public static final double PRIORITY = 400.0;
 
 }

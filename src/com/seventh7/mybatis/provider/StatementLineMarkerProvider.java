@@ -42,10 +42,11 @@ public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag
            && isTargetType(element);
   }
 
+  @SuppressWarnings("unchecked")
   @NotNull @Override
   public Optional<PsiMethod> apply(@NotNull XmlTag from) {
-      DomElement domElement = DomUtil.getDomElement(from);
-    return JavaUtils.findMethod(from.getProject(), (IdDomElement)domElement);
+    DomElement domElement = DomUtil.getDomElement(from);
+    return null == domElement ? Optional.<PsiMethod>absent() : JavaUtils.findMethod(from.getProject(), (IdDomElement)domElement);
   }
 
   private boolean isTargetType(PsiElement element) {
@@ -57,6 +58,7 @@ public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag
     return false;
   }
 
+  @SuppressWarnings("unchecked")
   @NotNull @Override
   public Navigatable getNavigatable(@NotNull XmlTag from, @NotNull PsiMethod target) {
     return (Navigatable)target.getNavigationElement();
