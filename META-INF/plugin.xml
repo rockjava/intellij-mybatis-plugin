@@ -13,6 +13,7 @@
       <ul>
           <li>Support generating mapper of xml</li>
           <li>Support property completion for result and id of resultMap、collection、association</li>
+          <li>Support parameter completion[ #{param} ] while writting sql(@Param based)</li>
           <li>Support resultMap completion for collection and association of resultMap</li>
       </ul>
       <h4>1.46</h4>
@@ -35,6 +36,7 @@
       <applicationConfigurable instance="com.seventh7.mybatis.setting.MybatisConfigurable" />
       <applicationService serviceInterface="com.seventh7.mybatis.setting.MybatisSetting" serviceImplementation="com.seventh7.mybatis.setting.MybatisSetting"/>
       <completion.contributor language="XML" implementationClass="com.seventh7.mybatis.contributor.TestConditionContributor"/>
+      <completion.contributor language="SQL" implementationClass="com.seventh7.mybatis.contributor.SqlParamCompletionContributor"/>
       <fileTemplateGroup implementation="com.seventh7.mybatis.MybatisFileTemplateDescriptorFactory" />
       <intentionAction>
           <className>com.seventh7.mybatis.intention.GenerateParamAnnotationIntention</className>

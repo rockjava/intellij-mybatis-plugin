@@ -8,6 +8,7 @@ import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.impl.source.codeStyle.CodeFormatterFacade;
 
@@ -31,8 +32,8 @@ public class EditorService {
     return ServiceManager.getService(project, EditorService.class);
   }
 
-  public void format(@NotNull PsiElement element) {
-    codeFormatterFacade.processText(element.getContainingFile(), new FormatTextRanges(element.getTextRange(), true), true);
+  public void format(@NotNull PsiFile file, @NotNull PsiElement element) {
+    codeFormatterFacade.processText(file, new FormatTextRanges(element.getTextRange(), true), true);
   }
 
   public void scrollTo(@NotNull PsiElement element, int offset) {

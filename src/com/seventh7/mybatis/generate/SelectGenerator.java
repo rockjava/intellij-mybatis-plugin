@@ -30,7 +30,7 @@ public class SelectGenerator extends StatementGenerator{
   private void setupResultType(PsiMethod method, Select select) {
     PsiType returnType = method.getReturnType();
     GenericAttributeValue<String> resultType = select.getResultType();
-    if (returnType instanceof PsiPrimitiveType) {
+    if (returnType instanceof PsiPrimitiveType && returnType != PsiType.VOID) {
       resultType.setValue(((PsiPrimitiveType) returnType).getBoxedTypeName());
     } else if (returnType instanceof PsiClassReferenceType) {
       PsiClassReferenceType type = (PsiClassReferenceType)returnType;

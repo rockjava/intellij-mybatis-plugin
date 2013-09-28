@@ -66,7 +66,7 @@ public abstract class StatementGenerator {
     XmlTag tag = target.getXmlTag();
     int offset = tag.getTextOffset() + tag.getTextLength() - tag.getName().length() + 1;
     EditorService editorService = EditorService.getInstance(method.getProject());
-    editorService.format(tag);
+    editorService.format(tag.getContainingFile(), tag);
     editorService.scrollTo(tag, offset);
   }
 

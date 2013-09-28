@@ -89,7 +89,7 @@ public class JavaService {
         PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
         PsiImportStatement statement = elementFactory.createImportStatement(clzz.get());
         importList.add(statement);
-        EditorService.getInstance(file.getProject()).format(statement);
+        EditorService.getInstance(file.getProject()).format(file, statement);
       }
     }
   }
