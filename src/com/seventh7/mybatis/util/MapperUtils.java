@@ -16,8 +16,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.xml.XmlElement;
-import com.intellij.psi.xml.XmlFile;
-import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomFileElement;
 import com.intellij.util.xml.DomService;
@@ -70,15 +68,7 @@ public final class MapperUtils {
 
   public static boolean isElementWithinMybatisFile(@NotNull PsiElement element) {
     PsiFile psiFile = element.getContainingFile();
-    return element instanceof XmlElement && isMybatisFile(psiFile);
-  }
-
-  public static boolean isMybatisFile(@Nullable PsiFile file) {
-    if (!(file instanceof XmlFile)) {
-      return false;
-    }
-    XmlTag rootTag = ((XmlFile)file).getRootTag();
-    return null != rootTag && rootTag.getName().equals("mapper");
+    return element instanceof XmlElement && DomUtils.isMybatisFile(psiFile);
   }
 
   @NotNull @NonNls

@@ -10,7 +10,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.intellij.sql.psi.SqlFile;
-import com.seventh7.mybatis.util.MapperUtils;
+import com.seventh7.mybatis.util.DomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +25,7 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
    */
   @Override
   public Result checkAutoPopup(char charTyped, Project project, Editor editor, PsiFile file) {
-    if (charTyped == '.' && MapperUtils.isMybatisFile(file)) {
+    if (charTyped == '.' && DomUtils.isMybatisFile(file)) {
       handlePopup(file, editor);
       return Result.STOP;
     }
@@ -44,7 +44,7 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
   @Override
   public Result charTyped(char c, Project project, Editor editor, @NotNull PsiFile file) {
     PsiFile topLevelFile = InjectedLanguageUtil.getTopLevelFile(file);
-    if (c == '{' & file instanceof SqlFile && MapperUtils.isMybatisFile(topLevelFile)) {
+    if (c == '{' & file instanceof SqlFile && DomUtils.isMybatisFile(topLevelFile)) {
       CaretModel caretModel = editor.getCaretModel();
       int offset = caretModel.getOffset();
       Document document = editor.getDocument();

@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  */
-public interface Association extends GroupFour, ResultMapGroup {
+public interface Association extends GroupFour, ResultMapGroup, PropertyGroup {
 
   @NotNull
   @Attribute("javaType")

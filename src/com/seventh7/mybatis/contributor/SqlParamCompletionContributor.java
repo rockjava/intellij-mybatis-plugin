@@ -13,7 +13,7 @@ import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomUtil;
 import com.seventh7.mybatis.dom.model.IdDomElement;
-import com.seventh7.mybatis.util.MapperUtils;
+import com.seventh7.mybatis.util.DomUtils;
 
 
 /**
@@ -29,7 +29,7 @@ public class SqlParamCompletionContributor extends CompletionContributor {
 
     PsiElement position = parameters.getPosition();
     PsiFile topLevelFile = InjectedLanguageUtil.getTopLevelFile(position);
-    if (MapperUtils.isMybatisFile(topLevelFile)) {
+    if (DomUtils.isMybatisFile(topLevelFile)) {
       if (shouldAddElement(position.getContainingFile(), parameters.getOffset())) {
         process(topLevelFile, result, position);
       }

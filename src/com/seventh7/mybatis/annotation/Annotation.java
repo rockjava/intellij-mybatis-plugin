@@ -24,6 +24,8 @@ public class Annotation implements Cloneable{
 
   public static final Annotation DELETE = new Annotation("@Delete", "org.apache.ibatis.annotations.Delete");
 
+  public static final Annotation ALIAS = new Annotation("@Alias", "org.apache.ibatis.type.Alias");
+
   public static final Annotation[] STATEMENT_SYMMETRIES = {SELECT, UPDATE, INSERT, DELETE};
 
   private final String label;

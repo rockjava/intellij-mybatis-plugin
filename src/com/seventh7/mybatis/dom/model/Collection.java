@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  */
-public interface Collection extends GroupFour, ResultMapGroup {
+public interface Collection extends GroupFour, ResultMapGroup, PropertyGroup {
 
   @NotNull
   @Attribute("ofType")

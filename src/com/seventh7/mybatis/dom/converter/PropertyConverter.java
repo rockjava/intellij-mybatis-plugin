@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  */
-public class ResultPropertyConverter extends FakeConverter<XmlAttributeValue> implements CustomReferenceConverter<XmlAttributeValue> {
+public class PropertyConverter extends FakeConverter<XmlAttributeValue> implements CustomReferenceConverter<XmlAttributeValue> {
 
   @NotNull @Override
   public PsiReference[] createReferences(GenericDomValue<XmlAttributeValue> value, PsiElement element, ConvertContext context) {
