@@ -3,6 +3,7 @@ package com.seventh7.mybatis.contributor;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.injected.editor.DocumentWindow;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -22,6 +23,10 @@ public class SqlParamCompletionContributor extends CompletionContributor {
 
   @Override
   public void fillCompletionVariants(CompletionParameters parameters, final CompletionResultSet result) {
+    if (parameters.getCompletionType() != CompletionType.BASIC) {
+      return;
+    }
+
     PsiElement position = parameters.getPosition();
     PsiFile topLevelFile = InjectedLanguageUtil.getTopLevelFile(position);
     if (MapperUtils.isMybatisFile(topLevelFile)) {
@@ -41,6 +46,7 @@ public class SqlParamCompletionContributor extends CompletionContributor {
         DomElement domElement = DomUtil.getDomElement(xmlTag);
         if (domElement instanceof IdDomElement) {
           TestConditionContributor.addElementForPsiParameter(position.getProject(), result, (IdDomElement) domElement);
+          result.stopHere();
         }
       }
     }

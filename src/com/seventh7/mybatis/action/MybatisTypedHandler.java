@@ -4,6 +4,7 @@ import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.editorActions.CompletionAutoPopupHandler;
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
 import com.intellij.openapi.editor.CaretModel;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
@@ -14,13 +15,13 @@ import com.seventh7.mybatis.util.MapperUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Simple handle it
+ * Simply handling
  * @author yanglin
  */
 public class MybatisTypedHandler extends TypedHandlerDelegate {
 
   /**
-   * TODO make the condition stronger
+   * TODO[yanglin] make the inspection stronger
    */
   @Override
   public Result checkAutoPopup(char charTyped, Project project, Editor editor, PsiFile file) {
@@ -43,14 +44,16 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
   @Override
   public Result charTyped(char c, Project project, Editor editor, @NotNull PsiFile file) {
     PsiFile topLevelFile = InjectedLanguageUtil.getTopLevelFile(file);
-    if (file instanceof SqlFile && MapperUtils.isMybatisFile(topLevelFile)) {
+    if (c == '{' & file instanceof SqlFile && MapperUtils.isMybatisFile(topLevelFile)) {
       CaretModel caretModel = editor.getCaretModel();
       int offset = caretModel.getOffset();
-      if (editor.getDocument().getText().charAt(offset - 2) == '#') {
+      Document document = editor.getDocument();
+      if (document.getText().charAt(offset - 2) == '#') {
         editor.getDocument().insertString(offset, "}");
         caretModel.moveToOffset(offset);
+        handlePopup(file, editor);
+        return Result.STOP;
       }
-      return Result.STOP;
     }
     return super.charTyped(c, project, editor, file);
   }
