@@ -1,6 +1,7 @@
 package com.seventh7.mybatis.alias;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
@@ -8,6 +9,8 @@ import com.intellij.psi.PsiClass;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -36,6 +39,18 @@ public class AliasFacade {
       }
     }
     return Optional.absent();
+  }
+
+  @NotNull
+  public Collection<PsiClass> getAliasSupporttedClasses() {
+    ArrayList<PsiClass> result = Lists.newArrayList();
+    for (AliasResolver resolver : createAliasResolvers()) {
+      Set<AliasDesc> clssDescs = resolver.getClssDescs();
+      for (AliasDesc desc : clssDescs) {
+        result.add(desc.getClzz());
+      }
+    }
+    return result;
   }
 
   private AliasResolver[] createAliasResolvers() {

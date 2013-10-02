@@ -10,10 +10,10 @@ import java.util.List;
 /**
  * @author yanglin
  */
-public interface Beans extends DomElement {
+public interface Bean extends DomElement {
 
   @NotNull
-  @SubTagList("bean")
-  public List<Bean> getBeans();
+  @SubTagList("property")
+  public List<BeanProperty> getBeanProperties();
 
 }

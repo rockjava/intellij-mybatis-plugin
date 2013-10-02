@@ -5,7 +5,11 @@ import com.google.common.collect.Sets;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.xml.DomService;
+import com.seventh7.mybatis.dom.model.Bean;
+import com.seventh7.mybatis.dom.model.BeanProperty;
 import com.seventh7.mybatis.dom.model.Beans;
+import com.seventh7.mybatis.util.CollectionUtils;
+import com.seventh7.mybatis.util.DomUtils;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -42,6 +46,25 @@ public class BeanAliasResolver extends PackageAliasResolver{
 
   @NotNull @Override
   public Collection<String> getPackages() {
+    Set<String> result = Sets.newHashSet();
+    Collection<Beans> domElements = DomUtils.findDomElements(project, Beans.class);
+    if (CollectionUtils.isEmpty(domElements)) {
+      return standby();
+    } else {
+      for (Beans bs : domElements) {
+        for (Bean bean : bs.getBeans()) {
+          for (BeanProperty pop : bean.getBeanProperties()) {
+            if (pop.getName().getStringValue().equals("typeAliasesPackage")) {
+              result.add(pop.getValue().getStringValue());
+            }
+          }
+        }
+      }
+    }
+    return result;
+  }
+
+  private Collection<String> standby() {
     Collection<VirtualFile> candidates = DomService.getInstance().getDomFileCandidates(Beans.class, project);
     Set<String> result = Sets.newHashSet();
     try {
