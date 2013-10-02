@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -58,6 +59,20 @@ public class AliasFacade {
       result.addAll(resolver.getClssAliasDescriptions());
     }
     return result;
+  }
+
+  public Optional<AliasDesc> findAliasDesc(@Nullable PsiClass clzz) {
+    if (null == clzz) {
+      return Optional.absent();
+    }
+    for (AliasResolver resolver : resolvers) {
+      for (AliasDesc desc : resolver.getClssAliasDescriptions()) {
+        if (desc.getClzz().equals(clzz)) {
+          return Optional.of(desc);
+        }
+      }
+    }
+    return Optional.absent();
   }
 
   public void registerResolver(@NotNull AliasResolver resolver) {

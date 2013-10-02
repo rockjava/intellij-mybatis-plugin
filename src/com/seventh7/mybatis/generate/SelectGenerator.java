@@ -1,5 +1,7 @@
 package com.seventh7.mybatis.generate;
 
+import com.google.common.base.Optional;
+
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiPrimitiveType;
@@ -9,6 +11,7 @@ import com.intellij.util.xml.GenericAttributeValue;
 import com.seventh7.mybatis.dom.model.GroupTwo;
 import com.seventh7.mybatis.dom.model.Mapper;
 import com.seventh7.mybatis.dom.model.Select;
+import com.seventh7.mybatis.util.JavaUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -30,9 +33,12 @@ public class SelectGenerator extends StatementGenerator{
 
   private void setupResultType(PsiMethod method, Select select) {
     PsiType returnType = method.getReturnType();
-    GenericAttributeValue<String> resultType = select.getResultType();
+    GenericAttributeValue<PsiClass> resultType = select.getResultType();
     if (returnType instanceof PsiPrimitiveType && returnType != PsiType.VOID) {
-      resultType.setValue(((PsiPrimitiveType) returnType).getBoxedTypeName());
+      Optional<PsiClass> clzz = JavaUtils.findClzz(method.getProject(), ((PsiPrimitiveType) returnType).getBoxedTypeName());
+      if (clzz.isPresent()) {
+        resultType.setValue(clzz.get());
+      }
     } else if (returnType instanceof PsiClassReferenceType) {
       PsiClassReferenceType type = (PsiClassReferenceType)returnType;
       if (type.hasParameters()) {
@@ -43,7 +49,7 @@ public class SelectGenerator extends StatementGenerator{
       }
       PsiClass clzz = type.resolve();
       if (null != clzz) {
-        resultType.setValue(clzz.getQualifiedName());
+        resultType.setValue(clzz);
       }
     }
   }

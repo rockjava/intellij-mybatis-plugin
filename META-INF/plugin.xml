@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.seventh7.plugin.mybatis</id>
     <name>MyBatis plugin</name>
-    <version>1.47</version>
+    <version>1.471</version>
     <vendor email="insist.day@gmail.com" url="https://github.com/seventh7">Yanglin</vendor>
 
   <description><![CDATA[
@@ -9,7 +9,7 @@
       ]]></description>
 
   <change-notes><![CDATA[
-      <h4>1.47</h4>
+      <h4>1.471</h4>
       <ul>
           <li>Support generating mapper of xml</li>
           <li>Support property completion for result and id of resultMap、collection、association</li>
@@ -17,6 +17,7 @@
           <li>Support resultMap completion for collection and association of resultMap</li>
           <li>Change reference strategy to support rename</li>
           <li>Brace completion while editting sql</li>
+          <li>Support resultType</li>
           <li>Alias support</li>
       </ul>
       <h4>1.46</h4>

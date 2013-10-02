@@ -1,7 +1,10 @@
 package com.seventh7.mybatis.dom.model;
 
+import com.intellij.psi.PsiClass;
 import com.intellij.util.xml.Attribute;
+import com.intellij.util.xml.Convert;
 import com.intellij.util.xml.GenericAttributeValue;
+import com.seventh7.mybatis.dom.converter.AliasConverter;
 
 /**
  * @author yanglin
@@ -9,5 +12,6 @@ import com.intellij.util.xml.GenericAttributeValue;
 public interface Select extends GroupTwo, ResultMapGroup{
 
   @Attribute("resultType")
-  public GenericAttributeValue<String> getResultType();
+  @Convert(AliasConverter.class)
+  public GenericAttributeValue<PsiClass> getResultType();
 }
