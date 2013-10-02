@@ -29,7 +29,7 @@ public class AliasConverter extends FakeConverter<PsiClass> implements CustomRef
   @Nullable @Override
   public PsiClass fromString(@Nullable @NonNls String s, ConvertContext context) {
     if (StringUtil.isEmptyOrSpaces(s)) return null;
-    if (null != s && !s.contains(MybatisConstants.DOT_SEPARATOR)) {
+    if (!s.contains(MybatisConstants.DOT_SEPARATOR)) {
       return AliasFacade.getInstance(context.getProject()).findPsiClass(s).orNull();
     }
     return DomJavaUtil.findClass(s.trim(), context.getFile(), context.getModule(), GlobalSearchScope.allScope(context.getProject()));
@@ -40,8 +40,7 @@ public class AliasConverter extends FakeConverter<PsiClass> implements CustomRef
     if (!(element instanceof XmlAttributeValue)) {
       return PsiReference.EMPTY_ARRAY;
     }
-    String text = ((XmlAttributeValue) element).getValue();
-    if (text.contains(MybatisConstants.DOT_SEPARATOR)) {
+    if (((XmlAttributeValue) element).getValue().contains(MybatisConstants.DOT_SEPARATOR)) {
       return DELEGATE.createReferences(value, element, context);
     } else {
       return new PsiReference[]{new AliasClassReference((XmlAttributeValue) element)};

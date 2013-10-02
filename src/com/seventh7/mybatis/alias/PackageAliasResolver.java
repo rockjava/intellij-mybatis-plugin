@@ -25,15 +25,11 @@ public abstract class PackageAliasResolver extends AliasResolver{
   public Set<AliasDesc> getClssDescs() {
     JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(project);
     Set<AliasDesc> result = Sets.newHashSet();
-    AliasDesc desc;
     for (String pkgName : getPackages()) {
       PsiPackage pkg = javaPsiFacade.findPackage(pkgName);
       if (null != pkg) {
         for (PsiClass clzz : pkg.getClasses()) {
-          desc = new AliasDesc();
-          result.add(desc);
-          desc.setClzz(clzz);
-          desc.setAlias(clzz.getName());
+          addAliasDesc(result, clzz, clzz.getName());
         }
       }
     }

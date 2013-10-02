@@ -1,6 +1,7 @@
 package com.seventh7.mybatis.alias;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiClass;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -15,6 +16,14 @@ public abstract class AliasResolver {
 
   public AliasResolver(Project project) {
     this.project = project;
+  }
+
+  protected AliasDesc addAliasDesc(@NotNull Set<AliasDesc> descs, @NotNull PsiClass clzz, @NotNull String alias) {
+    AliasDesc desc = new AliasDesc();
+    descs.add(desc);
+    desc.setClzz(clzz);
+    desc.setAlias(alias);
+    return desc;
   }
 
   @NotNull

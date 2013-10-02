@@ -25,14 +25,10 @@ public class SingleAliasResolver extends AliasResolver{
   @NotNull @Override
   public Set<AliasDesc> getClssDescs() {
     HashSet<AliasDesc> result = Sets.newHashSet();
-    AliasDesc desc;
     for (Configuration conf : DomUtils.findDomElements(project, Configuration.class)) {
       for (TypeAliases tas : conf.getTypeAliases()) {
         for (TypeAlias ta : tas.getTypeAlias()) {
-          desc = new AliasDesc();
-          result.add(desc);
-          desc.setAlias(ta.getAlias().getStringValue());
-          desc.setClzz(ta.getType().getValue());
+          addAliasDesc(result, ta.getType().getValue(), ta.getAlias().getStringValue());
         }
       }
     }
