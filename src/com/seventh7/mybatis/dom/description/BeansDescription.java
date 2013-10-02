@@ -20,7 +20,7 @@ public class BeansDescription extends DomFileDescription<Beans>{
 
   @Override
   public boolean isMyFile(@NotNull XmlFile file, @Nullable Module module) {
-    return DomUtils.isBeansFile(file);
+    return true;
   }
 
 }

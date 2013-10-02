@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author yanglin
@@ -20,19 +20,29 @@ public class AliasFacade {
 
   private Project project;
 
+  private List<AliasResolver> resolvers;
+
   public static final AliasFacade getInstance(@NotNull Project project) {
     return ServiceManager.getService(project, AliasFacade.class);
   }
 
   public AliasFacade(Project project) {
     this.project = project;
+    this.resolvers = Lists.newArrayList();
+    initResolvers();
+  }
+
+  private void initResolvers() {
+    this.registerResolver(AliasResolverFactory.createSingleAliasResolver(project));
+    this.registerResolver(AliasResolverFactory.createConfigPackageResolver(project));
+    this.registerResolver(AliasResolverFactory.createBeanResolver(project));
+    this.registerResolver(AliasResolverFactory.createAnnotationResolver(project));
   }
 
   @NotNull
   public Optional<PsiClass> findPsiClass(@NotNull String shortName) {
-    for (AliasResolver resolver : createAliasResolvers()) {
-      Set<AliasDesc> clssDescs = resolver.getClssDescs();
-      for (AliasDesc desc : clssDescs) {
+    for (AliasResolver resolver : resolvers) {
+      for (AliasDesc desc : resolver.getClssDescs()) {
         if (desc.getAlias().equals(shortName)) {
           return Optional.of(desc.getClzz());
         }
@@ -42,24 +52,16 @@ public class AliasFacade {
   }
 
   @NotNull
-  public Collection<PsiClass> getAliasSupporttedClasses() {
-    ArrayList<PsiClass> result = Lists.newArrayList();
-    for (AliasResolver resolver : createAliasResolvers()) {
-      Set<AliasDesc> clssDescs = resolver.getClssDescs();
-      for (AliasDesc desc : clssDescs) {
-        result.add(desc.getClzz());
-      }
+  public Collection<AliasDesc> getAliasDescs() {
+    ArrayList<AliasDesc> result = Lists.newArrayList();
+    for (AliasResolver resolver : resolvers) {
+      result.addAll(resolver.getClssDescs());
     }
     return result;
   }
 
-  private AliasResolver[] createAliasResolvers() {
-    return new AliasResolver[] {
-        AliasResolverFactory.createAnnotationResolver(project),
-        AliasResolverFactory.createSingleAliasResolver(project),
-        AliasResolverFactory.createConfigPackageResolver(project),
-        AliasResolverFactory.createBeanResolver(project)
-    };
+  public void registerResolver(@NotNull AliasResolver resolver) {
+    this.resolvers.add(resolver);
   }
 
 }

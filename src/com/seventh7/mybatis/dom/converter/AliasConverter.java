@@ -1,9 +1,17 @@
 package com.seventh7.mybatis.dom.converter;
 
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.util.xml.ConvertContext;
+import com.intellij.util.xml.CustomReferenceConverter;
+import com.intellij.util.xml.DomJavaUtil;
+import com.intellij.util.xml.GenericDomValue;
 import com.intellij.util.xml.PsiClassConverter;
-import com.intellij.util.xml.ResolvingConverter;
+import com.seventh7.mybatis.alias.AliasClassReference;
 import com.seventh7.mybatis.alias.AliasFacade;
 import com.seventh7.mybatis.util.MybatisConstants;
 
@@ -11,32 +19,32 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-
 /**
- * todo fix completion 
  * @author yanglin
  */
-public class AliasConverter extends ResolvingConverter<PsiClass> {
+public class AliasConverter extends FakeConverter<PsiClass> implements CustomReferenceConverter<PsiClass> {
 
   private final static PsiClassConverter DELEGATE = new PsiClassConverter();
 
   @Nullable @Override
   public PsiClass fromString(@Nullable @NonNls String s, ConvertContext context) {
+    if (StringUtil.isEmptyOrSpaces(s)) return null;
     if (null != s && !s.contains(MybatisConstants.DOT_SEPARATOR)) {
       return AliasFacade.getInstance(context.getProject()).findPsiClass(s).orNull();
     }
-    return DELEGATE.fromString(s, context);
-  }
-
-  @Nullable @Override
-  public String toString(@Nullable PsiClass psiClass, ConvertContext context) {
-    return DELEGATE.toString(psiClass, context);
+    return DomJavaUtil.findClass(s.trim(), context.getFile(), context.getModule(), GlobalSearchScope.allScope(context.getProject()));
   }
 
   @NotNull @Override
-  public Collection<? extends PsiClass> getVariants(ConvertContext context) {
-    return AliasFacade.getInstance(context.getProject()).getAliasSupporttedClasses();
+  public PsiReference[] createReferences(GenericDomValue<PsiClass> value, PsiElement element, ConvertContext context) {
+    if (!(element instanceof XmlAttributeValue)) {
+      return PsiReference.EMPTY_ARRAY;
+    }
+    String text = ((XmlAttributeValue) element).getValue();
+    if (text.contains(MybatisConstants.DOT_SEPARATOR)) {
+      return DELEGATE.createReferences(value, element, context);
+    } else {
+      return new PsiReference[]{new AliasClassReference((XmlAttributeValue) element)};
+    }
   }
-
 }

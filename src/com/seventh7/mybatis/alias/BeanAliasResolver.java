@@ -69,6 +69,7 @@ public class BeanAliasResolver extends PackageAliasResolver{
     Set<String> result = Sets.newHashSet();
     try {
       for (VirtualFile file : candidates) {
+        file.refresh(true, true);
         Document document = builder.build(new ByteArrayInputStream(file.contentsToByteArray()));
         XPath path = setupXPath("org.mybatis.spring.SqlSessionFactoryBean", "typeAliasesPackage");
         Element property = (Element)path.selectSingleNode(document);
