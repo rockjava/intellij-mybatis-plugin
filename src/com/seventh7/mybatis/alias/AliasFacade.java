@@ -42,7 +42,7 @@ public class AliasFacade {
   @NotNull
   public Optional<PsiClass> findPsiClass(@NotNull String shortName) {
     for (AliasResolver resolver : resolvers) {
-      for (AliasDesc desc : resolver.getClssDescs()) {
+      for (AliasDesc desc : resolver.getClssAliasDescriptions()) {
         if (desc.getAlias().equals(shortName)) {
           return Optional.of(desc.getClzz());
         }
@@ -55,7 +55,7 @@ public class AliasFacade {
   public Collection<AliasDesc> getAliasDescs() {
     ArrayList<AliasDesc> result = Lists.newArrayList();
     for (AliasResolver resolver : resolvers) {
-      result.addAll(resolver.getClssDescs());
+      result.addAll(resolver.getClssAliasDescriptions());
     }
     return result;
   }

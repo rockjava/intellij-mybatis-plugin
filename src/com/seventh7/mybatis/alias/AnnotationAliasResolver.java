@@ -54,7 +54,7 @@ public class AnnotationAliasResolver extends AliasResolver implements ProjectCom
   }
 
   @NotNull @Override
-  public Set<AliasDesc> getClssDescs() {
+  public Set<AliasDesc> getClssAliasDescriptions() {
     return Sets.newHashSet(Collections2.transform(clzzCache, function));
   }
 

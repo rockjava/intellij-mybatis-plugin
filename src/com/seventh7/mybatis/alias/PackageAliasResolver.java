@@ -22,7 +22,7 @@ public abstract class PackageAliasResolver extends AliasResolver{
   }
 
   @NotNull @Override
-  public Set<AliasDesc> getClssDescs() {
+  public Set<AliasDesc> getClssAliasDescriptions() {
     JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(project);
     Set<AliasDesc> result = Sets.newHashSet();
     for (String pkgName : getPackages()) {

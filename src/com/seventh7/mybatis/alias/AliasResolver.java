@@ -27,6 +27,13 @@ public abstract class AliasResolver {
   }
 
   @NotNull
-  public abstract Set<AliasDesc> getClssDescs();
+  public abstract Set<AliasDesc> getClssAliasDescriptions();
 
+  public Project getProject() {
+    return project;
+  }
+
+  public void setProject(Project project) {
+    this.project = project;
+  }
 }

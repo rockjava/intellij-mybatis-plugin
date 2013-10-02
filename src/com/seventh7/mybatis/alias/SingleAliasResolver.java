@@ -23,7 +23,7 @@ public class SingleAliasResolver extends AliasResolver{
   }
 
   @NotNull @Override
-  public Set<AliasDesc> getClssDescs() {
+  public Set<AliasDesc> getClssAliasDescriptions() {
     HashSet<AliasDesc> result = Sets.newHashSet();
     for (Configuration conf : DomUtils.findDomElements(project, Configuration.class)) {
       for (TypeAliases tas : conf.getTypeAliases()) {
