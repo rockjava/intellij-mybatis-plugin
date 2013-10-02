@@ -32,7 +32,7 @@ public class MybatisSetting implements PersistentStateComponent<Element> {
 
   private GenerateModel statementGenerateModel;
 
-  private Gson gson = new GsonBuilder().create();
+  private Gson gson = new Gson();
 
   private Type gsonTypeToken = new TypeToken<Set<String>>() {}.getType();
 

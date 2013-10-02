@@ -15,7 +15,7 @@
           <li>Support property completion for result and id of resultMap、collection、association</li>
           <li>Support parameter completion[ #{param} ] while editting sql(@Param based)</li>
           <li>Support resultMap completion for collection and association of resultMap</li>
-          <li>Change reference strategy to support refactor</li>
+          <li>Change reference strategy to support rename</li>
       </ul>
       <h4>1.46</h4>
       <ul>
@@ -35,11 +35,12 @@
       <projectService serviceImplementation="com.seventh7.mybatis.service.JavaService" />
       <projectService serviceImplementation="com.seventh7.mybatis.service.AnnotationService" />
       <projectService serviceImplementation="com.seventh7.mybatis.service.EditorService" />
+      <projectService serviceImplementation="com.seventh7.mybatis.alias.AliasFacade" />
       <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.seventh7.mybatis.provider.MapperLineMarkerProvider" />
       <codeInsight.lineMarkerProvider language="XML" implementationClass="com.seventh7.mybatis.provider.StatementLineMarkerProvider" />
       <applicationConfigurable instance="com.seventh7.mybatis.setting.MybatisConfigurable" />
       <applicationService serviceInterface="com.seventh7.mybatis.setting.MybatisSetting" serviceImplementation="com.seventh7.mybatis.setting.MybatisSetting"/>
-      <completion.contributor language="XML" implementationClass="com.seventh7.mybatis.contributor.TestConditionContributor"/>
+      <completion.contributor language="XML" implementationClass="com.seventh7.mybatis.contributor.TestParamContributor"/>
       <completion.contributor language="SQL" implementationClass="com.seventh7.mybatis.contributor.SqlParamCompletionContributor" order="first"/>
       <fileTemplateGroup implementation="com.seventh7.mybatis.MybatisFileTemplateDescriptorFactory" />
       <typedHandler implementation="com.seventh7.mybatis.action.MybatisTypedHandler" id="mybatis"/>
@@ -53,4 +54,9 @@
           <className>com.seventh7.mybatis.intention.GenerateMapperIntention</className>
       </intentionAction>
   </extensions>
+    <project-components>
+        <component>
+            <implementation-class>com.seventh7.mybatis.alias.AnnotationAliasResolver</implementation-class>
+        </component>
+    </project-components>
 </idea-plugin>

@@ -21,14 +21,14 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ContextPsiFieldReference extends PsiReferenceBase<XmlAttributeValue>{
 
-  private ContextReferenceSetResolver resolver;
+  protected ContextReferenceSetResolver resolver;
 
-  private int index;
+  protected int index;
 
   public ContextPsiFieldReference(XmlAttributeValue element, TextRange range, int index) {
-    super(element, range, false);
-    resolver = ReferenceSetResolverFactory.createPsiFieldResolver(element);
+    super(element, range, true);
     this.index = index;
+    resolver = ReferenceSetResolverFactory.createPsiFieldResolver(element);
   }
 
   @SuppressWarnings("unchecked")
@@ -58,4 +58,19 @@ public class ContextPsiFieldReference extends PsiReferenceBase<XmlAttributeValue
     return Optional.absent();
   }
 
+  public ContextReferenceSetResolver getResolver() {
+    return resolver;
+  }
+
+  public void setResolver(ContextReferenceSetResolver resolver) {
+    this.resolver = resolver;
+  }
+
+  public int getIndex() {
+    return index;
+  }
+
+  public void setIndex(int index) {
+    this.index = index;
+  }
 }

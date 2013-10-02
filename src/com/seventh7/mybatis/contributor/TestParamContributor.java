@@ -11,8 +11,6 @@ import com.intellij.codeInsight.completion.PrioritizedLookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.patterns.XmlPatterns;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiAnnotationMemberValue;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
@@ -32,10 +30,10 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author yanglin
  */
-public class TestConditionContributor extends CompletionContributor {
+public class TestParamContributor extends CompletionContributor {
 
   @SuppressWarnings("unchecked")
-  public TestConditionContributor() {
+  public TestParamContributor() {
     extend(CompletionType.BASIC,
            XmlPatterns.psiElement().inside(XmlPatterns.xmlAttributeValue().inside(XmlPatterns.xmlAttribute().withName("test"))),
            new CompletionProvider<CompletionParameters>() {
@@ -57,16 +55,11 @@ public class TestConditionContributor extends CompletionContributor {
     }
     Optional<PsiMethod> method = JavaUtils.findMethod(project, element);
     PsiParameterList parameterList = method.get().getParameterList();
-    if (null != parameterList) {
-      for (PsiParameter parameter : parameterList.getParameters()) {
-        Optional<PsiAnnotation> psiAnnotation = JavaUtils.getPsiAnnotation(parameter, Annotation.PARAM);
-        if (psiAnnotation.isPresent()) {
-          PsiAnnotationMemberValue value = psiAnnotation.get().findDeclaredAttributeValue("value");
-          if (null != value) {
-            LookupElementBuilder builder = LookupElementBuilder.create(value.getText().replaceAll("\"", "")).setIcon(Icons.PARAM_COMPLECTION_ICON);
-            result.addElement(PrioritizedLookupElement.withPriority(builder, MybatisConstants.PRIORITY));
-          }
-        }
+    for (PsiParameter parameter : parameterList.getParameters()) {
+      Optional<String> valueText = JavaUtils.getAnnotationValueText(parameter, Annotation.PARAM);
+      if (valueText.isPresent()) {
+        LookupElementBuilder builder = LookupElementBuilder.create(valueText.get()).setIcon(Icons.PARAM_COMPLECTION_ICON);
+        result.addElement(PrioritizedLookupElement.withPriority(builder, MybatisConstants.PRIORITY));
       }
     }
   }

@@ -15,7 +15,7 @@ import com.seventh7.mybatis.util.DomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Simply handling
+ * Simple handling
  * @author yanglin
  */
 public class MybatisTypedHandler extends TypedHandlerDelegate {

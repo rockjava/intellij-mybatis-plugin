@@ -1,3 +1,7 @@
+#Download
+
+* http://plugins.jetbrains.com/plugin/7293
+
 # Features
 
 * Useful navigation between xml and mapper
@@ -7,7 +11,7 @@
     * \#{yourParameter}
     * @Param annotation based
     * Association is supportted
-* Support some useful refactor of mapper in xml
+* Support some useful rename of mapper in xml
 
 #Generate
 

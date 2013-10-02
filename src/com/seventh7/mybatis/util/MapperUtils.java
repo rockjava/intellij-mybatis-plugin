@@ -14,11 +14,8 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.xml.XmlElement;
 import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.DomFileElement;
-import com.intellij.util.xml.DomService;
 import com.intellij.util.xml.DomUtil;
 import com.seventh7.mybatis.dom.model.IdDomElement;
 import com.seventh7.mybatis.dom.model.Mapper;
@@ -36,13 +33,6 @@ import java.util.Properties;
  * @author yanglin
  */
 public final class MapperUtils {
-
-  private  static Function<DomFileElement<Mapper>, Mapper> MAPPER_TRANSFORM_fUNCTION = new Function<DomFileElement<Mapper>, Mapper>() {
-    @Override
-    public Mapper apply(DomFileElement<Mapper> element) {
-      return element.getRootElement();
-    }
-  };
 
   private MapperUtils() {
     throw new UnsupportedOperationException();
@@ -73,9 +63,7 @@ public final class MapperUtils {
 
   @NotNull @NonNls
   public static Collection<Mapper> findMappers(@NotNull Project project) {
-    GlobalSearchScope scope = GlobalSearchScope.allScope(project);
-    List<DomFileElement<Mapper>> elements = DomService.getInstance().getFileElements(Mapper.class, project, scope);
-    return Collections2.transform(elements, MAPPER_TRANSFORM_fUNCTION);
+    return DomUtils.findDomElements(project, Mapper.class);
   }
 
   @NotNull @NonNls

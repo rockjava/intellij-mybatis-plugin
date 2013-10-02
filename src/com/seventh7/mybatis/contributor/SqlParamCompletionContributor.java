@@ -45,7 +45,7 @@ public class SqlParamCompletionContributor extends CompletionContributor {
       if (null != xmlTag) {
         DomElement domElement = DomUtil.getDomElement(xmlTag);
         if (domElement instanceof IdDomElement) {
-          TestConditionContributor.addElementForPsiParameter(position.getProject(), result, (IdDomElement) domElement);
+          TestParamContributor.addElementForPsiParameter(position.getProject(), result, (IdDomElement) domElement);
           result.stopHere();
         }
       }

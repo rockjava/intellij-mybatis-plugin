@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiAnnotation;
+import com.intellij.psi.PsiAnnotationMemberValue;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
@@ -92,9 +93,31 @@ public final class JavaUtils {
     return null != modifierList && null != modifierList.findAnnotation(annotation.getQualifiedName());
   }
 
+  @NotNull
   public static Optional<PsiAnnotation> getPsiAnnotation(@NotNull PsiModifierListOwner target, @NotNull Annotation annotation) {
     PsiModifierList modifierList = target.getModifierList();
     return null == modifierList ? Optional.<PsiAnnotation>absent() : Optional.fromNullable(modifierList.findAnnotation(annotation.getQualifiedName()));
+  }
+
+  @NotNull
+  public static Optional<PsiAnnotationMemberValue> getAnnotationAttributeValue(@NotNull PsiModifierListOwner target,
+                                                                               @NotNull Annotation annotation,
+                                                                               @NotNull String attrName) {
+    if (!isAnnotationPresent(target, annotation)) {
+      return Optional.absent();
+    }
+    Optional<PsiAnnotation> psiAnnotation = getPsiAnnotation(target, annotation);
+    return psiAnnotation.isPresent() ? Optional.fromNullable(psiAnnotation.get().findAttributeValue(attrName)) : Optional.<PsiAnnotationMemberValue>absent();
+  }
+
+  @NotNull
+  public static Optional<PsiAnnotationMemberValue> getAnnotationValue(@NotNull PsiModifierListOwner target, @NotNull Annotation annotation) {
+    return getAnnotationAttributeValue(target, annotation, "value");
+  }
+
+  public static Optional<String> getAnnotationValueText(@NotNull PsiModifierListOwner target, @NotNull Annotation annotation) {
+    Optional<PsiAnnotationMemberValue> annotationValue = getAnnotationValue(target, annotation);
+    return annotationValue.isPresent() ? Optional.of(annotationValue.get().getText().replaceAll("\"", "")) : Optional.<String>absent();
   }
 
   public static boolean isAnyAnnotationPresent(@NotNull PsiModifierListOwner target, @NotNull Annotation[] annotations) {
