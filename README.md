@@ -18,4 +18,4 @@
 * Place your caret on your target
     * Declaration of mapper interface、method or parameter
 * Shortcut: Option + Enter(Mac) | Alt + Enter(Windows)
-* Method match model can changed with "Idea Setting" -> "Mybatis"
+* Method match model can be changed with "Idea Setting" -> "Mybatis"
