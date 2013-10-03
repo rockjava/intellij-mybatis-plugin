@@ -1,7 +1,6 @@
 package com.seventh7.mybatis.alias;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Sets;
 
@@ -87,16 +86,14 @@ public class AnnotationAliasResolver extends AliasResolver implements ProjectCom
     }
   }
 
-  private void cacheClzzIfNeeded(@NotNull PsiClass clzz) {
-    Optional<String> alias = JavaUtils.getAnnotationValueText(clzz, ALIAS);
-    if (alias.isPresent()) {
+  public void cacheClzzIfNeeded(@NotNull PsiClass clzz) {
+    if (JavaUtils.getAnnotationValueText(clzz, ALIAS).isPresent()) {
       clzzCache.add(clzz);
     }
   }
 
-  private void removeCachedClzzIfNeeded(@NotNull PsiClass clzz) {
-    Optional<String> alias = JavaUtils.getAnnotationValueText(clzz, ALIAS);
-    if (!alias.isPresent()) {
+  public void removeCachedClzzIfNeeded(@NotNull PsiClass clzz) {
+    if (!JavaUtils.getAnnotationValueText(clzz, ALIAS).isPresent()) {
       clzzCache.remove(clzz);
     }
   }

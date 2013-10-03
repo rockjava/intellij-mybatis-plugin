@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
@@ -18,7 +19,11 @@ public abstract class AliasResolver {
     this.project = project;
   }
 
-  protected AliasDesc addAliasDesc(@NotNull Set<AliasDesc> descs, @NotNull PsiClass clzz, @NotNull String alias) {
+  @Nullable
+  protected AliasDesc addAliasDesc(@NotNull Set<AliasDesc> descs, @Nullable PsiClass clzz, @Nullable String alias) {
+    if (null == clzz || null == alias) {
+      return null;
+    }
     AliasDesc desc = new AliasDesc();
     descs.add(desc);
     desc.setClzz(clzz);

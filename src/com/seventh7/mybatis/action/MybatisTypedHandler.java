@@ -49,9 +49,8 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
       int offset = caretModel.getOffset();
       Document document = editor.getDocument();
       if (document.getText().charAt(offset - 2) == '#') {
-        editor.getDocument().insertString(offset, "}");
+        document.insertString(offset, "}");
         caretModel.moveToOffset(offset);
-        handlePopup(file, editor);
         return Result.STOP;
       }
     }
