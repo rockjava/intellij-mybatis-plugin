@@ -72,7 +72,7 @@ public class AnnotationAliasResolver extends AliasResolver implements ProjectCom
 
   private void handlePsiClassChange(@NotNull PsiClass[] clzzes) {
     for (PsiClass clzz : clzzes) {
-      if (!clzz.isInterface() && !clzz.isAnnotationType() && !clzz.isEnum() && clzz.isValid()) {
+      if (JavaUtils.isModelClzz(clzz)) {
         handlePsiClassChange(clzz);
       }
     }
@@ -87,7 +87,7 @@ public class AnnotationAliasResolver extends AliasResolver implements ProjectCom
   }
 
   public void cacheClzzIfNeeded(@NotNull PsiClass clzz) {
-    if (JavaUtils.getAnnotationValueText(clzz, ALIAS).isPresent()) {
+    if (JavaUtils.isModelClzz(clzz) && JavaUtils.getAnnotationValueText(clzz, ALIAS).isPresent()) {
       clzzCache.add(clzz);
     }
   }

@@ -39,6 +39,10 @@ public final class JavaUtils {
     throw new UnsupportedOperationException();
   }
 
+  public static boolean isModelClzz(@Nullable PsiClass clzz) {
+    return null != clzz && !clzz.isAnnotationType() && !clzz.isInterface() && !clzz.isEnum() && clzz.isValid();
+  }
+
   @NotNull
   public static Optional<PsiField> findSettablePsiField(@NotNull Project project, @NotNull PsiClass clzz, @Nullable String propertyName) {
     PsiMethod propertySetter = PropertyUtil.findPropertySetter(clzz, propertyName, false, true);

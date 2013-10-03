@@ -33,11 +33,8 @@ public abstract class PackageAliasResolver extends AliasResolver{
       PsiPackage pkg = javaPsiFacade.findPackage(pkgName);
       if (null != pkg) {
         addAliasDesc(result, pkg);
-        PsiPackage[] packages = pkg.getSubPackages();
-        for (PsiPackage tmp : packages) {
-          if (null != tmp) {
-            addAliasDesc(result, tmp);
-          }
+        for (PsiPackage tmp : pkg.getSubPackages()) {
+          addAliasDesc(result, tmp);
         }
       }
     }
