@@ -21,7 +21,7 @@ public abstract class AliasResolver {
 
   @Nullable
   protected AliasDesc addAliasDesc(@NotNull Set<AliasDesc> descs, @Nullable PsiClass clzz, @Nullable String alias) {
-    if (null == clzz || null == alias) {
+    if (null == clzz || null == alias || clzz.isEnum() || clzz.isInterface() || !clzz.isValid()) {
       return null;
     }
     AliasDesc desc = new AliasDesc();
