@@ -28,7 +28,10 @@ public class SingleAliasResolver extends AliasResolver{
     for (Configuration conf : DomUtils.findDomElements(project, Configuration.class)) {
       for (TypeAliases tas : conf.getTypeAliases()) {
         for (TypeAlias ta : tas.getTypeAlias()) {
-          addAliasDesc(result, ta.getType().getValue(), ta.getAlias().getStringValue());
+          String stringValue = ta.getAlias().getStringValue();
+          if (null != stringValue) {
+            addAliasDesc(result, ta.getType().getValue(), stringValue);
+          }
         }
       }
     }

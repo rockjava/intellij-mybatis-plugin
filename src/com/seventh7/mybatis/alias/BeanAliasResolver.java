@@ -54,8 +54,12 @@ public class BeanAliasResolver extends PackageAliasResolver{
       for (Beans bs : domElements) {
         for (Bean bean : bs.getBeans()) {
           for (BeanProperty pop : bean.getBeanProperties()) {
-            if (pop.getName().getStringValue().equals("typeAliasesPackage")) {
-              result.add(pop.getValue().getStringValue());
+            String stringValue = pop.getName().getStringValue();
+            if (null != stringValue && stringValue.equals("typeAliasesPackage")) {
+              String popValue = pop.getValue().getStringValue();
+              if (null != popValue) {
+                result.add(popValue);
+              }
             }
           }
         }

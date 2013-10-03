@@ -26,7 +26,10 @@ public class ConfigPackageAliasResolver extends PackageAliasResolver{
     for (Configuration conf : DomUtils.findDomElements(project, Configuration.class)) {
       for (TypeAliases tas : conf.getTypeAliases()) {
         for (com.seventh7.mybatis.dom.model.Package pkg : tas.getPackages()) {
-          result.add(pkg.getName().getStringValue());
+          String stringValue = pkg.getName().getStringValue();
+          if (null != stringValue) {
+            result.add(stringValue);
+          }
         }
       }
     }
