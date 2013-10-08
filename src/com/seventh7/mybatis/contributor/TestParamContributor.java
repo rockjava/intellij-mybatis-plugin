@@ -16,12 +16,11 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiParameterList;
 import com.intellij.util.ProcessingContext;
-import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.DomUtil;
 import com.seventh7.mybatis.annotation.Annotation;
 import com.seventh7.mybatis.dom.model.IdDomElement;
 import com.seventh7.mybatis.util.Icons;
 import com.seventh7.mybatis.util.JavaUtils;
+import com.seventh7.mybatis.util.MapperUtils;
 import com.seventh7.mybatis.util.MybatisConstants;
 
 import org.jetbrains.annotations.NotNull;
@@ -40,12 +39,9 @@ public class TestParamContributor extends CompletionContributor {
               @Override
               protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
                 PsiElement position = parameters.getPosition();
-                DomElement domElement = DomUtil.getDomElement(position);
-                if (null != domElement) {
-                  IdDomElement element = DomUtil.getParentOfType(domElement, IdDomElement.class, true);
-                  addElementForPsiParameter(position.getProject(), result, element);
-                }
-             }
+                Optional<IdDomElement> idDomElement = MapperUtils.findParentIdDomElement(position);
+                addElementForPsiParameter(position.getProject(), result, idDomElement.orNull());
+              }
     });
   }
 

@@ -14,9 +14,7 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlElement;
-import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomUtil;
 import com.seventh7.mybatis.dom.model.IdDomElement;
@@ -40,16 +38,13 @@ public final class MapperUtils {
     throw new UnsupportedOperationException();
   }
 
+  @NotNull
   public static Optional<IdDomElement> findParentIdDomElement(@NotNull PsiElement element) {
-    XmlTag xmlTag = PsiTreeUtil.getParentOfType(element, XmlTag.class);
-    if (null == xmlTag) {
+    DomElement domElement = DomUtil.getDomElement(element);
+    if (null == domElement) {
       return Optional.absent();
     }
-    while (null != xmlTag.getParentTag() && !(DomUtil.getDomElement(xmlTag) instanceof IdDomElement)) {
-      xmlTag = xmlTag.getParentTag();
-    }
-    DomElement result = DomUtil.getDomElement(xmlTag);
-    return result instanceof IdDomElement ? Optional.of((IdDomElement)result) : Optional.<IdDomElement>absent();
+    return Optional.fromNullable(DomUtil.getParentOfType(domElement, IdDomElement.class, true));
   }
 
   public static PsiElement createMapperFromFileTemplate(@NotNull String fileTemplateName,
