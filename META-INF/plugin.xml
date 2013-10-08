@@ -4,11 +4,11 @@
     <version>1.48</version>
     <vendor email="insist.day@gmail.com" url="https://github.com/seventh7">Yanglin</vendor>
 
-  <description><![CDATA[
+    <description><![CDATA[
           Plugin for mybatis
       ]]></description>
 
-  <change-notes><![CDATA[
+    <change-notes><![CDATA[
       <h4>1.48</h4>
           <li>Supoort surround with CDATA section for sql</li>
       <h4>1.472</h4>
@@ -29,41 +29,42 @@
           <li>Change the keystroke for generate @Param and new statement with Alt + Enter(Windows) | Option + Enter(Mac)</li>
       </ul>
       ]]>
-  </change-notes>
+    </change-notes>
 
-  <idea-version since-build="107.105"/>
-  <depends>com.intellij.sql</depends>
-  <extensions defaultExtensionNs="com.intellij">
-      <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.MapperDescription" />
-      <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.BeansDescription" />
-      <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.ConfigurationDescription" />
-      <definitionsSearch implementation="com.seventh7.mybatis.definitionsearch.MapperDefinitionSearch"/>
-      <projectService serviceImplementation="com.seventh7.mybatis.service.JavaService" />
-      <projectService serviceImplementation="com.seventh7.mybatis.service.AnnotationService" />
-      <projectService serviceImplementation="com.seventh7.mybatis.service.EditorService" />
-      <projectService serviceImplementation="com.seventh7.mybatis.alias.AliasFacade" />
-      <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.seventh7.mybatis.provider.MapperLineMarkerProvider" />
-      <codeInsight.lineMarkerProvider language="XML" implementationClass="com.seventh7.mybatis.provider.StatementLineMarkerProvider" />
-      <applicationConfigurable instance="com.seventh7.mybatis.setting.MybatisConfigurable" />
-      <applicationService serviceInterface="com.seventh7.mybatis.setting.MybatisSetting" serviceImplementation="com.seventh7.mybatis.setting.MybatisSetting"/>
-      <completion.contributor language="XML" implementationClass="com.seventh7.mybatis.contributor.TestParamContributor"/>
-      <completion.contributor language="SQL" implementationClass="com.seventh7.mybatis.contributor.SqlParamCompletionContributor" order="first"/>
-      <fileTemplateGroup implementation="com.seventh7.mybatis.template.MybatisFileTemplateDescriptorFactory" />
-      <typedHandler implementation="com.seventh7.mybatis.action.MybatisTypedHandler" id="mybatis"/>
-      <defaultLiveTemplatesProvider implementation="com.seventh7.mybatis.template.SqlLiveTemplateProvider"/>
-      <intentionAction>
-          <className>com.seventh7.mybatis.intention.GenerateParamAnnotationIntention</className>
-      </intentionAction>
-      <intentionAction>
-          <className>com.seventh7.mybatis.intention.GenerateStatementIntention</className>
-      </intentionAction>
-      <intentionAction order="first">
-          <className>com.seventh7.mybatis.intention.GenerateMapperIntention</className>
-      </intentionAction>
-  </extensions>
+    <idea-version since-build="107.105"/>
+    <depends>com.intellij.sql</depends>
+    <extensions defaultExtensionNs="com.intellij">
+        <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.MapperDescription"/>
+        <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.BeansDescription"/>
+        <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.ConfigurationDescription"/>
+        <definitionsSearch implementation="com.seventh7.mybatis.definitionsearch.MapperDefinitionSearch"/>
+        <projectService serviceImplementation="com.seventh7.mybatis.service.JavaService"/>
+        <projectService serviceImplementation="com.seventh7.mybatis.service.AnnotationService"/>
+        <projectService serviceImplementation="com.seventh7.mybatis.service.EditorService"/>
+        <projectService serviceImplementation="com.seventh7.mybatis.alias.AliasFacade"/>
+        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.seventh7.mybatis.provider.MapperLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="XML" implementationClass="com.seventh7.mybatis.provider.StatementLineMarkerProvider"/>
+        <applicationConfigurable instance="com.seventh7.mybatis.setting.MybatisConfigurable"/>
+        <applicationService serviceInterface="com.seventh7.mybatis.setting.MybatisSetting" serviceImplementation="com.seventh7.mybatis.setting.MybatisSetting"/>
+        <completion.contributor language="XML" implementationClass="com.seventh7.mybatis.contributor.TestParamContributor"/>
+        <completion.contributor language="SQL" implementationClass="com.seventh7.mybatis.contributor.SqlParamCompletionContributor" order="first"/>
+        <fileTemplateGroup implementation="com.seventh7.mybatis.template.MybatisFileTemplateDescriptorFactory"/>
+        <typedHandler implementation="com.seventh7.mybatis.action.MybatisTypedHandler" id="mybatis"/>
+        <defaultLiveTemplatesProvider implementation="com.seventh7.mybatis.template.SqlLiveTemplateProvider"/>
+        <intentionAction>
+            <className>com.seventh7.mybatis.intention.GenerateParamAnnotationIntention</className>
+        </intentionAction>
+        <intentionAction>
+            <className>com.seventh7.mybatis.intention.GenerateStatementIntention</className>
+        </intentionAction>
+        <intentionAction order="first">
+            <className>com.seventh7.mybatis.intention.GenerateMapperIntention</className>
+        </intentionAction>
+    </extensions>
     <project-components>
         <component>
-            <implementation-class>com.seventh7.mybatis.alias.AnnotationAliasResolver</implementation-class>
+            <implementation-class>com.seventh7.mybatis.alias.AnnotationAliasResolver
+            </implementation-class>
         </component>
     </project-components>
 </idea-plugin>
