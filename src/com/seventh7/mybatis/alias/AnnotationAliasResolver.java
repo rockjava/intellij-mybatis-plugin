@@ -58,6 +58,13 @@ public class AnnotationAliasResolver extends AliasResolver implements ProjectCom
   }
 
   public void initComponent() {
+    DumbService.getInstance(project).smartInvokeLater(new Runnable() {
+      @Override
+      public void run() {
+        setupListener();
+        initCache();
+      }
+    });
   }
 
   private void initCache() {
@@ -107,13 +114,6 @@ public class AnnotationAliasResolver extends AliasResolver implements ProjectCom
   }
 
   public void projectOpened() {
-    DumbService.getInstance(project).smartInvokeLater(new Runnable() {
-      @Override
-      public void run() {
-        setupListener();
-        initCache();
-      }
-    });
   }
 
   private void setupListener() {
