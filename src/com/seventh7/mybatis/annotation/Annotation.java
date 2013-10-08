@@ -32,7 +32,7 @@ public class Annotation implements Cloneable{
 
   private final String qualifiedName;
 
-  private final Map<String, AnnotationValue> attributePairs;
+  private Map<String, AnnotationValue> attributePairs;
 
   public interface AnnotationValue {
   }
@@ -64,7 +64,9 @@ public class Annotation implements Cloneable{
   }
 
   public Annotation withAttribute(@NotNull String key, @NotNull AnnotationValue value) {
-    return this.clone().addAttribute(key, value);
+    Annotation copy = this.clone();
+    copy.attributePairs = Maps.newHashMap(this.attributePairs);
+    return copy.addAttribute(key, value);
   }
 
   public Annotation withValue(@NotNull AnnotationValue value) {
