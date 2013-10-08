@@ -1,5 +1,7 @@
 package com.seventh7.mybatis.contributor;
 
+import com.google.common.base.Optional;
+
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
@@ -8,12 +10,9 @@ import com.intellij.injected.editor.DocumentWindow;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.xml.XmlTag;
-import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.DomUtil;
 import com.seventh7.mybatis.dom.model.IdDomElement;
 import com.seventh7.mybatis.util.DomUtils;
+import com.seventh7.mybatis.util.MapperUtils;
 
 
 /**
@@ -40,14 +39,10 @@ public class SqlParamCompletionContributor extends CompletionContributor {
     DocumentWindow documentWindow = InjectedLanguageUtil.getDocumentWindow(position);
     if (null != documentWindow) {
       int offset = documentWindow.injectedToHost(position.getTextOffset());
-      PsiElement elementAt = xmlFile.findElementAt(offset);
-      XmlTag xmlTag = PsiTreeUtil.getParentOfType(elementAt, XmlTag.class);
-      if (null != xmlTag) {
-        DomElement domElement = DomUtil.getDomElement(xmlTag);
-        if (domElement instanceof IdDomElement) {
-          TestParamContributor.addElementForPsiParameter(position.getProject(), result, (IdDomElement) domElement);
-          result.stopHere();
-        }
+      Optional<IdDomElement> idDomElement = MapperUtils.findParentIdDomElement(xmlFile.findElementAt(offset));
+      if (idDomElement.isPresent()) {
+        TestParamContributor.addElementForPsiParameter(position.getProject(), result, idDomElement.get());
+        result.stopHere();
       }
     }
   }

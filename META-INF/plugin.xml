@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.seventh7.plugin.mybatis</id>
     <name>MyBatis plugin</name>
-    <version>1.48</version>
+    <version>1.473</version>
     <vendor email="insist.day@gmail.com" url="https://github.com/seventh7">Yanglin</vendor>
 
     <description><![CDATA[
@@ -9,8 +9,10 @@
       ]]></description>
 
     <change-notes><![CDATA[
-      <h4>1.48</h4>
+      <h4>1.473</h4>
+      <ul>
           <li>Supoort surround with CDATA section for sql</li>
+      </ul>
       <h4>1.472</h4>
       <ul>
           <li>Support generating mapper of xml</li>
