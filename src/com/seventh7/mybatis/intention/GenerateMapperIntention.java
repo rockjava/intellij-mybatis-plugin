@@ -19,7 +19,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.seventh7.mybatis.MybatisFileTemplateDescriptorFactory;
+import com.seventh7.mybatis.template.MybatisFileTemplateDescriptorFactory;
 import com.seventh7.mybatis.service.EditorService;
 import com.seventh7.mybatis.ui.ClickableListener;
 import com.seventh7.mybatis.ui.ListSelectionListener;

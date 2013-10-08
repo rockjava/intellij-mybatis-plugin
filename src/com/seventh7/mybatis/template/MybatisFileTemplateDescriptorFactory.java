@@ -1,4 +1,4 @@
-package com.seventh7.mybatis;
+package com.seventh7.mybatis.template;
 
 import com.intellij.ide.fileTemplates.FileTemplateDescriptor;
 import com.intellij.ide.fileTemplates.FileTemplateGroupDescriptor;

@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.seventh7.plugin.mybatis</id>
     <name>MyBatis plugin</name>
-    <version>1.472</version>
+    <version>1.48</version>
     <vendor email="insist.day@gmail.com" url="https://github.com/seventh7">Yanglin</vendor>
 
   <description><![CDATA[
@@ -9,6 +9,8 @@
       ]]></description>
 
   <change-notes><![CDATA[
+      <h4>1.48</h4>
+          <li>Supoort surround with CDATA section for sql</li>
       <h4>1.472</h4>
       <ul>
           <li>Support generating mapper of xml</li>
@@ -46,8 +48,9 @@
       <applicationService serviceInterface="com.seventh7.mybatis.setting.MybatisSetting" serviceImplementation="com.seventh7.mybatis.setting.MybatisSetting"/>
       <completion.contributor language="XML" implementationClass="com.seventh7.mybatis.contributor.TestParamContributor"/>
       <completion.contributor language="SQL" implementationClass="com.seventh7.mybatis.contributor.SqlParamCompletionContributor" order="first"/>
-      <fileTemplateGroup implementation="com.seventh7.mybatis.MybatisFileTemplateDescriptorFactory" />
+      <fileTemplateGroup implementation="com.seventh7.mybatis.template.MybatisFileTemplateDescriptorFactory" />
       <typedHandler implementation="com.seventh7.mybatis.action.MybatisTypedHandler" id="mybatis"/>
+      <defaultLiveTemplatesProvider implementation="com.seventh7.mybatis.template.SqlLiveTemplateProvider"/>
       <intentionAction>
           <className>com.seventh7.mybatis.intention.GenerateParamAnnotationIntention</className>
       </intentionAction>
