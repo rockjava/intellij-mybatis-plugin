@@ -117,16 +117,18 @@ public class AnnotationAliasResolver extends AliasResolver implements ProjectCom
   }
 
   private void setupListener() {
-    PsiManager.getInstance(project).addPsiTreeChangeListener(new PsiTreeChangeAdapter() {
-      @Override
-      public void childrenChanged(@NotNull PsiTreeChangeEvent event) {
-        PsiElement element = event.getParent();
-        if (element instanceof PsiJavaFile) {
-          PsiClass[] classes = ((PsiJavaFile) element).getClasses();
-          handlePsiClassChange(classes);
+    if (!project.isDisposed() && project.isOpen()) {
+      PsiManager.getInstance(project).addPsiTreeChangeListener(new PsiTreeChangeAdapter() {
+        @Override
+        public void childrenChanged(@NotNull PsiTreeChangeEvent event) {
+          PsiElement element = event.getParent();
+          if (element instanceof PsiJavaFile) {
+            PsiClass[] classes = ((PsiJavaFile) element).getClasses();
+            handlePsiClassChange(classes);
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   public void projectClosed() {
