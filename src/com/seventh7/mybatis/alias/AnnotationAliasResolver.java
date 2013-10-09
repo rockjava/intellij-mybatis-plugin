@@ -110,25 +110,25 @@ public class AnnotationAliasResolver extends AliasResolver implements ProjectCom
     DumbService.getInstance(project).smartInvokeLater(new Runnable() {
       @Override
       public void run() {
-        setupListener();
-        initCache();
+        if (!project.isDisposed() && project.isOpen()) {
+          setupListener();
+          initCache();
+        }
       }
     });
   }
 
   private void setupListener() {
-    if (!project.isDisposed() && project.isOpen()) {
-      PsiManager.getInstance(project).addPsiTreeChangeListener(new PsiTreeChangeAdapter() {
-        @Override
-        public void childrenChanged(@NotNull PsiTreeChangeEvent event) {
-          PsiElement element = event.getParent();
-          if (element instanceof PsiJavaFile) {
-            PsiClass[] classes = ((PsiJavaFile) element).getClasses();
-            handlePsiClassChange(classes);
-          }
+    PsiManager.getInstance(project).addPsiTreeChangeListener(new PsiTreeChangeAdapter() {
+      @Override
+      public void childrenChanged(@NotNull PsiTreeChangeEvent event) {
+        PsiElement element = event.getParent();
+        if (element instanceof PsiJavaFile) {
+          PsiClass[] classes = ((PsiJavaFile) element).getClasses();
+          handlePsiClassChange(classes);
         }
-      });
-    }
+      }
+    });
   }
 
   public void projectClosed() {
