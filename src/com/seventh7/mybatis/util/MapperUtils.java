@@ -44,6 +44,9 @@ public final class MapperUtils {
     if (null == domElement) {
       return Optional.absent();
     }
+    if (domElement instanceof IdDomElement) {
+      return Optional.of((IdDomElement) domElement);
+    }
     return Optional.fromNullable(DomUtil.getParentOfType(domElement, IdDomElement.class, true));
   }
 
