@@ -15,7 +15,7 @@ public final class ArrayUtils {
   }
 
   @NotNull
-  public static <T> Optional<T> getOnlyElement(@Nullable T[] target, T defValue) {
+  public static <T> Optional<T> getOnlyElement(@Nullable T[] target, @NotNull T defValue) {
     return Optional.fromNullable(getOnlyElement(target).or(defValue));
   }
 
