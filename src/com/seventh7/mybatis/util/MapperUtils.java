@@ -39,7 +39,7 @@ public final class MapperUtils {
   }
 
   @NotNull
-  public static Optional<IdDomElement> findParentIdDomElement(@NotNull PsiElement element) {
+  public static Optional<IdDomElement> findParentIdDomElement(@Nullable PsiElement element) {
     DomElement domElement = DomUtil.getDomElement(element);
     if (null == domElement) {
       return Optional.absent();
