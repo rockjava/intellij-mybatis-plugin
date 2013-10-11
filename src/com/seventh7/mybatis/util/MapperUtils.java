@@ -120,7 +120,8 @@ public final class MapperUtils {
 
   @NotNull @NonNls
   public static String getNamespace(@NotNull Mapper mapper) {
-    return mapper.getNamespace().getRawText();
+    String ns = mapper.getNamespace().getStringValue();
+    return null == ns ? "" : ns;
   }
 
   @NotNull @NonNls

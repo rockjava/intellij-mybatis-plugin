@@ -26,7 +26,7 @@ public class ContextPsiFieldReference extends PsiReferenceBase<XmlAttributeValue
   protected int index;
 
   public ContextPsiFieldReference(XmlAttributeValue element, TextRange range, int index) {
-    super(element, range, true);
+    super(element, range, false);
     this.index = index;
     resolver = ReferenceSetResolverFactory.createPsiFieldResolver(element);
   }

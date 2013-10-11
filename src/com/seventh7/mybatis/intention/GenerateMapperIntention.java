@@ -32,6 +32,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -118,14 +120,15 @@ public class GenerateMapperIntention extends GenericIntention {
 
   private String[] getPathTextForShown(Project project, Collection<String> paths, final Map<String, PsiDirectory> pathMap) {
     final String projectBasePath = project.getBasePath();
-    Collection<String> result = Collections2.transform(paths, new Function<String, String>() {
+    List<String> result = Lists.newArrayList(Collections2.transform(paths, new Function<String, String>() {
       @Override
       public String apply(String input) {
         String relativePath = FileUtil.getRelativePath(projectBasePath, input, File.separatorChar);
         Module module = ModuleUtil.findModuleForPsiElement(pathMap.get(input));
         return null == module ? relativePath : ("[" + module.getName() + "] " + relativePath);
       }
-    });
+    }));
+    Collections.sort(result);
     return result.toArray(new String[result.size()]);
   }
 

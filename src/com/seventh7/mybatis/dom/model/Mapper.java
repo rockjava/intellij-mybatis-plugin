@@ -3,6 +3,7 @@ package com.seventh7.mybatis.dom.model;
 import com.intellij.util.xml.Attribute;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.GenericAttributeValue;
+import com.intellij.util.xml.NameValue;
 import com.intellij.util.xml.Required;
 import com.intellij.util.xml.SubTagList;
 import com.intellij.util.xml.SubTagsList;
@@ -20,8 +21,9 @@ public interface Mapper extends DomElement {
   @SubTagsList({"insert", "update", "delete", "select"})
   public List<IdDomElement> getDaoElements();
 
+  @NameValue
   @NotNull
-  @Required
+  @Required(identifier = true)
   @Attribute("namespace")
   public GenericAttributeValue<String> getNamespace();
 

@@ -1,14 +1,21 @@
 <idea-plugin version="2">
     <id>com.seventh7.plugin.mybatis</id>
     <name>MyBatis plugin</name>
-    <version>1.474</version>
+    <version>1.475</version>
     <vendor email="insist.day@gmail.com" url="https://github.com/seventh7">Yanglin</vendor>
 
     <description><![CDATA[
-          Plugin for mybatis
+          Plugin for mybatis <br/>
+          Feedback any message to me
       ]]></description>
 
     <change-notes><![CDATA[
+      <h4>1.475</h4>
+      <ul>
+          <li>Group module when generate mapper xml</li>
+          <li>Correct a information typo</li>
+          <li>Bug fix</li>
+      </ul>
       <h4>1.474</h4>
       <ul>
           <li>Support generating mapper of xml</li>
@@ -20,7 +27,6 @@
           <li>Supoort surround with CDATA section for sql</li>
           <li>Support resultType</li>
           <li>Alias support</li>
-          <li>Bug fix</li>
       </ul>
       <h4>1.46</h4>
       <ul>
@@ -48,7 +54,7 @@
         <completion.contributor language="XML" implementationClass="com.seventh7.mybatis.contributor.TestParamContributor"/>
         <completion.contributor language="SQL" implementationClass="com.seventh7.mybatis.contributor.SqlParamCompletionContributor" order="first"/>
         <fileTemplateGroup implementation="com.seventh7.mybatis.template.MybatisFileTemplateDescriptorFactory"/>
-        <typedHandler implementation="com.seventh7.mybatis.action.MybatisTypedHandler" id="mybatis"/>
+        <typedHandler implementation="com.seventh7.mybatis.action.MybatisTypedHandler" id="mybatis" order="first"/>
         <defaultLiveTemplatesProvider implementation="com.seventh7.mybatis.template.SqlLiveTemplateProvider"/>
         <intentionAction>
             <className>com.seventh7.mybatis.intention.GenerateParamAnnotationIntention</className>
@@ -62,8 +68,7 @@
     </extensions>
     <project-components>
         <component>
-            <implementation-class>com.seventh7.mybatis.alias.AnnotationAliasResolver
-            </implementation-class>
+            <implementation-class>com.seventh7.mybatis.alias.AnnotationAliasResolver</implementation-class>
         </component>
     </project-components>
 </idea-plugin>
