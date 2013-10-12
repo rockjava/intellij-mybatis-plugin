@@ -1,22 +1,24 @@
 <idea-plugin version="2">
     <id>com.seventh7.plugin.mybatis</id>
     <name>MyBatis plugin</name>
-    <version>1.475</version>
+    <version>1.476</version>
     <vendor email="insist.day@gmail.com" url="https://github.com/seventh7">Yanglin</vendor>
 
     <description><![CDATA[
           Plugin for mybatis <br/>
-          Feedback any message to me
+          Feel free to feedback
       ]]></description>
 
     <change-notes><![CDATA[
-      <h4>1.475</h4>
+      <h4>1.476</h4>
       <ul>
-          <li>Group module when generate mapper xml</li>
-          <li>Correct a information typo</li>
-          <li>Bug fix</li>
+          <li>Provide qucik fix of resultType for select statement when return value of mapper method is changed</li>
+          <li>Mark unresolved string with error marker in mapper interface and mapper xml</li>
+          <li>Mark conflicting statement with error marker in mapper xml</li>
+          <li>Support refactor for id based tag in mapper xml</li>
+          <li>Support refactor the name of mapper xml when rename the mapper interface</li>
       </ul>
-      <h4>1.474</h4>
+      <h4>1.475</h4>
       <ul>
           <li>Support generating mapper of xml</li>
           <li>Support property completion for result and id of resultMap、collection、association</li>
@@ -56,6 +58,7 @@
         <fileTemplateGroup implementation="com.seventh7.mybatis.template.MybatisFileTemplateDescriptorFactory"/>
         <typedHandler implementation="com.seventh7.mybatis.action.MybatisTypedHandler" id="mybatis" order="first"/>
         <defaultLiveTemplatesProvider implementation="com.seventh7.mybatis.template.SqlLiveTemplateProvider"/>
+        <refactoring.elementListenerProvider implementation="com.seventh7.mybatis.refactoring.MapperRefactoringProvider"/>
         <intentionAction>
             <className>com.seventh7.mybatis.intention.GenerateParamAnnotationIntention</className>
         </intentionAction>

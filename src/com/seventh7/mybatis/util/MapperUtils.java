@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -87,6 +88,11 @@ public final class MapperUtils {
       }
     }
     return result;
+  }
+
+  @NotNull
+  public static Collection<Mapper> findMappers(@NotNull Project project, @NotNull PsiClass clzz) {
+    return JavaUtils.isElementWithinInterface(clzz) ? findMappers(project, clzz.getQualifiedName()) : Collections.<Mapper>emptyList();
   }
 
   @NotNull @NonNls
