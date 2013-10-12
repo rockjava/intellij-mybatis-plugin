@@ -65,6 +65,9 @@ public final class JavaUtils {
   }
 
   public static boolean isElementWithinInterface(@Nullable PsiElement element) {
+    if (element instanceof PsiClass && ((PsiClass) element).isInterface()) {
+      return true;
+    }
     PsiClass type = PsiTreeUtil.getParentOfType(element, PsiClass.class);
     return Optional.fromNullable(type).isPresent() && type.isInterface();
   }
