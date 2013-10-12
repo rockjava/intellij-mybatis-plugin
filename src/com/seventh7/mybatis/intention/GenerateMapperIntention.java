@@ -118,9 +118,10 @@ public class GenerateMapperIntention extends GenericIntention {
     }
   }
 
-  private String[] getPathTextForShown(Project project, Collection<String> paths, final Map<String, PsiDirectory> pathMap) {
+  private String[] getPathTextForShown(Project project, List<String> paths, final Map<String, PsiDirectory> pathMap) {
+    Collections.sort(paths);
     final String projectBasePath = project.getBasePath();
-    List<String> result = Lists.newArrayList(Collections2.transform(paths, new Function<String, String>() {
+    Collection<String> result = Lists.newArrayList(Collections2.transform(paths, new Function<String, String>() {
       @Override
       public String apply(String input) {
         String relativePath = FileUtil.getRelativePath(projectBasePath, input, File.separatorChar);
@@ -128,7 +129,6 @@ public class GenerateMapperIntention extends GenericIntention {
         return null == module ? relativePath : ("[" + module.getName() + "] " + relativePath);
       }
     }));
-    Collections.sort(result);
     return result.toArray(new String[result.size()]);
   }
 
