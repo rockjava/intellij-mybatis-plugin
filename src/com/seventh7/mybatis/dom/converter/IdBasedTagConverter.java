@@ -142,7 +142,7 @@ public abstract class IdBasedTagConverter extends ConverterAdaptor<XmlAttributeV
       return GlobalSearchScope.allScope(project);
     }
 
-    /** It looks like hacking here, as it's a little hard to handle so many different cases as Intellij does */
+    /** It looks like hacking here, as it's a little hard to handle so many different cases as JetBrains does */
     @NotNull @Override
     public PsiReference[] getReferencesByString(String text, @NotNull PsiElement position, int offsetInPosition) {
       List<PsiReference> refs = Lists.newArrayList(super.getReferencesByString(text, position, offsetInPosition));

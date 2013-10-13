@@ -5,7 +5,6 @@ import com.google.common.base.Optional;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
-import com.intellij.codeInsight.daemon.LineMarkerProvider;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
@@ -23,7 +22,7 @@ import javax.swing.*;
 /**
  * @author yanglin
  */
-public abstract class SimpleLineMarkerProvider<F extends PsiElement, T> implements LineMarkerProvider {
+public abstract class SimpleLineMarkerProvider<F extends PsiElement, T> extends GenericLineMarkerProvider {
 
   @Override
   public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {

@@ -26,6 +26,12 @@ public class Annotation implements Cloneable{
 
   public static final Annotation ALIAS = new Annotation("@Alias", "org.apache.ibatis.type.Alias");
 
+  public static final Annotation AUTOWIRED = new Annotation("@Autowired", "org.springframework.beans.factory.annotation.Autowired");
+
+  public static final Annotation RESOURCE = new Annotation("@Resource", "javax.annotation.Resource");
+
+  public static final Annotation[] SPRING_INJECT = {AUTOWIRED, RESOURCE};
+
   public static final Annotation[] STATEMENT_SYMMETRIES = {SELECT, UPDATE, INSERT, DELETE};
 
   private final String label;
