@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.seventh7.plugin.mybatis</id>
     <name>MyBatis plugin</name>
-    <version>1.476</version>
+    <version>1.48</version>
     <vendor email="insist.day@gmail.com" url="https://github.com/seventh7">Yanglin</vendor>
 
     <description><![CDATA[
@@ -10,7 +10,7 @@
       ]]></description>
 
     <change-notes><![CDATA[
-      <h4>1.476</h4>
+      <h4>1.48</h4>
       <ul>
           <li>Support correct result type for select statement in mapper xml</li>
           <li>Support correct unresolved attribute value of mapper xml</li>
