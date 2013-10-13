@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class AliasConverter extends ConverterAdaptor<PsiClass> implements CustomReferenceConverter<PsiClass> {
 
-  private final static PsiClassConverter DELEGATE = new PsiClassConverter();
+  private PsiClassConverter delegate = new PsiClassConverter();
 
   @Nullable @Override
   public PsiClass fromString(@Nullable @NonNls String s, ConvertContext context) {
@@ -37,13 +37,13 @@ public class AliasConverter extends ConverterAdaptor<PsiClass> implements Custom
 
   @Nullable @Override
   public String toString(@Nullable PsiClass psiClass, ConvertContext context) {
-    return DELEGATE.toString(psiClass, context);
+    return delegate.toString(psiClass, context);
   }
 
   @NotNull @Override
   public PsiReference[] createReferences(GenericDomValue<PsiClass> value, PsiElement element, ConvertContext context) {
     if (((XmlAttributeValue) element).getValue().contains(MybatisConstants.DOT_SEPARATOR)) {
-      return DELEGATE.createReferences(value, element, context);
+      return delegate.createReferences(value, element, context);
     } else {
       return new PsiReference[]{new AliasClassReference((XmlAttributeValue) element)};
     }
