@@ -4,7 +4,6 @@ import com.google.common.base.Optional;
 
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
-import com.intellij.util.xml.GenericAttributeValue;
 import com.seventh7.mybatis.dom.model.GroupTwo;
 import com.seventh7.mybatis.dom.model.Mapper;
 import com.seventh7.mybatis.dom.model.Select;
@@ -14,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  */
-public class SelectGenerator extends StatementGenerator{
+public class SelectGenerator extends StatementGenerator {
 
   public SelectGenerator(@NotNull String... patterns) {
     super(patterns);
@@ -30,10 +29,7 @@ public class SelectGenerator extends StatementGenerator{
   private void setupResultType(PsiMethod method, Select select) {
     Optional<PsiClass> clzz = StatementGenerator.getSelectResultType(method);
     if (clzz.isPresent()) {
-      GenericAttributeValue<PsiClass> resultType = select.getResultType();
-      if (null != resultType) {
-        resultType.setValue(clzz.get());
-      }
+      select.getResultType().setValue(clzz.get());
     }
   }
 

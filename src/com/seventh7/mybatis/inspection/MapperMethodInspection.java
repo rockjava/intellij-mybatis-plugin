@@ -4,17 +4,16 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 import com.intellij.codeInspection.InspectionManager;
+import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiIdentifier;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiType;
 import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.GenericAttributeValue;
 import com.seventh7.mybatis.annotation.Annotation;
 import com.seventh7.mybatis.dom.model.Select;
+import com.seventh7.mybatis.generate.StatementGenerator;
 import com.seventh7.mybatis.locator.MapperLocator;
 import com.seventh7.mybatis.service.JavaService;
 import com.seventh7.mybatis.util.JavaUtils;
@@ -23,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author yanglin
@@ -31,14 +31,13 @@ public class MapperMethodInspection extends MapperInspection{
 
   @Nullable @Override
   public ProblemDescriptor[] checkMethod(@NotNull PsiMethod method, @NotNull InspectionManager manager, boolean isOnTheFly) {
-    Project project = method.getProject();
-    if (!MapperLocator.getInstance(project).process(method) || JavaUtils.isAnyAnnotationPresent(method, Annotation.STATEMENT_SYMMETRIES))
+    if (!MapperLocator.getInstance(method.getProject()).process(method) || JavaUtils.isAnyAnnotationPresent(method, Annotation.STATEMENT_SYMMETRIES))
       return EMPTY_ARRAY;
-    ArrayList<ProblemDescriptor> res = createProblemDescriptors(method, manager, isOnTheFly);
+    List<ProblemDescriptor> res = createProblemDescriptors(method, manager, isOnTheFly);
     return res.toArray(new ProblemDescriptor[res.size()]);
   }
 
-  private ArrayList<ProblemDescriptor> createProblemDescriptors(PsiMethod method, InspectionManager manager, boolean isOnTheFly) {
+  private List<ProblemDescriptor> createProblemDescriptors(PsiMethod method, InspectionManager manager, boolean isOnTheFly) {
     ArrayList<ProblemDescriptor> res = Lists.newArrayList();
     Optional<ProblemDescriptor> p1 = checkStatementExists(method, manager, isOnTheFly);
     if (p1.isPresent()) {
@@ -57,9 +56,18 @@ public class MapperMethodInspection extends MapperInspection{
       DomElement domElement = ele.get();
       if (domElement instanceof Select) {
         Select select = (Select)domElement;
-        GenericAttributeValue<PsiClass> resultType = select.getResultType();
-        PsiType returnType = method.getReturnType();
+        Optional<PsiClass> target = StatementGenerator.getSelectResultType(method);
+        PsiClass clzz = select.getResultType().getValue();
         PsiIdentifier ide = method.getNameIdentifier();
+        if (null != ide) {
+          if (target.isPresent() && (null == clzz || !target.get().equals(clzz))) {
+            return  Optional.of(manager.createProblemDescriptor(ide, "Result type not match for select id=\"#ref\"",
+                                                                new ResultTypeQuickFix(select, target.get()), ProblemHighlightType.GENERIC_ERROR, isOnTheFly));
+          } else  if (!target.isPresent() && null != clzz) {
+            return  Optional.of(manager.createProblemDescriptor(ide, "Result type not match for select id=\"#ref\"",
+                                                                (LocalQuickFix)null, ProblemHighlightType.GENERIC_ERROR, isOnTheFly));
+          }
+        }
       }
     }
     return Optional.absent();

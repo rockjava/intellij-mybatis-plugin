@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class MapperLocator {
 
-  public static final LocateStrategy DFLT_LOCATE_STRATEGY = new PackageLocateStrategy();
+  public static LocateStrategy dfltLocateStrategy = new PackageLocateStrategy();
 
   public static MapperLocator getInstance(@NotNull Project project) {
     return ServiceManager.getService(project, MapperLocator.class);
@@ -25,7 +25,7 @@ public class MapperLocator {
   }
 
   public boolean process(@Nullable PsiClass clzz) {
-    return null != clzz && JavaUtils.isElementWithinInterface(clzz) && DFLT_LOCATE_STRATEGY.apply(clzz);
+    return null != clzz && JavaUtils.isElementWithinInterface(clzz) && dfltLocateStrategy.apply(clzz);
   }
 
 }

@@ -4,6 +4,7 @@ import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
+import com.intellij.util.xml.GenericAttributeValue;
 import com.seventh7.mybatis.dom.model.Select;
 
 import org.jetbrains.annotations.NotNull;
@@ -16,14 +17,14 @@ public class ResultTypeQuickFix implements LocalQuickFix {
   private Select select;
   private PsiClass target;
 
-  public ResultTypeQuickFix(Select select, PsiClass target) {
+  public ResultTypeQuickFix(@NotNull Select select, @NotNull PsiClass target) {
     this.select = select;
     this.target = target;
   }
 
   @NotNull @Override
   public String getName() {
-    return "Corrrect resultType";
+    return "Correct resultType";
   }
 
   @NotNull @Override
@@ -33,21 +34,25 @@ public class ResultTypeQuickFix implements LocalQuickFix {
 
   @Override
   public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
+    GenericAttributeValue<PsiClass> resultType = select.getResultType();
+    resultType.setValue(target);
   }
 
+  @NotNull
   public PsiClass getTarget() {
     return target;
   }
 
-  public void setTarget(PsiClass target) {
+  public void setTarget(@NotNull PsiClass target) {
     this.target = target;
   }
 
+  @NotNull
   public Select getSelect() {
     return select;
   }
 
-  public void setSelect(Select select) {
+  public void setSelect(@NotNull Select select) {
     this.select = select;
   }
 }
