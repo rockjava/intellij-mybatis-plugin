@@ -49,6 +49,7 @@
         <projectService serviceImplementation="com.seventh7.mybatis.service.AnnotationService"/>
         <projectService serviceImplementation="com.seventh7.mybatis.service.EditorService"/>
         <projectService serviceImplementation="com.seventh7.mybatis.alias.AliasFacade"/>
+        <projectService serviceImplementation="com.seventh7.mybatis.locator.MapperLocator"/>
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.seventh7.mybatis.provider.MapperLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="XML" implementationClass="com.seventh7.mybatis.provider.StatementLineMarkerProvider"/>
         <applicationConfigurable instance="com.seventh7.mybatis.setting.MybatisConfigurable"/>
@@ -59,6 +60,8 @@
         <typedHandler implementation="com.seventh7.mybatis.action.MybatisTypedHandler" id="mybatis" order="first"/>
         <defaultLiveTemplatesProvider implementation="com.seventh7.mybatis.template.SqlLiveTemplateProvider"/>
         <refactoring.elementListenerProvider implementation="com.seventh7.mybatis.refactoring.MapperRefactoringProvider"/>
+        <localInspection language="JAVA" shortName="MybatisMapperMethodInspection" displayName="Mapper interface method not defined in xml"  groupName="Mybatis Inpsection"
+                         enabledByDefault="true" level="ERROR" implementationClass="com.seventh7.mybatis.inspection.MapperMethodInspection"/>
         <intentionAction>
             <className>com.seventh7.mybatis.intention.GenerateParamAnnotationIntention</className>
         </intentionAction>

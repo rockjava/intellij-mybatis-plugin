@@ -95,6 +95,12 @@ public final class MapperUtils {
     return JavaUtils.isElementWithinInterface(clzz) ? findMappers(project, clzz.getQualifiedName()) : Collections.<Mapper>emptyList();
   }
 
+  @NotNull
+  public static Collection<Mapper> findMappers(@NotNull Project project, @NotNull PsiMethod method) {
+    PsiClass clzz = method.getContainingClass();
+    return null == clzz ? Collections.<Mapper>emptyList() : findMappers(project, clzz);
+  }
+
   @NotNull @NonNls
   public static Optional<Mapper> findFirstMapper(@NotNull Project project, @NotNull String namespace) {
     Collection<Mapper> mappers = findMappers(project, namespace);

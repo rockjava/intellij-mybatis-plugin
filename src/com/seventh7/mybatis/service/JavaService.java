@@ -17,12 +17,14 @@ import com.intellij.psi.PsiType;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.Processor;
+import com.intellij.util.xml.DomElement;
 import com.seventh7.mybatis.dom.model.IdDomElement;
 import com.seventh7.mybatis.dom.model.Mapper;
 import com.seventh7.mybatis.util.JavaUtils;
 import com.seventh7.mybatis.util.MapperUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
@@ -47,6 +49,12 @@ public class JavaService {
     return type instanceof PsiClassReferenceType ? Optional.fromNullable(((PsiClassReferenceType) type).resolve()) : Optional.<PsiClass>absent();
   }
 
+  public Optional<DomElement> findStatement(@Nullable PsiMethod method) {
+    CommonProcessors.FindFirstProcessor<DomElement> processor = new CommonProcessors.FindFirstProcessor<DomElement>();
+    process(method, processor);
+    return processor.isFound() ? Optional.fromNullable(processor.getFoundValue()) : Optional.<DomElement>absent();
+  }
+
   @SuppressWarnings("unchecked")
   public void process(@NotNull PsiMethod method, @NotNull Processor processor) {
     Optional<Mapper> mapper = MapperUtils.findFirstMapper(project, method);
@@ -54,6 +62,7 @@ public class JavaService {
       for (IdDomElement idDomElement : mapper.get().getDaoElements()) {
         if (MapperUtils.getId(idDomElement).equals(method.getName())) {
           processor.process(idDomElement);
+          return;
         }
       }
     }

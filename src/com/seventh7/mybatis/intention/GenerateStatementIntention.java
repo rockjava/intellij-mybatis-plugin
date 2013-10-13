@@ -8,8 +8,6 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.seventh7.mybatis.generate.StatementGenerator;
-import com.seventh7.mybatis.ui.ListSelectionListener;
-import com.seventh7.mybatis.ui.UiComponentFacade;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -30,24 +28,7 @@ public class GenerateStatementIntention extends GenericIntention {
   @Override
   public void invoke(@NotNull final Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
-    final PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
-    if (null == method) return;
-    final StatementGenerator[] generators = StatementGenerator.getGenerators(method);
-    if (1 == generators.length) {
-      generators[0].execute(method);
-    } else {
-      UiComponentFacade.getInstance(project).showListPopup("[ Select target statement ]", new ListSelectionListener() {
-        @Override
-        public void selected(int index) {
-          generators[index].execute(method);
-        }
-
-        @Override
-        public boolean isWriteAction() {
-          return true;
-        }
-
-      }, generators);
-    }
+    StatementGenerator.applyGenerate(PsiTreeUtil.getParentOfType(element, PsiMethod.class));
   }
+
 }

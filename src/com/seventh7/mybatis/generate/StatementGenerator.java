@@ -4,16 +4,24 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiPrimitiveType;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.psi.xml.XmlTag;
 import com.seventh7.mybatis.dom.model.GroupTwo;
 import com.seventh7.mybatis.dom.model.Mapper;
 import com.seventh7.mybatis.service.EditorService;
 import com.seventh7.mybatis.setting.MybatisSetting;
+import com.seventh7.mybatis.ui.ListSelectionListener;
+import com.seventh7.mybatis.ui.UiComponentFacade;
 import com.seventh7.mybatis.util.CollectionUtils;
+import com.seventh7.mybatis.util.JavaUtils;
 import com.seventh7.mybatis.util.MapperUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
@@ -32,6 +40,47 @@ public abstract class StatementGenerator {
   public static final StatementGenerator INSERT_GENERATOR = new InsertGenerator("insert", "add", "new");
 
   public static final StatementGenerator[] ALL = {UPDATE_GENERATOR, SELECT_GENERATOR, DELETE_GENERATOR, INSERT_GENERATOR};
+
+  public static Optional<PsiClass> getSelectResultType(@Nullable PsiMethod method) {
+    if (null == method) {
+      return Optional.absent();
+    }
+    PsiType returnType = method.getReturnType();
+    if (returnType instanceof PsiPrimitiveType && returnType != PsiType.VOID) {
+      return JavaUtils.findClzz(method.getProject(), ((PsiPrimitiveType) returnType).getBoxedTypeName());
+    } else if (returnType instanceof PsiClassReferenceType) {
+      PsiClassReferenceType type = (PsiClassReferenceType)returnType;
+      if (type.hasParameters()) {
+        PsiType[] parameters = type.getParameters();
+        if (parameters.length == 1) {
+          type = (PsiClassReferenceType)parameters[0];
+        }
+      }
+      return Optional.fromNullable(type.resolve());
+    }
+    return Optional.absent();
+  }
+
+  public static void applyGenerate(@Nullable final PsiMethod method) {
+    if (null == method) return;
+    final StatementGenerator[] generators = getGenerators(method);
+    if (1 == generators.length) {
+      generators[0].execute(method);
+    } else {
+      UiComponentFacade.getInstance(method.getProject()).showListPopup("[ Select target statement ]", new ListSelectionListener() {
+        @Override
+        public void selected(int index) {
+          generators[index].execute(method);
+        }
+
+        @Override
+        public boolean isWriteAction() {
+          return true;
+        }
+
+      }, generators);
+    }
+  }
 
   @NotNull
   public static StatementGenerator[] getGenerators(@NotNull PsiMethod method) {
