@@ -11,6 +11,7 @@ import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomUtil;
 import com.seventh7.mybatis.dom.model.Association;
 import com.seventh7.mybatis.dom.model.Collection;
+import com.seventh7.mybatis.dom.model.ParameterMap;
 import com.seventh7.mybatis.dom.model.ResultMap;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +29,7 @@ public final class MapperBacktrackingFacade {
   /**
    * TODO refactor to make it much more applicable
    */
-  public static Optional<PsiClass> getResultPropertyClzz(XmlAttributeValue attributeValue) {
+  public static Optional<PsiClass> getPropertyClzz(XmlAttributeValue attributeValue) {
     DomElement domElement = DomUtil.getDomElement(attributeValue);
     if (null == domElement) {
       return Optional.absent();
@@ -38,10 +39,17 @@ public final class MapperBacktrackingFacade {
     if (null != collection && !isWithinSameTag(collection, attributeValue)) {
       return Optional.fromNullable(collection.getOfType().getValue());
     }
+
     Association association = DomUtil.getParentOfType(domElement, Association.class, true);
     if (null != association && !isWithinSameTag(association, attributeValue)) {
       return Optional.fromNullable(association.getJavaType().getValue());
     }
+
+    ParameterMap parameterMap = DomUtil.getParentOfType(domElement, ParameterMap.class, true);
+    if (null != parameterMap && !isWithinSameTag(parameterMap, attributeValue)) {
+      return Optional.fromNullable(parameterMap.getType().getValue());
+    }
+
     ResultMap resultMap = DomUtil.getParentOfType(domElement, ResultMap.class, true);
     if (null != resultMap && !isWithinSameTag(resultMap, attributeValue)) {
       return Optional.fromNullable(resultMap.getType().getValue());

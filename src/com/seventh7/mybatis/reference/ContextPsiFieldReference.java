@@ -53,7 +53,7 @@ public class ContextPsiFieldReference extends PsiReferenceBase<XmlAttributeValue
         return JavaService.getInstance(myElement.getProject()).getReferenceClzzOfPsiField(resolved.get());
       }
     } else {
-      return MapperBacktrackingFacade.getResultPropertyClzz(myElement);
+      return MapperBacktrackingFacade.getPropertyClzz(myElement);
     }
     return Optional.absent();
   }

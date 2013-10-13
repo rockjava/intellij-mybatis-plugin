@@ -17,6 +17,7 @@
           <li>Highlight conflicting element of mapper xml as errors</li>
           <li>Support refactor for id based tag in mapper xml</li>
           <li>Support refactor the name of mapper xml file when rename the mapper interface</li>
+          <li>Parameter Map support</li>
       </ul>
       <h4>1.475</h4>
       <ul>

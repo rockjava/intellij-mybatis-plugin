@@ -1,9 +1,8 @@
 package com.seventh7.mybatis.dom.model;
 
-import com.intellij.util.xml.DomElement;
-
 /**
  * @author yanglin
  */
-public interface Parameter extends DomElement {
+public interface Parameter extends PropertyGroup {
+
 }

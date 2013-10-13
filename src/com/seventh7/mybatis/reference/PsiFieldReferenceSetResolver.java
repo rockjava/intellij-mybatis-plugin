@@ -13,9 +13,6 @@ import com.seventh7.mybatis.util.JavaUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-import java.util.List;
-
 /**
  * @author yanglin
  */
@@ -44,7 +41,7 @@ public class PsiFieldReferenceSetResolver extends ContextReferenceSetResolver<Xm
 
   @NotNull @Override
   public Optional<PsiField> getStartElement(@Nullable String firstText) {
-    Optional<PsiClass> clzz = MapperBacktrackingFacade.getResultPropertyClzz(getElement());
+    Optional<PsiClass> clzz = MapperBacktrackingFacade.getPropertyClzz(getElement());
     return clzz.isPresent() ? JavaUtils.findSettablePsiField(project, clzz.get(), firstText) : Optional.<PsiField>absent();
   }
 
