@@ -8,9 +8,10 @@
 * Useful auto completion while editting mapper of xml
 * Support generating of statement, @Param annotation and mapper of xml
 * Support some useful rename of mapper in xml
-* Provide qucik fix of resultType for select statement when return value of mapper method is changed</li>
-* Mark unresolved string with error marker in mapper interface and mapper xml</li>
-* Mark repeated statement with error marker in mapper xml</li>
+* Support correct result type for select statement in mapper xml</li>
+* Support correct unresolved attribute value of mapper xml</li>
+* Support correct conflicting statement in mapper xml</li>
+* Support refactor the name of mapper xml file when rename the mapper interface</li>
 * Support refactor for id based tag in mapper xml</li>
 * Mapper parameter auto completion in xml while editting sql
     * \#{yourParameter}

@@ -1,6 +1,5 @@
 package com.seventh7.mybatis.inspection;
 
-import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
@@ -12,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  */
-public class ResultTypeQuickFix implements LocalQuickFix {
+public class ResultTypeQuickFix extends GenericQuickFix {
 
   private Select select;
   private PsiClass target;
@@ -25,11 +24,6 @@ public class ResultTypeQuickFix implements LocalQuickFix {
   @NotNull @Override
   public String getName() {
     return "Correct resultType";
-  }
-
-  @NotNull @Override
-  public String getFamilyName() {
-    return getName();
   }
 
   @Override
