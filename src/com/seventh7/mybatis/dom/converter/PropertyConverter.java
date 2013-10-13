@@ -6,15 +6,19 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.util.xml.ConvertContext;
 import com.intellij.util.xml.CustomReferenceConverter;
+import com.intellij.util.xml.DomElement;
+import com.intellij.util.xml.GenericAttributeValue;
 import com.intellij.util.xml.GenericDomValue;
 import com.seventh7.mybatis.reference.ResultPropertyReferenceSet;
 
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
  */
-public class PropertyConverter extends FakeConverter<XmlAttributeValue> implements CustomReferenceConverter<XmlAttributeValue> {
+public class PropertyConverter extends ConverterAdaptor<XmlAttributeValue> implements CustomReferenceConverter<XmlAttributeValue> {
 
   @NotNull @Override
   public PsiReference[] createReferences(GenericDomValue<XmlAttributeValue> value, PsiElement element, ConvertContext context) {
@@ -23,6 +27,12 @@ public class PropertyConverter extends FakeConverter<XmlAttributeValue> implemen
       return PsiReference.EMPTY_ARRAY;
     }
     return new ResultPropertyReferenceSet(s, element, ElementManipulators.getOffsetInElement(element)).getPsiReferences();
+  }
+
+  @Nullable @Override
+  public XmlAttributeValue fromString(@Nullable @NonNls String s, ConvertContext context) {
+    DomElement ctxElement = context.getInvocationElement();
+    return ctxElement instanceof GenericAttributeValue ? ((GenericAttributeValue)ctxElement).getXmlAttributeValue() : null;
   }
 
 }

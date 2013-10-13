@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author yanglin
  */
-public class AliasConverter extends FakeConverter<PsiClass> implements CustomReferenceConverter<PsiClass> {
+public class AliasConverter extends ConverterAdaptor<PsiClass> implements CustomReferenceConverter<PsiClass> {
 
   private final static PsiClassConverter DELEGATE = new PsiClassConverter();
 

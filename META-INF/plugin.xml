@@ -62,6 +62,8 @@
         <refactoring.elementListenerProvider implementation="com.seventh7.mybatis.refactoring.MapperRefactoringProvider"/>
         <localInspection language="JAVA" shortName="MybatisMapperMethodInspection" displayName="Mapper interface method not defined in xml"  groupName="Mybatis Inpsection"
                          enabledByDefault="true" level="ERROR" implementationClass="com.seventh7.mybatis.inspection.MapperMethodInspection"/>
+        <localInspection language="XML" shortName="MybatisMapperXmlInspection"  enabledByDefault="true" level="ERROR" displayName="Unresolved mapper value"
+                         implementationClass="com.seventh7.mybatis.inspection.MapperXmlInspection"/>
         <intentionAction>
             <className>com.seventh7.mybatis.intention.GenerateParamAnnotationIntention</className>
         </intentionAction>

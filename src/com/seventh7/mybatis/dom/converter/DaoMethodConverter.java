@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author yanglin
  */
-public class DaoMethodConverter extends FakeConverter<PsiMethod> {
+public class DaoMethodConverter extends ConverterAdaptor<PsiMethod> {
 
   @Nullable @Override
   public PsiMethod fromString(@Nullable @NonNls String id, ConvertContext context) {
