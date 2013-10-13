@@ -14,7 +14,7 @@
       <ul>
           <li>Support correct result type for select statement in mapper xml</li>
           <li>Support correct unresolved attribute value of mapper xml</li>
-          <li>Support correct conflicting statement in mapper xml</li>
+          <li>Highlight conflicting element of mapper xml as errors</li>
           <li>Support refactor for id based tag in mapper xml</li>
           <li>Support refactor the name of mapper xml file when rename the mapper interface</li>
       </ul>
@@ -64,8 +64,6 @@
                          enabledByDefault="true" level="ERROR" implementationClass="com.seventh7.mybatis.inspection.MapperMethodInspection"/>
         <localInspection language="XML" shortName="MybatisMapperXmlInspection"  enabledByDefault="true" level="ERROR" displayName="Unresolved mapper value"
                          implementationClass="com.seventh7.mybatis.inspection.MapperXmlInspection"/>
-        <localInspection language="XML" shortName="MybatisConflictingStatementInspection"  enabledByDefault="true" level="ERROR"
-                         displayName="Conflicting mapper statement found" implementationClass="com.seventh7.mybatis.inspection.ConflictingStatementInspection"/>
         <intentionAction>
             <className>com.seventh7.mybatis.intention.GenerateParamAnnotationIntention</className>
         </intentionAction>

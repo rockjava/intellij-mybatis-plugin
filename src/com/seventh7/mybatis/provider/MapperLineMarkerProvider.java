@@ -2,7 +2,6 @@ package com.seventh7.mybatis.provider;
 
 import com.google.common.base.Optional;
 
-import com.intellij.openapi.util.IconLoader;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;

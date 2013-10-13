@@ -10,9 +10,9 @@
 * Support some useful rename of mapper in xml
 * Support correct result type for select statement in mapper xml
 * Support correct unresolved attribute value of mapper xml
-* Support correct conflicting statement in mapper xml
 * Support refactor the name of mapper xml file when rename the mapper interface
 * Support refactor for id based tag in mapper xml
+* Highlight conflicting element of mapper xml as errors</li>
 * Mapper parameter auto completion in xml while editting sql
     * \#{yourParameter}
     * @Param annotation based
