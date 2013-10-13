@@ -19,7 +19,6 @@
           <li>Support refactor the name of mapper xml file when rename the mapper interface</li>
           <li>Support find usage of mapper interface and mapper xml element</li>
           <li>Parameter Map support</li>
-          <li>Navigation for variable of mapper interface with spring annotation @Autowired or @Resource</li>
       </ul>
       <h4>1.475</h4>
       <ul>
@@ -55,8 +54,6 @@
         <projectService serviceImplementation="com.seventh7.mybatis.locator.MapperLocator"/>
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.seventh7.mybatis.provider.MapperLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="XML" implementationClass="com.seventh7.mybatis.provider.StatementLineMarkerProvider"/>
-        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.seventh7.mybatis.provider.InjectLineMarkerProvider"
-                                        order="last" id="MybatisMapperInjectLineMarkerProvider"/>
         <applicationConfigurable instance="com.seventh7.mybatis.setting.MybatisConfigurable"/>
         <applicationService serviceInterface="com.seventh7.mybatis.setting.MybatisSetting" serviceImplementation="com.seventh7.mybatis.setting.MybatisSetting"/>
         <completion.contributor language="XML" implementationClass="com.seventh7.mybatis.contributor.TestParamContributor"/>

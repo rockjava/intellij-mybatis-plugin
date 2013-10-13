@@ -13,7 +13,6 @@
 * Support refactor the name of mapper xml file when rename the mapper interface
 * Support refactor for id based tag in mapper xml
 * Support find usage of mapper interface and mapper xml element</li>
-* Navigation for variable of mapper interface with spring annotation @Autowired or @Resource</li>
 * Highlight conflicting element of mapper xml as errors</li>
 * Mapper parameter auto completion in xml while editting sql
     * \#{yourParameter}

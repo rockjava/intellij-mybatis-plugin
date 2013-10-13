@@ -25,18 +25,30 @@ import com.seventh7.mybatis.util.MapperUtils;
 
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.awt.event.MouseEvent;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Simple Purpose, Simple Implementation
+ * Hack unsuccessfully
  * @author yanglin
  */
-public class InjectLineMarkerProvider extends GenericLineMarkerProvider {
+public class InjectLineMarkerProvider extends MarkerProviderAdaptor {
 
-  @Nullable @Override @SuppressWarnings("unchecked")
-  public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement ele) {
+  @Override
+  public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {
+    for (PsiElement element : elements) {
+      LineMarkerInfo lineMarker = getLineMarker(element);
+      if (null != lineMarker) {
+        result.add(lineMarker);
+      }
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  public LineMarkerInfo getLineMarker(@NotNull PsiElement ele) {
     if (!(ele instanceof PsiField))  return null;
     PsiField field = (PsiField) ele;
     if (!isTargetField(field))  return null;
