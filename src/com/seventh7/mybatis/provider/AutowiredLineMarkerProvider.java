@@ -6,6 +6,8 @@ import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
+import com.intellij.psi.PsiAnnotation;
+import com.intellij.psi.PsiAnnotationMemberValue;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
@@ -33,13 +35,13 @@ public class AutowiredLineMarkerProvider extends GenericLineMarkerProvider {
   public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element) {
     if (element instanceof PsiField ) {
       PsiField field = (PsiField) element;
-      if (JavaUtils.isAnyAnnotationPresent(field, Annotation.SPRING_INJECT)) {
+      if (shouldAddLineMarker(field)) {
         PsiType type =  field.getType();
         if (type instanceof PsiClassReferenceType) {
           final PsiClass clzz = ((PsiClassReferenceType) type).resolve();
           Optional<Object> res = JavaService.getInstance(element.getProject()).findWithFindFristProcessor(clzz);
           if (res.isPresent()) {
-            return new LineMarkerInfo( field.getNameIdentifier(),
+            return new LineMarkerInfo(field.getNameIdentifier(),
                                        element.getTextRange(),
                                        Icons.AUTO_WIRED_LINE_MARKER_ICON,
                                        Pass.UPDATE_ALL,
@@ -61,6 +63,19 @@ public class AutowiredLineMarkerProvider extends GenericLineMarkerProvider {
       }
     }
     return null;
+  }
+
+  private boolean shouldAddLineMarker(PsiField field) {
+    Optional<PsiAnnotation> wutowired = JavaUtils.getPsiAnnotation(field, Annotation.AUTOWIRED);
+    if (wutowired.isPresent()) {
+      return true;
+    }
+    Optional<PsiAnnotation> resource = JavaUtils.getPsiAnnotation(field, Annotation.RESOURCE);
+    if (resource.isPresent()) {
+      PsiAnnotationMemberValue name = resource.get().findAttributeValue("name");
+      return null != name && name.getText().replaceAll("\"", "").equals(field.getName());
+    }
+    return false;
   }
 
 }
