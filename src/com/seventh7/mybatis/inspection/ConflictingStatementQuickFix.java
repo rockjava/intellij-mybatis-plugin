@@ -58,7 +58,8 @@ public class ConflictingStatementQuickFix extends GenericQuickFix {
       @Override
       public String apply(IdDomElement input) {
         XmlElement xmlElement = MapperUtils.getMapper(input).getXmlElement();
-        String relativePath = FileUtil.getRelativePath(xmlElement.getProject().getBasePath(), xmlElement.getContainingFile().getVirtualFile().getCanonicalPath().toString(), File.separatorChar);
+        String relativePath = FileUtil.getRelativePath(xmlElement.getProject().getBasePath(),
+                                                       xmlElement.getContainingFile().getVirtualFile().getCanonicalPath().toString(), File.separatorChar);
         return "\"" + MapperUtils.getId(input) + "\" in \"" + relativePath + "\"";
       }
     });

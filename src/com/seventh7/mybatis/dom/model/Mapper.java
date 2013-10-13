@@ -21,9 +21,9 @@ public interface Mapper extends DomElement {
   @SubTagsList({"insert", "update", "delete", "select"})
   public List<IdDomElement> getDaoElements();
 
+  @Required
   @NameValue
   @NotNull
-  @Required(identifier = true)
   @Attribute("namespace")
   public GenericAttributeValue<String> getNamespace();
 
