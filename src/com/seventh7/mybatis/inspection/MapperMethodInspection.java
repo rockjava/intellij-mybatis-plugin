@@ -59,7 +59,7 @@ public class MapperMethodInspection extends MapperInspection{
         Optional<PsiClass> target = StatementGenerator.getSelectResultType(method);
         PsiClass clzz = select.getResultType().getValue();
         PsiIdentifier ide = method.getNameIdentifier();
-        if (null != ide) {
+        if (null != ide && null == select.getResultMap().getValue()) {
           if (target.isPresent() && (null == clzz || !target.get().equals(clzz))) {
             return  Optional.of(manager.createProblemDescriptor(ide, "Result type not match for select id=\"#ref\"",
                                                                 new ResultTypeQuickFix(select, target.get()), ProblemHighlightType.GENERIC_ERROR, isOnTheFly));
