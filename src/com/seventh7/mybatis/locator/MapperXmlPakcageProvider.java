@@ -7,6 +7,7 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiPackage;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.seventh7.mybatis.dom.model.Mapper;
 import com.seventh7.mybatis.util.MapperUtils;
@@ -23,16 +24,21 @@ import java.util.Set;
 public class MapperXmlPakcageProvider extends PackageProvider{
 
   @NotNull @Override
-  public Set<String> getPakcages(@NotNull Project project) {
-    HashSet<String> res = Sets.newHashSet();
+  public Set<PsiPackage> getPakcages(@NotNull Project project) {
+    HashSet<PsiPackage> res = Sets.newHashSet();
     Collection<Mapper> mappers = MapperUtils.findMappers(project);
+    JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(project);
     for (Mapper mapper : mappers) {
       String namespace = MapperUtils.getNamespace(mapper);
-      PsiClass clzz = JavaPsiFacade.getInstance(project).findClass(namespace, GlobalSearchScope.allScope(project));
+      PsiClass clzz = javaPsiFacade.findClass(namespace, GlobalSearchScope.allScope(project));
       if (null != clzz) {
         PsiFile file = clzz.getContainingFile();
         if (file instanceof PsiJavaFile) {
-          res.add(((PsiJavaFile) file).getPackageName());
+          String packageName = ((PsiJavaFile) file).getPackageName();
+          PsiPackage pkg = javaPsiFacade.findPackage(packageName);
+          if (null != pkg) {
+            res.add(pkg);
+          }
         }
       }
     }

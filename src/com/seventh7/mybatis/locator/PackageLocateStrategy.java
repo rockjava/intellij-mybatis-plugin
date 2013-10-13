@@ -1,7 +1,9 @@
 package com.seventh7.mybatis.locator;
 
+import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiJavaFile;
+import com.intellij.psi.PsiPackage;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -16,9 +18,10 @@ public class PackageLocateStrategy extends LocateStrategy{
 
   @Override
   public boolean apply(@NotNull PsiClass clzz) {
-    Set<String> pakcages = provider.getPakcages(clzz.getProject());
-    String pkg = ((PsiJavaFile) clzz.getContainingFile()).getPackageName();
-    for (String tmp : pakcages) {
+    Set<PsiPackage> pakcages = provider.getPakcages(clzz.getProject());
+    String packageName = ((PsiJavaFile) clzz.getContainingFile()).getPackageName();
+    PsiPackage pkg = JavaPsiFacade.getInstance(clzz.getProject()).findPackage(packageName);
+    for (PsiPackage tmp : pakcages) {
       if (tmp.equals(pkg)) {
         return true;
       }
