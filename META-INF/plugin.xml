@@ -18,7 +18,8 @@
           <li>Support refactor for id based tag in mapper xml</li>
           <li>Support refactor the name of mapper xml file when rename the mapper interface</li>
           <li>Support find usage of mapper interface and mapper xml element</li>
-          <li>Parameter Map support</li>
+          <li>Parameter map support</li>
+          <li>Parameter type support</li>
       </ul>
       <h4>1.475</h4>
       <ul>
