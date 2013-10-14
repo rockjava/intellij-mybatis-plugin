@@ -18,7 +18,4 @@ public interface Icons {
 
   Icon STATEMENT_LINE_MARKER_ICON = IconLoader.getIcon("/gutter/overridingMethod.png");
 
-  /** Icon from JetBrains */
-  Icon AUTO_WIRED_LINE_MARKER_ICON = IconLoader.getIcon("/images/autowired.png");
-
 }
