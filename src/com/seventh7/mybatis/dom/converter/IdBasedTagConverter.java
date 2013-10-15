@@ -29,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -196,8 +197,9 @@ public abstract class IdBasedTagConverter extends ConverterAdaptor<XmlAttributeV
 
     private Set<String> setupGlobalIdSignature() {
       Mapper contextMapper = MapperUtils.getMapper(context.getInvocationElement());
-      Set<String> res = Sets.newHashSet();
-      for (IdDomElement ele : selectStrategy(context).getValue()) {
+      Collection<? extends IdDomElement> idDomElements = selectStrategy(context).getValue();
+      Set<String> res = new HashSet<String>(idDomElements.size());
+      for (IdDomElement ele : idDomElements) {
         res.add(MapperUtils.getIdSignature(ele, contextMapper));
       }
       return res;

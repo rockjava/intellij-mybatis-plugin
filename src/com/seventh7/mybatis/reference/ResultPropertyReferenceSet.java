@@ -22,10 +22,7 @@ public class ResultPropertyReferenceSet extends ReferenceSetBase<PsiReference>{
   @Nullable @NonNls @Override
   protected PsiReference createReference(TextRange range, int index) {
     XmlAttributeValue element = (XmlAttributeValue)getElement();
-    if (null == element) {
-      return null;
-    }
-    return new ContextPsiFieldReference(element, range, index);
+    return null == element ? null : new ContextPsiFieldReference(element, range, index);
   }
 
 }

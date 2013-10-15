@@ -44,7 +44,7 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
   @Override
   public Result charTyped(char c, Project project, Editor editor, @NotNull PsiFile file) {
     PsiFile topLevelFile = InjectedLanguageUtil.getTopLevelFile(file);
-    if (c == '{' & file instanceof SqlFile && DomUtils.isMybatisFile(topLevelFile)) {
+    if (c == '{' && file instanceof SqlFile && DomUtils.isMybatisFile(topLevelFile)) {
       CaretModel caretModel = editor.getCaretModel();
       int offset = caretModel.getOffset();
       Document document = editor.getDocument();

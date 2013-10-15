@@ -30,7 +30,7 @@ public class Annotation implements Cloneable{
 
   public static final Annotation RESOURCE = new Annotation("@Resource", "javax.annotation.Resource");
 
-  public static final Annotation[] SPRING_INJECT = {AUTOWIRED, RESOURCE};
+  public static final Annotation[] SPRING_INJECTION = {AUTOWIRED, RESOURCE};
 
   public static final Annotation[] STATEMENT_SYMMETRIES = {SELECT, UPDATE, INSERT, DELETE};
 
