@@ -63,7 +63,7 @@ public class InjectLineMarkerProvider extends MarkerProviderAdaptor {
     if (MapperUtils.findFirstMapper(project, clzz).isPresent()) {
       return new LineMarkerInfo(field.getNameIdentifier(),
                                 ele.getTextRange(),
-                                Icons.AUTO_WIRED_LINE_MARKER_ICON,
+                                Icons.SPRING_INJECTION_ICON,
                                 Pass.UPDATE_ALL,
                                 new Function<PsiIdentifier, String>() {
                                   @Override

@@ -18,4 +18,5 @@ public interface Icons {
 
   Icon STATEMENT_LINE_MARKER_ICON = IconLoader.getIcon("/gutter/overridingMethod.png");
 
+  Icon SPRING_INJECTION_ICON= IconLoader.getIcon("/images/");
 }
