@@ -49,7 +49,7 @@ public class TestParamContributor extends CompletionContributor {
     for (PsiParameter parameter : JavaUtils.findMethod(project, element).get().getParameterList().getParameters()) {
       Optional<String> valueText = JavaUtils.getAnnotationValueText(parameter, Annotation.PARAM);
       if (valueText.isPresent()) {
-        LookupElementBuilder builder = LookupElementBuilder.create(valueText.get()).setIcon(Icons.PARAM_COMPLECTION_ICON);
+        LookupElementBuilder builder = LookupElementBuilder.create(valueText.get()).withIcon(Icons.PARAM_COMPLECTION_ICON);
         result.addElement(PrioritizedLookupElement.withPriority(builder, MybatisConstants.PRIORITY));
       }
     }

@@ -50,7 +50,7 @@ public final class UiComponentFacade {
                                                   @NotNull ListSelectionListener popupListener,
                                                   @NotNull String clickableTitle,
                                                   @Nullable final ClickableListener clickableListener,
-                                                  @NotNull Object... objs) {
+                                                  @NotNull Object[] objs) {
     PopupChooserBuilder builder = createListPopupBuilder(popupTitle, popupListener, objs);
     JBCheckBox checkBox = new JBCheckBox(clickableTitle);
     builder.setSouthComponent(checkBox);
@@ -76,7 +76,7 @@ public final class UiComponentFacade {
 
   public JBPopup showListPopup(@NotNull String title,
                                @Nullable final ListSelectionListener listener,
-                               @NotNull Object... objs) {
+                               @NotNull Object[] objs) {
     PopupChooserBuilder builder = createListPopupBuilder(title, listener, objs);
     JBPopup popup = builder.createPopup();
     setPositionForShown(popup);

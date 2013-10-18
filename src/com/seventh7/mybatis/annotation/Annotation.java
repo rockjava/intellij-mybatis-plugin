@@ -1,12 +1,14 @@
 package com.seventh7.mybatis.annotation;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Simple implementation
@@ -30,9 +32,7 @@ public class Annotation implements Cloneable{
 
   public static final Annotation RESOURCE = new Annotation("@Resource", "javax.annotation.Resource");
 
-  public static final Annotation[] SPRING_INJECTION = {AUTOWIRED, RESOURCE};
-
-  public static final Annotation[] STATEMENT_SYMMETRIES = {SELECT, UPDATE, INSERT, DELETE};
+  public static final Set<Annotation> STATEMENT_SYMMETRIES = ImmutableSet.of(SELECT, UPDATE, INSERT, DELETE);
 
   private final String label;
 

@@ -1,6 +1,7 @@
 package com.seventh7.mybatis.generate;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -39,7 +40,7 @@ public abstract class StatementGenerator {
 
   public static final StatementGenerator INSERT_GENERATOR = new InsertGenerator("insert", "add", "new");
 
-  public static final StatementGenerator[] ALL = {UPDATE_GENERATOR, SELECT_GENERATOR, DELETE_GENERATOR, INSERT_GENERATOR};
+  public static final Set<StatementGenerator> ALL = ImmutableSet.of(UPDATE_GENERATOR, SELECT_GENERATOR, DELETE_GENERATOR, INSERT_GENERATOR);
 
   public static Optional<PsiClass> getSelectResultType(@Nullable PsiMethod method) {
     if (null == method) {
@@ -92,7 +93,7 @@ public abstract class StatementGenerator {
         result.add(generator);
       }
     }
-    return CollectionUtils.isNotEmpty(result) ? result.toArray(new StatementGenerator[result.size()]) : ALL;
+    return CollectionUtils.isNotEmpty(result) ? result.toArray(new StatementGenerator[result.size()]) : ALL.toArray(new StatementGenerator[ALL.size()]);
   }
 
   private Set<String> patterns;
