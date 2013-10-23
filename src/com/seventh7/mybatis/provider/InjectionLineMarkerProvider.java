@@ -54,8 +54,7 @@ public class InjectionLineMarkerProvider extends RelatedItemLineMarkerProvider {
   }
 
   private boolean isTargetField(PsiField field) {
-    Optional<PsiAnnotation> wutowiredAnno = JavaUtils.getPsiAnnotation(field, Annotation.AUTOWIRED);
-    if (wutowiredAnno.isPresent()) {
+    if (JavaUtils.isAnnotationPresent(field, Annotation.AUTOWIRED)) {
       return true;
     }
     Optional<PsiAnnotation> resourceAnno = JavaUtils.getPsiAnnotation(field, Annotation.RESOURCE);
