@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="https://github.com/seventh7/intellij-mybatis-plugin">
     <id>com.seventh7.plugin.mybatis</id>
     <name>MyBatis plugin</name>
-    <version>1.51</version>
+    <version>1.52</version>
     <vendor email="insist.day@gmail.com" url="https://github.com/seventh7">Yanglin</vendor>
 
     <description><![CDATA[
@@ -10,6 +10,11 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      <h4>1.52</h4>
+      <ul>
+          <li>Solve conflict with other plugin</li>
+          <li>Auto register mapper as spring bean</li>
+      </ul>
       <h4>1.51</h4>
       <ul>
           <li>Support correct result type for select statement in mapper xml</li>
@@ -18,11 +23,6 @@
           <li>Support refactor for id based tag in mapper xml</li>
           <li>Support refactor the name of mapper xml file when rename the mapper interface</li>
           <li>Support find usage of mapper interface and mapper xml element</li>
-          <li>Parameter map support</li>
-          <li>Parameter type support</li>
-      </ul>
-      <h4>1.475</h4>
-      <ul>
           <li>Support generating mapper of xml</li>
           <li>Support property completion for result and id of resultMap、collection、association</li>
           <li>Support parameter completion[ #{param} ] while editting sql(@Param based)</li>
@@ -31,6 +31,8 @@
           <li>Brace completion while editting sql</li>
           <li>Supoort surround with CDATA section for sql</li>
           <li>Support resultType</li>
+          <li>Parameter map support</li>
+          <li>Parameter type support</li>
           <li>Alias support</li>
       </ul>
       <h4>1.46</h4>
@@ -43,9 +45,9 @@
 
     <idea-version since-build="107.105"/>
     <depends>com.intellij.sql</depends>
+    <depends>com.intellij.spring</depends>
     <extensions defaultExtensionNs="com.intellij">
         <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.MapperDescription"/>
-        <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.BeansDescription"/>
         <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.ConfigurationDescription"/>
         <definitionsSearch implementation="com.seventh7.mybatis.definitionsearch.MapperDefinitionSearch"/>
         <projectService serviceImplementation="com.seventh7.mybatis.service.JavaService"/>

@@ -5,10 +5,12 @@ import com.google.common.collect.Sets;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPackage;
 import com.intellij.psi.search.GlobalSearchScope;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Set;
@@ -23,10 +25,10 @@ public abstract class PackageAliasResolver extends AliasResolver{
   }
 
   @NotNull @Override
-  public Set<AliasDesc> getClssAliasDescriptions() {
+  public Set<AliasDesc> getClssAliasDescriptions(@Nullable PsiElement element) {
     JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(project);
     Set<AliasDesc> result = Sets.newHashSet();
-    for (String pkgName : getPackages()) {
+    for (String pkgName : getPackages(element)) {
       if (null == pkgName) {
         continue;
       }
@@ -48,5 +50,5 @@ public abstract class PackageAliasResolver extends AliasResolver{
   }
 
   @NotNull
-  public abstract Collection<String> getPackages();
+  public abstract Collection<String> getPackages(@Nullable PsiElement element);
 }

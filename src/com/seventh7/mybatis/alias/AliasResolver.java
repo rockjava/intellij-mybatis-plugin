@@ -4,6 +4,7 @@ import com.google.common.base.Optional;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
 import com.seventh7.mybatis.util.JavaUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +36,7 @@ public abstract class AliasResolver {
   }
 
   @NotNull
-  public abstract Set<AliasDesc> getClssAliasDescriptions();
+  public abstract Set<AliasDesc> getClssAliasDescriptions(@Nullable PsiElement element);
 
   public Project getProject() {
     return project;

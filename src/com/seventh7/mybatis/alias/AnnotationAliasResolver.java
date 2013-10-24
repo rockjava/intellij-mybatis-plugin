@@ -18,6 +18,7 @@ import com.intellij.psi.search.PsiShortNamesCache;
 import com.seventh7.mybatis.util.JavaUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
@@ -53,7 +54,7 @@ public class AnnotationAliasResolver extends AliasResolver implements ProjectCom
   }
 
   @NotNull @Override
-  public Set<AliasDesc> getClssAliasDescriptions() {
+  public Set<AliasDesc> getClssAliasDescriptions(@Nullable PsiElement element) {
     return Sets.newHashSet(Collections2.transform(clzzCache, function));
   }
 

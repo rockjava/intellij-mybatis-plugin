@@ -13,6 +13,7 @@
 * Support refactor for id based tag in mapper xml
 * Support find usage of mapper interface and mapper xml element
 * Highlight conflicting element of mapper xml as errors
+* Auto register mapper as spring bean</li>
 * Mapper parameter auto completion in xml while editting sql
     * \#{yourParameter}
     * @Param annotation based

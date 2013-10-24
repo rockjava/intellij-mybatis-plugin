@@ -3,28 +3,18 @@ package com.seventh7.mybatis.alias;
 import com.google.common.collect.Sets;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.xml.DomService;
-import com.seventh7.mybatis.dom.model.Bean;
-import com.seventh7.mybatis.dom.model.BeanProperty;
-import com.seventh7.mybatis.dom.model.Beans;
-import com.seventh7.mybatis.util.CollectionUtils;
-import com.seventh7.mybatis.util.DomUtils;
+import com.intellij.psi.PsiElement;
+import com.intellij.spring.CommonSpringModel;
+import com.intellij.spring.model.utils.SpringModelUtils;
+import com.intellij.spring.model.utils.SpringPropertyUtils;
+import com.intellij.spring.model.xml.beans.SpringBaseBeanPointer;
+import com.intellij.spring.model.xml.beans.SpringPropertyDefinition;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.xpath.XPath;
 import org.jetbrains.annotations.NotNull;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
+import org.jetbrains.annotations.Nullable;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -32,66 +22,30 @@ import java.util.Set;
  */
 public class BeanAliasResolver extends PackageAliasResolver{
 
-  private SAXBuilder builder = new SAXBuilder(false) {{
-    setEntityResolver(new EntityResolver() {
-      @Override public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-        return new InputSource(new StringReader(""));
-      }
-    });
-  }};
+  public static String MAPPER_ALIASE_PACKAGE_CLZZ = "org.mybatis.spring.SqlSessionFactoryBean";
 
   public BeanAliasResolver(Project project) {
     super(project);
   }
 
   @NotNull @Override
-  public Collection<String> getPackages() {
-    Set<String> result = Sets.newHashSet();
-    Collection<Beans> domElements = DomUtils.findDomElements(project, Beans.class);
-    if (CollectionUtils.isEmpty(domElements)) {
-      return standby();
-    } else {
-      for (Beans bs : domElements) {
-        for (Bean bean : bs.getBeans()) {
-          for (BeanProperty pop : bean.getBeanProperties()) {
-            String stringValue = pop.getName().getStringValue();
-            if (null != stringValue && stringValue.equals("typeAliasesPackage")) {
-              String popValue = pop.getValue().getStringValue();
-              if (null != popValue) {
-                result.add(popValue);
-              }
-            }
-          }
+  public Collection<String> getPackages(@Nullable PsiElement element) {
+    CommonSpringModel springModel = SpringModelUtils.getSpringModel(element);
+    if (null == springModel) {
+      return Collections.emptyList();
+    }
+    Set<String> res = Sets.newHashSet();
+    for (SpringBaseBeanPointer springBaseBeanPointer : springModel.findBeansByPsiClassWithInheritance(MAPPER_ALIASE_PACKAGE_CLZZ)) {
+      SpringPropertyDefinition basePackages = SpringPropertyUtils.findPropertyByName(springBaseBeanPointer.getSpringBean(), "typeAliasesPackage");
+      if (basePackages != null) {
+        final String value = basePackages.getValueElement().getStringValue();
+        if (value != null) {
+          res.add(value);
         }
       }
     }
-    return result;
+    return res;
   }
 
-  private Collection<String> standby() {
-    Collection<VirtualFile> candidates = DomService.getInstance().getDomFileCandidates(Beans.class, project);
-    Set<String> result = Sets.newHashSet();
-    try {
-      for (VirtualFile file : candidates) {
-        file.refresh(true, true);
-        Document document = builder.build(new ByteArrayInputStream(file.contentsToByteArray()));
-        XPath path = setupXPath("org.mybatis.spring.SqlSessionFactoryBean", "typeAliasesPackage");
-        Element property = (Element)path.selectSingleNode(document);
-        if (null != property) {
-          result.add(property.getAttributeValue("value"));
-        }
-      }
-    } catch (Exception e) {
-      return result;
-    }
-    return result;
-  }
-
-  private XPath setupXPath(String beanClassName, String propertyName) throws JDOMException {
-    String text = "/ns:beans/ns:bean[@class='" + beanClassName +"']/ns:property[@name='" + propertyName + "']";
-    XPath path = XPath.newInstance(text);
-    path.addNamespace("ns", "http://www.springframework.org/schema/beans");
-    return path;
-  }
 
 }

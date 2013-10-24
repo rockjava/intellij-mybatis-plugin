@@ -30,7 +30,7 @@ public class AliasConverter extends ConverterAdaptor<PsiClass> implements Custom
   public PsiClass fromString(@Nullable @NonNls String s, ConvertContext context) {
     if (StringUtil.isEmptyOrSpaces(s)) return null;
     if (!s.contains(MybatisConstants.DOT_SEPARATOR)) {
-      return AliasFacade.getInstance(context.getProject()).findPsiClass(s).orNull();
+      return AliasFacade.getInstance(context.getProject()).findPsiClass(context.getXmlElement(), s).orNull();
     }
     return DomJavaUtil.findClass(s.trim(), context.getFile(), context.getModule(), GlobalSearchScope.allScope(context.getProject()));
   }

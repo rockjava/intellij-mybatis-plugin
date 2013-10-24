@@ -7,6 +7,7 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
 
 import org.jetbrains.annotations.NotNull;
@@ -43,13 +44,13 @@ public class AliasFacade {
   }
 
   @NotNull
-  public Optional<PsiClass> findPsiClass(@NotNull String shortName) {
+  public Optional<PsiClass> findPsiClass(@Nullable PsiElement element, @NotNull String shortName) {
     PsiClass clzz = JavaPsiFacade.getInstance(project).findClass(shortName, GlobalSearchScope.allScope(project));
     if (null != clzz) {
       return Optional.of(clzz);
     }
     for (AliasResolver resolver : resolvers) {
-      for (AliasDesc desc : resolver.getClssAliasDescriptions()) {
+      for (AliasDesc desc : resolver.getClssAliasDescriptions(element)) {
         if (desc.getAlias().equals(shortName)) {
           return Optional.of(desc.getClzz());
         }
@@ -59,10 +60,10 @@ public class AliasFacade {
   }
 
   @NotNull
-  public Collection<AliasDesc> getAliasDescs() {
+  public Collection<AliasDesc> getAliasDescs(@Nullable PsiElement element) {
     ArrayList<AliasDesc> result = Lists.newArrayList();
     for (AliasResolver resolver : resolvers) {
-      result.addAll(resolver.getClssAliasDescriptions());
+      result.addAll(resolver.getClssAliasDescriptions(element));
     }
     return result;
   }
@@ -72,7 +73,7 @@ public class AliasFacade {
       return Optional.absent();
     }
     for (AliasResolver resolver : resolvers) {
-      for (AliasDesc desc : resolver.getClssAliasDescriptions()) {
+      for (AliasDesc desc : resolver.getClssAliasDescriptions(clzz)) {
         if (desc.getClzz().equals(clzz)) {
           return Optional.of(desc);
         }

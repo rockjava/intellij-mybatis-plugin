@@ -3,12 +3,14 @@ package com.seventh7.mybatis.alias;
 import com.google.common.collect.Sets;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
 import com.seventh7.mybatis.dom.model.Configuration;
 import com.seventh7.mybatis.dom.model.TypeAlias;
 import com.seventh7.mybatis.dom.model.TypeAliases;
 import com.seventh7.mybatis.util.DomUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,7 +25,7 @@ public class SingleAliasResolver extends AliasResolver{
   }
 
   @NotNull @Override
-  public Set<AliasDesc> getClssAliasDescriptions() {
+  public Set<AliasDesc> getClssAliasDescriptions(@Nullable PsiElement element) {
     HashSet<AliasDesc> result = Sets.newHashSet();
     for (Configuration conf : DomUtils.findDomElements(project, Configuration.class)) {
       for (TypeAliases tas : conf.getTypeAliases()) {
