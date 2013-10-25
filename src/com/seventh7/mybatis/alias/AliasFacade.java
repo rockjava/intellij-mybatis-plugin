@@ -37,9 +37,13 @@ public class AliasFacade {
   }
 
   private void initResolvers() {
+    try {
+      Class.forName("com.intellij.spring.model.utils.SpringModelUtils");
+      this.registerResolver(AliasResolverFactory.createBeanResolver(project));
+    } catch (ClassNotFoundException e) {
+    }
     this.registerResolver(AliasResolverFactory.createSingleAliasResolver(project));
     this.registerResolver(AliasResolverFactory.createConfigPackageResolver(project));
-    this.registerResolver(AliasResolverFactory.createBeanResolver(project));
     this.registerResolver(AliasResolverFactory.createAnnotationResolver(project));
   }
 
