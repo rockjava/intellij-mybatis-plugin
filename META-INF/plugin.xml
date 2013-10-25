@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="https://github.com/seventh7/intellij-mybatis-plugin">
     <id>com.seventh7.plugin.mybatis</id>
     <name>MyBatis plugin</name>
-    <version>1.52</version>
+    <version>1.54</version>
     <vendor email="insist.day@gmail.com" url="https://github.com/seventh7">Yanglin</vendor>
 
     <description><![CDATA[
@@ -10,10 +10,10 @@
       ]]></description>
 
     <change-notes><![CDATA[
-      <h4>1.52</h4>
+      <h4>1.54</h4>
       <ul>
-          <li>Solve conflict with other plugin</li>
-          <li>Auto register mapper as spring bean</li>
+          <li>Make spring bean regitstar optional</li>
+          <li>Change navigation icon for mapper and statement</li>
       </ul>
       <h4>1.51</h4>
       <ul>
@@ -27,6 +27,7 @@
           <li>Support property completion for result and id of resultMap、collection、association</li>
           <li>Support parameter completion[ #{param} ] while editting sql(@Param based)</li>
           <li>Support resultMap completion for collection and association of resultMap</li>
+          <li>Auto register mapper as spring bean(Optional)</li>
           <li>Change reference strategy to support rename</li>
           <li>Brace completion while editting sql</li>
           <li>Supoort surround with CDATA section for sql</li>
@@ -44,8 +45,8 @@
     </change-notes>
 
     <idea-version since-build="107.105"/>
-    <depends>com.intellij.sql</depends>
-    <depends>com.intellij.spring</depends>
+    <depends optional="true">com.intellij.sql</depends>
+    <depends optional="true">com.intellij.spring</depends>
     <extensions defaultExtensionNs="com.intellij">
         <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.MapperDescription"/>
         <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.ConfigurationDescription"/>
