@@ -147,10 +147,10 @@ public abstract class IdBasedTagConverter extends ConverterAdaptor<XmlAttributeV
     @NotNull @Override
     public PsiReference[] getReferencesByString(String text, @NotNull PsiElement position, int offsetInPosition) {
       List<PsiReference> refs = Lists.newArrayList(super.getReferencesByString(text, position, offsetInPosition));
-      ValueReference nr = new ValueReference(position, getTextRange(position), context, text);
-      if (!refs.isEmpty() && 0 != nr.getVariants().length) {
+      ValueReference vr = new ValueReference(position, getTextRange(position), context, text);
+      if (!refs.isEmpty() && 0 != vr.getVariants().length) {
         refs.remove(refs.size() - 1);
-        refs.add(nr);
+        refs.add(vr);
       }
       return refs.toArray(new PsiReference[refs.size()]);
     }
