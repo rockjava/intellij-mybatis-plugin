@@ -10,6 +10,11 @@ import org.jetbrains.annotations.NotNull;
 public class AliasResolverFactory {
 
   @NotNull
+  public static  AliasResolver createInnerAliasResolver(@NotNull Project project) {
+    return new InnerAliasResolver(project);
+  }
+
+  @NotNull
   public static AliasResolver createAnnotationResolver(@NotNull Project project) {
     return new AnnotationAliasResolver(project);
   }

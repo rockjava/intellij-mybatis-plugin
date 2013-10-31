@@ -2,6 +2,8 @@ package com.seventh7.mybatis.alias;
 
 import com.intellij.psi.PsiClass;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @author yanglin
  */
@@ -10,6 +12,18 @@ public class AliasDesc {
   private PsiClass clzz;
 
   private String alias;
+
+  public AliasDesc() {
+  }
+
+  public static AliasDesc create(@NotNull PsiClass psiClass, @NotNull String alias) {
+    return new AliasDesc(psiClass, alias);
+  }
+
+  public AliasDesc(PsiClass clzz, String alias) {
+    this.clzz = clzz;
+    this.alias = alias;
+  }
 
   public PsiClass getClzz() {
     return clzz;
