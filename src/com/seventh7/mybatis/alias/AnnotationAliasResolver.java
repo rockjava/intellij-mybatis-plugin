@@ -1,138 +1,59 @@
 package com.seventh7.mybatis.alias;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Sets;
 
-import com.intellij.openapi.components.ProjectComponent;
-import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiTreeChangeAdapter;
-import com.intellij.psi.PsiTreeChangeEvent;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.PsiShortNamesCache;
+import com.intellij.psi.search.searches.AnnotatedElementsSearch;
+import com.seventh7.mybatis.annotation.Annotation;
 import com.seventh7.mybatis.util.JavaUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
-
-import static com.seventh7.mybatis.annotation.Annotation.ALIAS;
 
 /**
  * @author yanglin
  */
-public class AnnotationAliasResolver extends AliasResolver implements ProjectComponent {
+public class AnnotationAliasResolver extends AliasResolver {
 
-  private Project project;
-
-  private Set<PsiClass> clzzCache;
-
-  private Function<PsiClass, AliasDesc> function = new Function<PsiClass, AliasDesc>() {
+  private static final Function FUN = new Function<PsiClass, AliasDesc>() {
     @Override
-    public AliasDesc apply(PsiClass input) {
+    public AliasDesc apply(PsiClass psiClass) {
+      Optional<String> txt = JavaUtils.getAnnotationValueText(psiClass, Annotation.ALIAS);
+      if (!txt.isPresent()) return null;
       AliasDesc ad = new AliasDesc();
-      ad.setClzz(input);
-      ad.setAlias(JavaUtils.getAnnotationValueText(input, ALIAS).get());
+      ad.setAlias(txt.get());
+      ad.setClzz(psiClass);
       return ad;
     }
   };
+
+  public AnnotationAliasResolver(Project project) {
+    super(project);
+  }
 
   public static final AnnotationAliasResolver getInstance(@NotNull Project project) {
     return project.getComponent(AnnotationAliasResolver.class);
   }
 
-  public AnnotationAliasResolver(Project project) {
-    super(project);
-    this.project = project;
-    this.clzzCache = Sets.newHashSet();
-  }
-
-  @NotNull @Override
-  public Set<AliasDesc> getClssAliasDescriptions(@Nullable PsiElement element) {
-    return Sets.newHashSet(Collections2.transform(clzzCache, function));
-  }
-
-  public void initComponent() {
-  }
-
-  private void initCache() {
-    PsiShortNamesCache shortNamesCache = PsiShortNamesCache.getInstance(project);
-    for (String name : shortNamesCache.getAllClassNames()) {
-      PsiClass[] psiClasses = shortNamesCache.getClassesByName(name, GlobalSearchScope.allScope(project));
-      for (PsiClass clzz : psiClasses) {
-        cacheClzzIfNeeded(clzz);
-      }
-    }
-  }
-
-  private void handlePsiClassChange(@NotNull PsiClass[] clzzes) {
-    for (PsiClass clzz : clzzes) {
-      if (JavaUtils.isModelClzz(clzz)) {
-        handlePsiClassChange(clzz);
-      }
-    }
-  }
-
-  private void handlePsiClassChange(@NotNull PsiClass clzz) {
-    if (JavaUtils.isAnnotationPresent(clzz, ALIAS)) {
-      cacheClzzIfNeeded(clzz);
-    } else {
-      removeCachedClzzIfNeeded(clzz);
-    }
-  }
-
-  public void cacheClzzIfNeeded(@NotNull PsiClass clzz) {
-    if (JavaUtils.isModelClzz(clzz) && JavaUtils.getAnnotationValueText(clzz, ALIAS).isPresent()) {
-      clzzCache.add(clzz);
-    }
-  }
-
-  public void removeCachedClzzIfNeeded(@NotNull PsiClass clzz) {
-    if (!JavaUtils.getAnnotationValueText(clzz, ALIAS).isPresent()) {
-      clzzCache.remove(clzz);
-    }
-  }
-
-  public void disposeComponent() {
-  }
-
   @NotNull
-  public String getComponentName() {
-    return "AnnotationAliasResolver";
+  @Override
+  public Set<AliasDesc> getClssAliasDescriptions(@Nullable PsiElement element) {
+    Optional<PsiClass> clzz = Annotation.ALIAS.toPsiClass(project);
+    if (clzz.isPresent()) {
+      Collection<PsiClass> res = AnnotatedElementsSearch.searchPsiClasses(clzz.get(), GlobalSearchScope.allScope(project)).findAll();
+      return Sets.newHashSet(Collections2.transform(res, FUN));
+    }
+    return Collections.emptySet();
   }
 
-  public void projectOpened() {
-    DumbService.getInstance(project).smartInvokeLater(new Runnable() {
-      @Override
-      public void run() {
-        if (!project.isDisposed() && project.isOpen()) {
-          setupListener();
-          initCache();
-        }
-      }
-    });
-  }
-
-  private void setupListener() {
-    PsiManager.getInstance(project).addPsiTreeChangeListener(new PsiTreeChangeAdapter() {
-      @Override
-      public void childrenChanged(@NotNull PsiTreeChangeEvent event) {
-        PsiElement element = event.getParent();
-        if (element instanceof PsiJavaFile) {
-          PsiClass[] classes = ((PsiJavaFile) element).getClasses();
-          handlePsiClassChange(classes);
-        }
-      }
-    });
-  }
-
-  public void projectClosed() {
-    clzzCache = null;
-  }
 }

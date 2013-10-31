@@ -11,7 +11,7 @@ public class AliasResolverFactory {
 
   @NotNull
   public static AliasResolver createAnnotationResolver(@NotNull Project project) {
-    return AnnotationAliasResolver.getInstance(project);
+    return new AnnotationAliasResolver(project);
   }
 
   @NotNull

@@ -82,9 +82,4 @@
             <className>com.seventh7.mybatis.intention.GenerateMapperIntention</className>
         </intentionAction>
     </extensions>
-    <project-components>
-        <component>
-            <implementation-class>com.seventh7.mybatis.alias.AnnotationAliasResolver</implementation-class>
-        </component>
-    </project-components>
 </idea-plugin>
