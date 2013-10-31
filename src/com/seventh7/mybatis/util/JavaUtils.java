@@ -45,18 +45,18 @@ public final class JavaUtils {
   }
 
   @NotNull
-  public static Optional<PsiField> findSettablePsiField(@NotNull Project project, @NotNull PsiClass clzz, @Nullable String propertyName) {
+  public static Optional<PsiField> findSettablePsiField(@NotNull PsiClass clzz, @Nullable String propertyName) {
     PsiMethod propertySetter = PropertyUtil.findPropertySetter(clzz, propertyName, false, true);
-    return null == propertySetter ? Optional.<PsiField>absent() : Optional.fromNullable(PropertyUtil.findPropertyField(project, clzz, propertyName, false));
+    return null == propertySetter ? Optional.<PsiField>absent() : Optional.fromNullable(PropertyUtil.findPropertyFieldByMember(propertySetter));
   }
 
   @NotNull
-  public static PsiField[] findSettablePsiFields(@NotNull Project project, @NotNull PsiClass clzz) {
+  public static PsiField[] findSettablePsiFields(@NotNull PsiClass clzz) {
     PsiMethod[] methods = clzz.getAllMethods();
     List<PsiField> fields = Lists.newArrayList();
     for (PsiMethod method : methods) {
       if (PropertyUtil.isSimplePropertySetter(method)) {
-        Optional<PsiField> psiField = findSettablePsiField(project, clzz, PropertyUtil.getPropertyName(method));
+        Optional<PsiField> psiField = findSettablePsiField(clzz, PropertyUtil.getPropertyName(method));
         if (psiField.isPresent()) {
           fields.add(psiField.get());
         }

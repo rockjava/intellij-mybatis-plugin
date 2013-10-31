@@ -13,6 +13,7 @@
       <h4>1.57</h4>
       <ul>
           <li>Support mybatis built-in aliases</li>
+          <li>Adapt to idea 13 EAP</li>
       </ul>
       <h4>1.56</h4>
       <ul>

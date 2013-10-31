@@ -41,7 +41,7 @@ public class ContextPsiFieldReference extends PsiReferenceBase<XmlAttributeValue
   @NotNull @Override
   public Object[] getVariants() {
     Optional<PsiClass> clzz = getTargetClzz();
-    return clzz.isPresent() ? JavaUtils.findSettablePsiFields(myElement.getProject(), clzz.get()) : PsiReference.EMPTY_ARRAY;
+    return clzz.isPresent() ? JavaUtils.findSettablePsiFields(clzz.get()) : PsiReference.EMPTY_ARRAY;
   }
 
   @SuppressWarnings("unchecked")
