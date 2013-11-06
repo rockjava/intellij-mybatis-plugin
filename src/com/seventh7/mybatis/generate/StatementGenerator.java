@@ -1,19 +1,25 @@
 package com.seventh7.mybatis.generate;
 
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.psi.xml.XmlTag;
+import com.intellij.util.CommonProcessors;
 import com.seventh7.mybatis.dom.model.GroupTwo;
 import com.seventh7.mybatis.dom.model.Mapper;
 import com.seventh7.mybatis.service.EditorService;
+import com.seventh7.mybatis.service.JavaService;
 import com.seventh7.mybatis.setting.MybatisSetting;
 import com.seventh7.mybatis.ui.ListSelectionListener;
 import com.seventh7.mybatis.ui.UiComponentFacade;
@@ -24,6 +30,7 @@ import com.seventh7.mybatis.util.MapperUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -41,6 +48,15 @@ public abstract class StatementGenerator {
   public static final StatementGenerator INSERT_GENERATOR = new InsertGenerator("insert", "add", "new");
 
   public static final Set<StatementGenerator> ALL = ImmutableSet.of(UPDATE_GENERATOR, SELECT_GENERATOR, DELETE_GENERATOR, INSERT_GENERATOR);
+
+  private static final Function<Mapper, String> FUN = new Function<Mapper, String>() {
+    @Override
+    public String  apply(Mapper mapper) {
+      VirtualFile vf = mapper.getXmlTag().getContainingFile().getVirtualFile();
+      if (null == vf) return "";
+      return vf.getCanonicalPath();
+    }
+  };
 
   public static Optional<PsiClass> getSelectResultType(@Nullable PsiMethod method) {
     if (null == method) {
@@ -102,15 +118,32 @@ public abstract class StatementGenerator {
     this.patterns = Sets.newHashSet(patterns);
   }
 
-  public void execute(@NotNull PsiMethod method) {
-    Optional<Mapper> mapper = MapperUtils.findFirstMapper(method.getProject(), method.getContainingClass());
-    if (mapper.isPresent()) {
-      setupTag(method, mapper);
+  public void execute(@NotNull final PsiMethod method) {
+    PsiClass psiClass = method.getContainingClass();
+    if (null == psiClass) return;
+    CommonProcessors.CollectProcessor<Mapper> processor = new CommonProcessors.CollectProcessor<Mapper>();
+    JavaService.getInstance(method.getProject()).process(psiClass, processor);
+    final List<Mapper> mappers = Lists.newArrayList(processor.getResults());
+    if (1 == mappers.size()) {
+      setupTag(method, Iterables.getOnlyElement(mappers, null));
+    } else if (mappers.size() > 1) {
+      Collection<String> paths = Collections2.transform(mappers, FUN);
+      UiComponentFacade.getInstance(method.getProject()).showListPopup("Choose target mapper xml to generate", new ListSelectionListener() {
+        @Override
+        public void selected(int index) {
+          setupTag(method, mappers.get(index));
+        }
+
+        @Override
+        public boolean isWriteAction() {
+          return true;
+        }
+      }, paths.toArray(new String[paths.size()]));
     }
   }
 
-  private void setupTag(PsiMethod method, Optional<Mapper> mapper) {
-    GroupTwo target = getTarget(mapper.get(), method);
+  private void setupTag(PsiMethod method, Mapper mapper) {
+    GroupTwo target = getTarget(mapper, method);
     target.getId().setStringValue(method.getName());
     target.setValue(" ");
     XmlTag tag = target.getXmlTag();

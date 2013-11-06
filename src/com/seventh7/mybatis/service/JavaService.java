@@ -56,23 +56,26 @@ public class JavaService {
   }
 
   @SuppressWarnings("unchecked")
-  public void process(@NotNull PsiMethod method, @NotNull Processor processor) {
-    Optional<Mapper> mapper = MapperUtils.findFirstMapper(project, method);
-    if (mapper.isPresent()) {
-      for (IdDomElement idDomElement : mapper.get().getDaoElements()) {
-        if (MapperUtils.getId(idDomElement).equals(method.getName())) {
+  public void process(@NotNull PsiMethod psiMethod, @NotNull Processor<IdDomElement> processor) {
+    PsiClass psiClass = psiMethod.getContainingClass();
+    if (null == psiClass) return;
+    String id = psiClass.getQualifiedName() + "." + psiMethod.getName();
+    for (Mapper mapper : MapperUtils.findMappers(psiMethod.getProject())) {
+      for (IdDomElement idDomElement : mapper.getDaoElements()) {
+        if (MapperUtils.getIdSignature(idDomElement).equals(id)) {
           processor.process(idDomElement);
-          return;
         }
       }
     }
   }
 
   @SuppressWarnings("unchecked")
-  public void process(@NotNull PsiClass clzz, @NotNull Processor processor) {
-    Optional<Mapper> mapper = MapperUtils.findFirstMapper(project, clzz);
-    if (mapper.isPresent()) {
-      processor.process(mapper.get());
+  public void process(@NotNull PsiClass clzz, @NotNull Processor<Mapper> processor) {
+    String ns = clzz.getQualifiedName();
+    for (Mapper mapper : MapperUtils.findMappers(clzz.getProject())) {
+      if (MapperUtils.getNamespace(mapper).equals(ns)) {
+        processor.process(mapper);
+      }
     }
   }
 

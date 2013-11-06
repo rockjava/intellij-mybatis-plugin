@@ -14,9 +14,9 @@ public interface Icons {
 
   Icon PARAM_COMPLECTION_ICON = PlatformIcons.PARAMETER_ICON;
 
-  Icon MAPPER_LINE_MARKER_ICON = IconLoader.getIcon("/gutter/implementedMethod.png");
+  Icon MAPPER_LINE_MARKER_ICON = IconLoader.getIcon("/images/mapper_method.png");
 
-  Icon STATEMENT_LINE_MARKER_ICON = IconLoader.getIcon("/gutter/overridingMethod.png");
+  Icon STATEMENT_LINE_MARKER_ICON = IconLoader.getIcon("/images/statement.png");
 
   Icon SPRING_INJECTION_ICON= IconLoader.getIcon("/images/injection.png");
 }

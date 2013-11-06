@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="https://github.com/seventh7/intellij-mybatis-plugin">
     <id>com.seventh7.plugin.mybatis</id>
     <name>MyBatis plugin</name>
-    <version>1.58</version>
+    <version>1.59</version>
     <vendor email="insist.day@gmail.com" url="https://github.com/seventh7">Yanglin</vendor>
 
     <description><![CDATA[
@@ -10,9 +10,9 @@
       ]]></description>
 
     <change-notes><![CDATA[
-      <h4>1.58</h4>
+      <h4>1.59</h4>
       <ul>
-          <li>Limit right idea version to use plugin</li>
+          <li>Improvement</li>
       </ul>
       <h4>1.56</h4>
       <ul>
