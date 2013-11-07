@@ -17,7 +17,7 @@
 * Mapper parameter auto completion in xml while editting sql
     * \#{yourParameter}
     * @Param annotation based
-    * Association is supportted
+    * Association is supported
 
 #Generate
 
