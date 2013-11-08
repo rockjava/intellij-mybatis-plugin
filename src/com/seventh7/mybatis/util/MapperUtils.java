@@ -15,10 +15,14 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.xml.XmlElement;
+import com.intellij.util.Processor;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomUtil;
+import com.seventh7.mybatis.dom.model.Configuration;
 import com.seventh7.mybatis.dom.model.IdDomElement;
 import com.seventh7.mybatis.dom.model.Mapper;
+import com.seventh7.mybatis.dom.model.TypeAlias;
+import com.seventh7.mybatis.dom.model.TypeAliases;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -162,4 +166,33 @@ public final class MapperUtils {
     return isMapperWithSameNamespace(contextMapper, mapper) ? getId(domElement) : getIdSignature(domElement);
   }
 
+  public static void processConfiguredTypeAliases(@NotNull Project project, @NotNull Processor<TypeAlias> processor) {
+    for (Configuration conf : getMybatisConfigurations(project)) {
+      for (TypeAliases tas : conf.getTypeAliases()) {
+        for (TypeAlias ta : tas.getTypeAlias()) {
+          String stringValue = ta.getAlias().getStringValue();
+          if (null != stringValue && !processor.process(ta)) {
+            return;
+          }
+        }
+      }
+    }
+  }
+
+  private static Collection<Configuration> getMybatisConfigurations(Project project) {
+    return DomUtils.findDomElements(project, Configuration.class);
+  }
+
+  public static void processConfiguredPackage(@NotNull Project project,
+                                              @NotNull Processor<com.seventh7.mybatis.dom.model.Package> processor) {
+    for (Configuration conf : getMybatisConfigurations(project)) {
+      for (TypeAliases tas : conf.getTypeAliases()) {
+        for (com.seventh7.mybatis.dom.model.Package pkg : tas.getPackages()) {
+          if (!processor.process(pkg)) {
+            return;
+          }
+        }
+      }
+    }
+  }
 }

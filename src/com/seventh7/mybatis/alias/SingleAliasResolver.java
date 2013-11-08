@@ -4,15 +4,13 @@ import com.google.common.collect.Sets;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import com.seventh7.mybatis.dom.model.Configuration;
+import com.intellij.util.Processor;
 import com.seventh7.mybatis.dom.model.TypeAlias;
-import com.seventh7.mybatis.dom.model.TypeAliases;
-import com.seventh7.mybatis.util.DomUtils;
+import com.seventh7.mybatis.util.MapperUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -26,17 +24,14 @@ public class SingleAliasResolver extends AliasResolver{
 
   @NotNull @Override
   public Set<AliasDesc> getClssAliasDescriptions(@Nullable PsiElement element) {
-    HashSet<AliasDesc> result = Sets.newHashSet();
-    for (Configuration conf : DomUtils.findDomElements(project, Configuration.class)) {
-      for (TypeAliases tas : conf.getTypeAliases()) {
-        for (TypeAlias ta : tas.getTypeAlias()) {
-          String stringValue = ta.getAlias().getStringValue();
-          if (null != stringValue) {
-            addAliasDesc(result, ta.getType().getValue(), stringValue);
-          }
-        }
+    final Set<AliasDesc> result = Sets.newHashSet();
+    MapperUtils.processConfiguredTypeAliases(project, new Processor<TypeAlias>() {
+      @Override
+      public boolean process(TypeAlias typeAlias) {
+        addAliasDesc(result, typeAlias.getType().getValue(), typeAlias.getAlias().getStringValue());
+        return true;
       }
-    }
+    });
     return result;
   }
 
