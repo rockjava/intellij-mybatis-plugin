@@ -43,14 +43,14 @@ public class MapperRefactoringProvider implements RefactoringElementListenerProv
 
   private void renameMapperXml(@NotNull final PsiClass oldClzz, @NotNull final PsiClass newClzz) {
     Collection<Mapper> mappers = MapperUtils.findMappers(oldClzz.getProject(), oldClzz);
-    for (Mapper mapper : mappers) {
-      try {
+    try {
+      for (Mapper mapper : mappers) {
         VirtualFile vf = mapper.getXmlTag().getOriginalElement().getContainingFile().getVirtualFile();
         if (null != vf) {
           vf.rename(MapperRefactoringProvider.this, newClzz.getName() + "." + vf.getExtension());
         }
-      } catch (IOException e) {
       }
+    } catch (IOException e) {
     }
   }
 
