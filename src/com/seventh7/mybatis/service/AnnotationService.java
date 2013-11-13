@@ -24,8 +24,14 @@ public class AnnotationService {
 
   private Project project;
 
+  private JavaService javaService;
+
+  private AnnotationService annotationService;
+
   public AnnotationService(Project project) {
     this.project = project;
+    this.javaService = JavaService.getInstance(project);
+    this.annotationService = AnnotationService.getInstance(project);
   }
 
   public static AnnotationService getInstance(@NotNull Project project) {
@@ -37,7 +43,6 @@ public class AnnotationService {
     if (JavaUtils.isAnnotationPresent(parameter, annotation) || null == modifierList) {
       return;
     }
-    JavaService javaService = JavaService.getInstance(parameter.getProject());
     javaService.importClzz((PsiJavaFile) parameter.getContainingFile(), annotation.getQualifiedName());
     
     PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
@@ -60,8 +65,7 @@ public class AnnotationService {
   public void addAnnotationWithParameterName(@NotNull PsiParameter parameter) {
     String name = parameter.getName();
     if (null != name) {
-      AnnotationService annotationManager = AnnotationService.getInstance(project);
-      annotationManager.addAnnotation(parameter, Annotation.PARAM.withValue(new Annotation.StringValue(name)));
+      annotationService.addAnnotation(parameter, Annotation.PARAM.withValue(new Annotation.StringValue(name)));
     }
   }
 }

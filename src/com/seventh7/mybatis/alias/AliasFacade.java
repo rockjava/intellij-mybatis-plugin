@@ -24,6 +24,8 @@ public class AliasFacade {
 
   private Project project;
 
+  private JavaPsiFacade javaPsiFacade;
+
   private List<AliasResolver> resolvers;
 
   public static final AliasFacade getInstance(@NotNull Project project) {
@@ -33,6 +35,7 @@ public class AliasFacade {
   public AliasFacade(Project project) {
     this.project = project;
     this.resolvers = Lists.newArrayList();
+    this.javaPsiFacade = JavaPsiFacade.getInstance(project);
     initResolvers();
   }
 
@@ -50,7 +53,7 @@ public class AliasFacade {
 
   @NotNull
   public Optional<PsiClass> findPsiClass(@Nullable PsiElement element, @NotNull String shortName) {
-    PsiClass clzz = JavaPsiFacade.getInstance(project).findClass(shortName, GlobalSearchScope.allScope(project));
+    PsiClass clzz = javaPsiFacade.findClass(shortName, GlobalSearchScope.allScope(project));
     if (null != clzz) {
       return Optional.of(clzz);
     }

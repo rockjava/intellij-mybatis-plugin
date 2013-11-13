@@ -27,8 +27,11 @@ public final class UiComponentFacade {
 
   private Project project;
 
+  private FileEditorManager fileEditorManager;
+
   private UiComponentFacade(Project project) {
     this.project = project;
+    this.fileEditorManager = FileEditorManager.getInstance(project);
   }
 
   public static UiComponentFacade getInstance(@NotNull Project project) {
@@ -84,7 +87,7 @@ public final class UiComponentFacade {
   }
 
   private void setPositionForShown(JBPopup popup) {
-    Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+    Editor editor = fileEditorManager.getSelectedTextEditor();
     if (null != editor) {
       popup.showInBestPositionFor(editor);
     } else {

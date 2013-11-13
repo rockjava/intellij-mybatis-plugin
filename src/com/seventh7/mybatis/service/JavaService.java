@@ -33,8 +33,14 @@ public class JavaService {
 
   private Project project;
 
+  private JavaPsiFacade javaPsiFacade;
+
+  private EditorService editorService;
+
   public JavaService(Project project) {
     this.project = project;
+    this.javaPsiFacade = JavaPsiFacade.getInstance(project);
+    this.editorService = EditorService.getInstance(project);
   }
 
   public static JavaService getInstance(@NotNull Project project) {
@@ -98,10 +104,10 @@ public class JavaService {
       Optional<PsiClass> clzz = JavaUtils.findClzz(project, clzzName);
       PsiImportList importList = file.getImportList();
       if (clzz.isPresent() && null != importList) {
-        PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
+        PsiElementFactory elementFactory = javaPsiFacade.getElementFactory();
         PsiImportStatement statement = elementFactory.createImportStatement(clzz.get());
         importList.add(statement);
-        EditorService.getInstance(file.getProject()).format(file, statement);
+        editorService.format(file, statement);
       }
     }
   }

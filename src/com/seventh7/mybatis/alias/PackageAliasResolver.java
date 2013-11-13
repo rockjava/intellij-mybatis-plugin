@@ -7,7 +7,6 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPackage;
-import com.intellij.psi.search.GlobalSearchScope;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,13 +19,15 @@ import java.util.Set;
  */
 public abstract class PackageAliasResolver extends AliasResolver{
 
+  private JavaPsiFacade javaPsiFacade;
+
   public PackageAliasResolver(Project project) {
     super(project);
+    this.javaPsiFacade = JavaPsiFacade.getInstance(project);
   }
 
   @NotNull @Override
   public Set<AliasDesc> getClssAliasDescriptions(@Nullable PsiElement element) {
-    JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(project);
     Set<AliasDesc> result = Sets.newHashSet();
     for (String pkgName : getPackages(element)) {
       if (null == pkgName) {

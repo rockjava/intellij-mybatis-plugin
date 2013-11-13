@@ -21,11 +21,14 @@ public class EditorService {
 
   private Project project;
 
+  private FileEditorManager fileEditorManager;
+
   private CodeFormatterFacade codeFormatterFacade;
 
   public EditorService(Project project) {
     this.project = project;
     this.codeFormatterFacade = new CodeFormatterFacade(new CodeStyleSettings());
+    this.fileEditorManager = FileEditorManager.getInstance(project);
   }
 
   public static EditorService getInstance(@NotNull Project project) {
@@ -38,7 +41,7 @@ public class EditorService {
 
   public void scrollTo(@NotNull PsiElement element, int offset) {
     NavigationUtil.activateFileWithPsiElement(element, true);
-    Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+    Editor editor = fileEditorManager.getSelectedTextEditor();
     if (null != editor) {
       editor.getCaretModel().moveToOffset(offset);
       editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
