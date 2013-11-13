@@ -20,9 +20,9 @@ import org.jetbrains.annotations.NotNull;
  * todo refactor
  * @author yanglin
  */
-public final class MapperBacktrackingFacade {
+public final class MapperBacktrackingUtils {
 
-  private MapperBacktrackingFacade() {
+  private MapperBacktrackingUtils() {
     throw new UnsupportedOperationException();
   }
 

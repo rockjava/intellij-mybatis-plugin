@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.xml.XmlAttributeValue;
-import com.seventh7.mybatis.dom.MapperBacktrackingFacade;
+import com.seventh7.mybatis.dom.MapperBacktrackingUtils;
 import com.seventh7.mybatis.service.JavaService;
 import com.seventh7.mybatis.util.JavaUtils;
 import com.seventh7.mybatis.util.MybatisConstants;
@@ -53,7 +53,7 @@ public class ContextPsiFieldReference extends PsiReferenceBase<XmlAttributeValue
         return JavaService.getInstance(myElement.getProject()).getReferenceClzzOfPsiField(resolved.get());
       }
     } else {
-      return MapperBacktrackingFacade.getPropertyClzz(myElement);
+      return MapperBacktrackingUtils.getPropertyClzz(myElement);
     }
     return Optional.absent();
   }

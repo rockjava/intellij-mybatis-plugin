@@ -7,7 +7,7 @@ import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.psi.xml.XmlAttributeValue;
-import com.seventh7.mybatis.dom.MapperBacktrackingFacade;
+import com.seventh7.mybatis.dom.MapperBacktrackingUtils;
 import com.seventh7.mybatis.util.JavaUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +41,7 @@ public class PsiFieldReferenceSetResolver extends ContextReferenceSetResolver<Xm
 
   @NotNull @Override
   public Optional<PsiField> getStartElement(@Nullable String firstText) {
-    Optional<PsiClass> clzz = MapperBacktrackingFacade.getPropertyClzz(getElement());
+    Optional<PsiClass> clzz = MapperBacktrackingUtils.getPropertyClzz(getElement());
     return clzz.isPresent() ? JavaUtils.findSettablePsiField(clzz.get(), firstText) : Optional.<PsiField>absent();
   }
 
