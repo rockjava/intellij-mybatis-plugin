@@ -13,6 +13,6 @@ import java.util.Set;
 public abstract class PackageProvider {
 
   @NotNull
-  public abstract Set<PsiPackage> getPakcages(@NotNull Project project);
+  public abstract Set<PsiPackage> getPackages(@NotNull Project project);
 
 }

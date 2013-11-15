@@ -18,7 +18,7 @@ public class PackageLocateStrategy extends LocateStrategy{
 
   @Override
   public boolean apply(@NotNull PsiClass clzz) {
-    Set<PsiPackage> pakcages = provider.getPakcages(clzz.getProject());
+    Set<PsiPackage> pakcages = provider.getPackages(clzz.getProject());
     String packageName = ((PsiJavaFile) clzz.getContainingFile()).getPackageName();
     PsiPackage pkg = JavaPsiFacade.getInstance(clzz.getProject()).findPackage(packageName);
     for (PsiPackage tmp : pakcages) {
