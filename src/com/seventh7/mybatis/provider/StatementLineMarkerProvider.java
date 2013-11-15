@@ -51,8 +51,8 @@ public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag
 
   private boolean isTargetType(PsiElement element) {
     DomElement domElement = DomUtil.getDomElement(element);
-    for (Class<?> clzz : TARGET_TYPES) {
-      if(clzz.isInstance(domElement))
+    for (Class<?> clazz : TARGET_TYPES) {
+      if(clazz.isInstance(domElement))
         return true;
     }
     return false;

@@ -25,7 +25,6 @@ import com.seventh7.mybatis.ui.ListSelectionListener;
 import com.seventh7.mybatis.ui.UiComponentFacade;
 import com.seventh7.mybatis.util.CollectionUtils;
 import com.seventh7.mybatis.util.JavaUtils;
-import com.seventh7.mybatis.util.MapperUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -64,7 +63,7 @@ public abstract class StatementGenerator {
     }
     PsiType returnType = method.getReturnType();
     if (returnType instanceof PsiPrimitiveType && returnType != PsiType.VOID) {
-      return JavaUtils.findClzz(method.getProject(), ((PsiPrimitiveType) returnType).getBoxedTypeName());
+      return JavaUtils.findClazz(method.getProject(), ((PsiPrimitiveType) returnType).getBoxedTypeName());
     } else if (returnType instanceof PsiClassReferenceType) {
       PsiClassReferenceType type = (PsiClassReferenceType)returnType;
       if (type.hasParameters()) {
@@ -105,7 +104,7 @@ public abstract class StatementGenerator {
     String target = method.getName();
     List<StatementGenerator> result = Lists.newArrayList();
     for (StatementGenerator generator : ALL) {
-      if (model.matchsAny(generator.getPatterns(), target)) {
+      if (model.matchesAny(generator.getPatterns(), target)) {
         result.add(generator);
       }
     }

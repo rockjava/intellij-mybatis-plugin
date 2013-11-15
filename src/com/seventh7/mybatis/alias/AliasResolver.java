@@ -24,19 +24,19 @@ public abstract class AliasResolver {
   }
 
   @NotNull
-  protected Optional<AliasDesc> addAliasDesc(@NotNull Set<AliasDesc> descs, @Nullable PsiClass clzz, @Nullable String alias) {
-    if (null == alias || !JavaUtils.isModelClzz(clzz)) {
+  protected Optional<AliasDesc> addAliasDesc(@NotNull Set<AliasDesc> descs, @Nullable PsiClass clazz, @Nullable String alias) {
+    if (null == alias || !JavaUtils.isModelClazz(clazz)) {
       return Optional.absent();
     }
     AliasDesc desc = new AliasDesc();
     descs.add(desc);
-    desc.setClzz(clzz);
+    desc.setClazz(clazz);
     desc.setAlias(alias);
     return Optional.of(desc);
   }
 
   @NotNull
-  public abstract Set<AliasDesc> getClssAliasDescriptions(@Nullable PsiElement element);
+  public abstract Set<AliasDesc> getClassAliasDescriptions(@Nullable PsiElement element);
 
   public Project getProject() {
     return project;

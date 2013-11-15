@@ -47,7 +47,7 @@ public class JavaService {
     return ServiceManager.getService(project, JavaService.class);
   }
 
-  public Optional<PsiClass> getReferenceClzzOfPsiField(@NotNull PsiElement field) {
+  public Optional<PsiClass> getReferenceClazzOfPsiField(@NotNull PsiElement field) {
     if (!(field instanceof PsiField)) {
       return Optional.absent();
     }
@@ -76,9 +76,9 @@ public class JavaService {
   }
 
   @SuppressWarnings("unchecked")
-  public void process(@NotNull PsiClass clzz, @NotNull Processor<Mapper> processor) {
-    String ns = clzz.getQualifiedName();
-    for (Mapper mapper : MapperUtils.findMappers(clzz.getProject())) {
+  public void process(@NotNull PsiClass clazz, @NotNull Processor<Mapper> processor) {
+    String ns = clazz.getQualifiedName();
+    for (Mapper mapper : MapperUtils.findMappers(clazz.getProject())) {
       if (MapperUtils.getNamespace(mapper).equals(ns)) {
         processor.process(mapper);
       }
@@ -93,19 +93,19 @@ public class JavaService {
     }
   }
 
-  public <T> Optional<T> findWithFindFristProcessor(@NotNull PsiElement target) {
+  public <T> Optional<T> findWithFindFirstProcessor(@NotNull PsiElement target) {
     CommonProcessors.FindFirstProcessor<T> processor = new CommonProcessors.FindFirstProcessor<T>();
     process(target, processor);
     return Optional.fromNullable(processor.getFoundValue());
   }
 
-  public void importClzz(PsiJavaFile file, String clzzName) {
-    if (!JavaUtils.hasImportClzz(file, clzzName)) {
-      Optional<PsiClass> clzz = JavaUtils.findClzz(project, clzzName);
+  public void importClazz(PsiJavaFile file, String clazzName) {
+    if (!JavaUtils.hasImportClazz(file, clazzName)) {
+      Optional<PsiClass> clazz = JavaUtils.findClazz(project, clazzName);
       PsiImportList importList = file.getImportList();
-      if (clzz.isPresent() && null != importList) {
+      if (clazz.isPresent() && null != importList) {
         PsiElementFactory elementFactory = javaPsiFacade.getElementFactory();
-        PsiImportStatement statement = elementFactory.createImportStatement(clzz.get());
+        PsiImportStatement statement = elementFactory.createImportStatement(clazz.get());
         importList.add(statement);
         editorService.format(file, statement);
       }

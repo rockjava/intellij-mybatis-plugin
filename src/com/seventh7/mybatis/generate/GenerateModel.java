@@ -34,7 +34,7 @@ public abstract class GenerateModel {
     }
   }
 
-  public boolean matchsAny(String[] patterns, String target) {
+  public boolean matchesAny(String[] patterns, String target) {
     for (String pattern : patterns) {
       if (apply(pattern, target)) {
         return true;
@@ -43,8 +43,8 @@ public abstract class GenerateModel {
     return false;
   }
 
-  public boolean matchsAny(Collection<String> patterns, String target) {
-    return matchsAny(patterns.toArray(new String[patterns.size()]), target);
+  public boolean matchesAny(Collection<String> patterns, String target) {
+    return matchesAny(patterns.toArray(new String[patterns.size()]), target);
   }
 
   protected abstract boolean apply(String pattern, String target);

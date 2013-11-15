@@ -29,7 +29,7 @@ public final class MapperBacktrackingUtils {
   /**
    * TODO refactor to make it much more applicable
    */
-  public static Optional<PsiClass> getPropertyClzz(XmlAttributeValue attributeValue) {
+  public static Optional<PsiClass> getPropertyClazz(XmlAttributeValue attributeValue) {
     DomElement domElement = DomUtil.getDomElement(attributeValue);
     if (null == domElement) {
       return Optional.absent();

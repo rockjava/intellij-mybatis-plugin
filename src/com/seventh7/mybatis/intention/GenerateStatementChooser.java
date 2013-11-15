@@ -22,10 +22,10 @@ public class GenerateStatementChooser extends JavaFileIntentionChooser{
       return false;
     }
     PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
-    PsiClass clzz = PsiTreeUtil.getParentOfType(element, PsiClass.class);
-    return null != method &&  null != clzz &&
+    PsiClass clazz = PsiTreeUtil.getParentOfType(element, PsiClass.class);
+    return null != method &&  null != clazz &&
            !JavaUtils.isAnyAnnotationPresent(method, Annotation.STATEMENT_SYMMETRIES) &&
            !isTargetPresentInXml(method) &&
-           isTargetPresentInXml(clzz);
+           isTargetPresentInXml(clazz);
   }
 }

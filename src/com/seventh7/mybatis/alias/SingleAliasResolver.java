@@ -23,7 +23,7 @@ public class SingleAliasResolver extends AliasResolver{
   }
 
   @NotNull @Override
-  public Set<AliasDesc> getClssAliasDescriptions(@Nullable PsiElement element) {
+  public Set<AliasDesc> getClassAliasDescriptions(@Nullable PsiElement element) {
     final Set<AliasDesc> result = Sets.newHashSet();
     MapperUtils.processConfiguredTypeAliases(project, new Processor<TypeAlias>() {
       @Override

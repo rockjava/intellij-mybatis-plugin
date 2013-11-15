@@ -95,14 +95,14 @@ public final class MapperUtils {
   }
 
   @NotNull
-  public static Collection<Mapper> findMappers(@NotNull Project project, @NotNull PsiClass clzz) {
-    return JavaUtils.isElementWithinInterface(clzz) ? findMappers(project, clzz.getQualifiedName()) : Collections.<Mapper>emptyList();
+  public static Collection<Mapper> findMappers(@NotNull Project project, @NotNull PsiClass clazz) {
+    return JavaUtils.isElementWithinInterface(clazz) ? findMappers(project, clazz.getQualifiedName()) : Collections.<Mapper>emptyList();
   }
 
   @NotNull
   public static Collection<Mapper> findMappers(@NotNull Project project, @NotNull PsiMethod method) {
-    PsiClass clzz = method.getContainingClass();
-    return null == clzz ? Collections.<Mapper>emptyList() : findMappers(project, clzz);
+    PsiClass clazz = method.getContainingClass();
+    return null == clazz ? Collections.<Mapper>emptyList() : findMappers(project, clazz);
   }
 
   @NotNull @NonNls
@@ -112,8 +112,8 @@ public final class MapperUtils {
   }
 
   @NotNull @NonNls
-  public static Optional<Mapper> findFirstMapper(@NotNull Project project, @NotNull PsiClass clzz) {
-    String qualifiedName = clzz.getQualifiedName();
+  public static Optional<Mapper> findFirstMapper(@NotNull Project project, @NotNull PsiClass clazz) {
+    String qualifiedName = clazz.getQualifiedName();
     return null != qualifiedName ? findFirstMapper(project, qualifiedName) : Optional.<Mapper>absent();
   }
 

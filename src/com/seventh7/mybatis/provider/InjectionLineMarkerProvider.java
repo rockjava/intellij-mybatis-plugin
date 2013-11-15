@@ -38,10 +38,10 @@ public class InjectionLineMarkerProvider extends RelatedItemLineMarkerProvider {
     PsiType type = field.getType();
     if (!(type instanceof PsiClassReferenceType)) return;
 
-    Optional<PsiClass> clzz = JavaUtils.findClzz(element.getProject(), type.getCanonicalText());
-    if (!clzz.isPresent()) return;
+    Optional<PsiClass> clazz = JavaUtils.findClazz(element.getProject(), type.getCanonicalText());
+    if (!clazz.isPresent()) return;
 
-    PsiClass psiClass = clzz.get();
+    PsiClass psiClass = clazz.get();
     Optional<Mapper> mapper = MapperUtils.findFirstMapper(element.getProject(), psiClass);
     if (!mapper.isPresent()) return;
 
@@ -49,7 +49,7 @@ public class InjectionLineMarkerProvider extends RelatedItemLineMarkerProvider {
         NavigationGutterIconBuilder.create(Icons.SPRING_INJECTION_ICON)
         .setAlignment(GutterIconRenderer.Alignment.CENTER)
         .setTarget(psiClass)
-        .setTooltipTitle("Data asscess object found - " + psiClass.getQualifiedName());
+        .setTooltipTitle("Data access object found - " + psiClass.getQualifiedName());
     result.add(builder.createLineMarkerInfo(field.getNameIdentifier()));
   }
 

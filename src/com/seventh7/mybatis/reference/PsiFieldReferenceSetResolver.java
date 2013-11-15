@@ -31,9 +31,9 @@ public class PsiFieldReferenceSetResolver extends ContextReferenceSetResolver<Xm
   public Optional<PsiField> resolve(@NotNull PsiField current, @NotNull String text) {
     PsiType type = current.getType();
     if (type instanceof PsiClassReferenceType && !((PsiClassReferenceType) type).hasParameters()) {
-      PsiClass clzz = ((PsiClassReferenceType) type).resolve();
-      if (null != clzz) {
-        return JavaUtils.findSettablePsiField(clzz, text);
+      PsiClass clazz = ((PsiClassReferenceType) type).resolve();
+      if (null != clazz) {
+        return JavaUtils.findSettablePsiField(clazz, text);
       }
     }
     return Optional.absent();
@@ -41,8 +41,8 @@ public class PsiFieldReferenceSetResolver extends ContextReferenceSetResolver<Xm
 
   @NotNull @Override
   public Optional<PsiField> getStartElement(@Nullable String firstText) {
-    Optional<PsiClass> clzz = MapperBacktrackingUtils.getPropertyClzz(getElement());
-    return clzz.isPresent() ? JavaUtils.findSettablePsiField(clzz.get(), firstText) : Optional.<PsiField>absent();
+    Optional<PsiClass> clazz = MapperBacktrackingUtils.getPropertyClazz(getElement());
+    return clazz.isPresent() ? JavaUtils.findSettablePsiField(clazz.get(), firstText) : Optional.<PsiField>absent();
   }
 
 }

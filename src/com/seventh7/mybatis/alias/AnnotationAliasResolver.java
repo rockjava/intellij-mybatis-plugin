@@ -32,7 +32,7 @@ public class AnnotationAliasResolver extends AliasResolver {
       if (!txt.isPresent()) return null;
       AliasDesc ad = new AliasDesc();
       ad.setAlias(txt.get());
-      ad.setClzz(psiClass);
+      ad.setClazz(psiClass);
       return ad;
     }
   };
@@ -47,10 +47,10 @@ public class AnnotationAliasResolver extends AliasResolver {
 
   @NotNull
   @Override
-  public Set<AliasDesc> getClssAliasDescriptions(@Nullable PsiElement element) {
-    Optional<PsiClass> clzz = Annotation.ALIAS.toPsiClass(project);
-    if (clzz.isPresent()) {
-      Collection<PsiClass> res = AnnotatedElementsSearch.searchPsiClasses(clzz.get(), GlobalSearchScope.allScope(project)).findAll();
+  public Set<AliasDesc> getClassAliasDescriptions(@Nullable PsiElement element) {
+    Optional<PsiClass> clazz = Annotation.ALIAS.toPsiClass(project);
+    if (clazz.isPresent()) {
+      Collection<PsiClass> res = AnnotatedElementsSearch.searchPsiClasses(clazz.get(), GlobalSearchScope.allScope(project)).findAll();
       return Sets.newHashSet(Collections2.transform(res, FUN));
     }
     return Collections.emptySet();

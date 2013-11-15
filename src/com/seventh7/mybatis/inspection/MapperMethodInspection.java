@@ -57,13 +57,13 @@ public class MapperMethodInspection extends MapperInspection{
       if (domElement instanceof Select) {
         Select select = (Select)domElement;
         Optional<PsiClass> target = StatementGenerator.getSelectResultType(method);
-        PsiClass clzz = select.getResultType().getValue();
+        PsiClass clazz = select.getResultType().getValue();
         PsiIdentifier ide = method.getNameIdentifier();
         if (null != ide && null == select.getResultMap().getValue()) {
-          if (target.isPresent() && (null == clzz || !target.get().equals(clzz))) {
+          if (target.isPresent() && (null == clazz || !target.get().equals(clazz))) {
             return  Optional.of(manager.createProblemDescriptor(ide, "Result type not match for select id=\"#ref\"",
                                                                 new ResultTypeQuickFix(select, target.get()), ProblemHighlightType.GENERIC_ERROR, isOnTheFly));
-          } else  if (!target.isPresent() && null != clzz) {
+          } else  if (!target.isPresent() && null != clazz) {
             return  Optional.of(manager.createProblemDescriptor(ide, "Result type not match for select id=\"#ref\"",
                                                                 (LocalQuickFix)null, ProblemHighlightType.GENERIC_ERROR, isOnTheFly));
           }

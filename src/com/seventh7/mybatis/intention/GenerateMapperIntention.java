@@ -60,25 +60,25 @@ public class GenerateMapperIntention extends GenericIntention {
   @Override
   public void invoke(@NotNull final Project project, final Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
-    PsiClass clzz = PsiTreeUtil.getParentOfType(element, PsiClass.class);
+    PsiClass clazz = PsiTreeUtil.getParentOfType(element, PsiClass.class);
     Collection<PsiDirectory> directories = MapperUtils.findMapperDirectories(project);
     if (CollectionUtils.isEmpty(directories)) {
-      handleChooseNewFolder(project, editor, clzz);
+      handleChooseNewFolder(project, editor, clazz);
     } else {
-      handleMutilDirectories(project, editor, clzz, directories);
+      handleMutilDirectories(project, editor, clazz, directories);
     }
   }
 
   private void handleMutilDirectories(Project project,
                                       final Editor editor,
-                                      final PsiClass clzz,
+                                      final PsiClass clazz,
                                       Collection<PsiDirectory> directories) {
     final Map<String, PsiDirectory> pathMap = getPathMap(directories);
     final ArrayList<String> keys = Lists.newArrayList(pathMap.keySet());
     ListSelectionListener popupListener = new ListSelectionListener() {
       @Override
       public void selected(int index) {
-        processGenerate(editor, clzz, pathMap.get(keys.get(index)));
+        processGenerate(editor, clazz, pathMap.get(keys.get(index)));
       }
 
       @Override
@@ -90,16 +90,16 @@ public class GenerateMapperIntention extends GenericIntention {
     uiComponentFacade.showListPopupWithSingleClickable("Choose folder",
                                                        popupListener,
                                                        "Choose another",
-                                                       getChooseFolderListener(editor, clzz),
+                                                       getChooseFolderListener(editor, clazz),
                                                        getPathTextForShown(project, keys, pathMap));
   }
 
-  private ClickableListener getChooseFolderListener(final Editor editor, final PsiClass clzz) {
-    final Project project = clzz.getProject();
+  private ClickableListener getChooseFolderListener(final Editor editor, final PsiClass clazz) {
+    final Project project = clazz.getProject();
     return new ClickableListener() {
       @Override
       public void clicked() {
-        handleChooseNewFolder(project, editor, clzz);
+        handleChooseNewFolder(project, editor, clazz);
       }
 
       @Override
@@ -109,12 +109,12 @@ public class GenerateMapperIntention extends GenericIntention {
     };
   }
 
-  private void handleChooseNewFolder(Project project, Editor editor, PsiClass clzz) {
+  private void handleChooseNewFolder(Project project, Editor editor, PsiClass clazz) {
     UiComponentFacade uiComponentFacade = UiComponentFacade.getInstance(project);
     VirtualFile baseDir = project.getBaseDir();
     VirtualFile vf = uiComponentFacade.showSingleFolderSelectionDialog("Select target folder", baseDir, baseDir);
     if (null != vf) {
-      processGenerate(editor, clzz, PsiManager.getInstance(project).findDirectory(vf));
+      processGenerate(editor, clazz, PsiManager.getInstance(project).findDirectory(vf));
     }
   }
 
@@ -143,7 +143,7 @@ public class GenerateMapperIntention extends GenericIntention {
     return result;
   }
 
-  private void processGenerate(Editor editor, PsiClass clzz, PsiDirectory directory) {
+  private void processGenerate(Editor editor, PsiClass clazz, PsiDirectory directory) {
     if (null == directory) {
       return;
     }
@@ -153,10 +153,10 @@ public class GenerateMapperIntention extends GenericIntention {
     }
     try {
       Properties properties = new Properties();
-      properties.setProperty("NAMESPACE", clzz.getQualifiedName());
+      properties.setProperty("NAMESPACE", clazz.getQualifiedName());
       PsiElement psiFile = MapperUtils.createMapperFromFileTemplate(MybatisFileTemplateDescriptorFactory.MYBATIS_MAPPER_XML_TEMPLATE,
-                                                                    clzz.getName(), directory, properties);
-      EditorService.getInstance(clzz.getProject()).scrollTo(psiFile, 0);
+                                                                    clazz.getName(), directory, properties);
+      EditorService.getInstance(clazz.getProject()).scrollTo(psiFile, 0);
     } catch (Exception e) {
       HintManager.getInstance().showErrorHint(editor, "Failed: " + e.getCause());
     }

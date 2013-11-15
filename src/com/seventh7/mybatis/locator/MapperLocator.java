@@ -24,8 +24,8 @@ public class MapperLocator {
     return null != method && process(method.getContainingClass());
   }
 
-  public boolean process(@Nullable PsiClass clzz) {
-    return null != clzz && JavaUtils.isElementWithinInterface(clzz) && dfltLocateStrategy.apply(clzz);
+  public boolean process(@Nullable PsiClass clazz) {
+    return null != clazz && JavaUtils.isElementWithinInterface(clazz) && dfltLocateStrategy.apply(clazz);
   }
 
 }

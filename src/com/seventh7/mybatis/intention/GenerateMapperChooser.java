@@ -16,9 +16,9 @@ public class GenerateMapperChooser extends JavaFileIntentionChooser{
   @Override
   public boolean isAvailable(@NotNull PsiElement element) {
     if (isPositionOfInterfaceDeclaration(element)) {
-      PsiClass clzz = PsiTreeUtil.getParentOfType(element, PsiClass.class);
-      if (null != clzz) {
-        return !isTargetPresentInXml(clzz);
+      PsiClass clazz = PsiTreeUtil.getParentOfType(element, PsiClass.class);
+      if (null != clazz) {
+        return !isTargetPresentInXml(clazz);
       }
     }
     return false;

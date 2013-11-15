@@ -53,14 +53,14 @@ public class AliasFacade {
 
   @NotNull
   public Optional<PsiClass> findPsiClass(@Nullable PsiElement element, @NotNull String shortName) {
-    PsiClass clzz = javaPsiFacade.findClass(shortName, GlobalSearchScope.allScope(project));
-    if (null != clzz) {
-      return Optional.of(clzz);
+    PsiClass clazz = javaPsiFacade.findClass(shortName, GlobalSearchScope.allScope(project));
+    if (null != clazz) {
+      return Optional.of(clazz);
     }
     for (AliasResolver resolver : resolvers) {
-      for (AliasDesc desc : resolver.getClssAliasDescriptions(element)) {
+      for (AliasDesc desc : resolver.getClassAliasDescriptions(element)) {
         if (desc.getAlias().equals(shortName)) {
-          return Optional.of(desc.getClzz());
+          return Optional.of(desc.getClazz());
         }
       }
     }
@@ -71,18 +71,18 @@ public class AliasFacade {
   public Collection<AliasDesc> getAliasDescs(@Nullable PsiElement element) {
     ArrayList<AliasDesc> result = Lists.newArrayList();
     for (AliasResolver resolver : resolvers) {
-      result.addAll(resolver.getClssAliasDescriptions(element));
+      result.addAll(resolver.getClassAliasDescriptions(element));
     }
     return result;
   }
 
-  public Optional<AliasDesc> findAliasDesc(@Nullable PsiClass clzz) {
-    if (null == clzz) {
+  public Optional<AliasDesc> findAliasDesc(@Nullable PsiClass clazz) {
+    if (null == clazz) {
       return Optional.absent();
     }
     for (AliasResolver resolver : resolvers) {
-      for (AliasDesc desc : resolver.getClssAliasDescriptions(clzz)) {
-        if (desc.getClzz().equals(clzz)) {
+      for (AliasDesc desc : resolver.getClassAliasDescriptions(clazz)) {
+        if (desc.getClazz().equals(clazz)) {
           return Optional.of(desc);
         }
       }

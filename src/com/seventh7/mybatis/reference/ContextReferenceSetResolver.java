@@ -35,7 +35,7 @@ public abstract class ContextReferenceSetResolver<F extends PsiElement, K extend
 
   @NotNull
   public final Optional<? extends PsiElement> resolve(int index) {
-    Optional<K>  startElement = getStartemtnElement();
+    Optional<K>  startElement = getStartElement();
     return startElement.isPresent() ? (texts.size() > 1 ? parseNext(startElement, texts, index) : startElement) : Optional.<PsiElement>absent();
   }
 
@@ -52,7 +52,7 @@ public abstract class ContextReferenceSetResolver<F extends PsiElement, K extend
     return current;
   }
 
-  public Optional<K> getStartemtnElement() {
+  public Optional<K> getStartElement() {
     return getStartElement(Iterables.getFirst(texts, null));
   }
 

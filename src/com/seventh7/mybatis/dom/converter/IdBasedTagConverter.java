@@ -180,11 +180,11 @@ public abstract class IdBasedTagConverter extends ConverterAdaptor<XmlAttributeV
 
     @NotNull @Override
     public Object[] getVariants() {
-      Set<String> res = getElement().getText().contains(MybatisConstants.DOT_SEPARATOR) ? setupContextIdSingnature() : setupGlobalIdSignature();
+      Set<String> res = getElement().getText().contains(MybatisConstants.DOT_SEPARATOR) ? setupContextIdSignature() : setupGlobalIdSignature();
       return res.toArray(new String[res.size()]);
     }
 
-    private Set<String> setupContextIdSingnature() {
+    private Set<String> setupContextIdSignature() {
       Set<String> res = Sets.newHashSet();
       String ns = text.substring(0, text.lastIndexOf(MybatisConstants.DOT_SEPARATOR));
       for (IdDomElement ele : selectStrategy(context).getValue()) {

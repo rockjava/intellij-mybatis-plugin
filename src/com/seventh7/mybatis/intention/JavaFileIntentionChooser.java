@@ -12,7 +12,6 @@ import com.seventh7.mybatis.service.JavaService;
 import com.seventh7.mybatis.util.JavaUtils;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author yanglin
@@ -42,7 +41,7 @@ public abstract class JavaFileIntentionChooser implements IntentionChooser {
   }
 
   public boolean isTargetPresentInXml(@NotNull PsiElement element) {
-    return JavaService.getInstance(element.getProject()).findWithFindFristProcessor(element).isPresent();
+    return JavaService.getInstance(element.getProject()).findWithFindFirstProcessor(element).isPresent();
   }
 
 }

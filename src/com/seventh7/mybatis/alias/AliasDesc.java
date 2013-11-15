@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class AliasDesc {
 
-  private PsiClass clzz;
+  private PsiClass clazz;
 
   private String alias;
 
@@ -20,17 +20,17 @@ public class AliasDesc {
     return new AliasDesc(psiClass, alias);
   }
 
-  public AliasDesc(PsiClass clzz, String alias) {
-    this.clzz = clzz;
+  public AliasDesc(PsiClass clazz, String alias) {
+    this.clazz = clazz;
     this.alias = alias;
   }
 
-  public PsiClass getClzz() {
-    return clzz;
+  public PsiClass getClazz() {
+    return clazz;
   }
 
-  public void setClzz(PsiClass clzz) {
-    this.clzz = clzz;
+  public void setClazz(PsiClass clazz) {
+    this.clazz = clazz;
   }
 
   public String getAlias() {
@@ -55,7 +55,7 @@ public class AliasDesc {
     if (alias != null ? !alias.equals(aliasDesc.alias) : aliasDesc.alias != null) {
       return false;
     }
-    if (clzz != null ? !clzz.equals(aliasDesc.clzz) : aliasDesc.clzz != null) {
+    if (clazz != null ? !clazz.equals(aliasDesc.clazz) : aliasDesc.clazz != null) {
       return false;
     }
 
@@ -64,7 +64,7 @@ public class AliasDesc {
 
   @Override
   public int hashCode() {
-    int result = clzz != null ? clzz.hashCode() : 0;
+    int result = clazz != null ? clazz.hashCode() : 0;
     result = 31 * result + (alias != null ? alias.hashCode() : 0);
     return result;
   }

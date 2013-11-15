@@ -41,13 +41,13 @@ public class MapperRefactoringProvider implements RefactoringElementListenerProv
     };
   }
 
-  private void renameMapperXml(@NotNull final PsiClass oldClzz, @NotNull final PsiClass newClzz) {
-    Collection<Mapper> mappers = MapperUtils.findMappers(oldClzz.getProject(), oldClzz);
+  private void renameMapperXml(@NotNull final PsiClass oldClazz, @NotNull final PsiClass newClazz) {
+    Collection<Mapper> mappers = MapperUtils.findMappers(oldClazz.getProject(), oldClazz);
     try {
       for (Mapper mapper : mappers) {
         VirtualFile vf = mapper.getXmlTag().getOriginalElement().getContainingFile().getVirtualFile();
         if (null != vf) {
-          vf.rename(MapperRefactoringProvider.this, newClzz.getName() + "." + vf.getExtension());
+          vf.rename(MapperRefactoringProvider.this, newClazz.getName() + "." + vf.getExtension());
         }
       }
     } catch (IOException e) {

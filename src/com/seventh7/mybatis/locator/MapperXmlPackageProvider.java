@@ -21,7 +21,7 @@ import java.util.Set;
 /**
  * @author yanglin
  */
-public class MapperXmlPakcageProvider extends PackageProvider{
+public class MapperXmlPackageProvider extends PackageProvider{
 
   @NotNull @Override
   public Set<PsiPackage> getPackages(@NotNull Project project) {
@@ -30,9 +30,9 @@ public class MapperXmlPakcageProvider extends PackageProvider{
     JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(project);
     for (Mapper mapper : mappers) {
       String namespace = MapperUtils.getNamespace(mapper);
-      PsiClass clzz = javaPsiFacade.findClass(namespace, GlobalSearchScope.allScope(project));
-      if (null != clzz) {
-        PsiFile file = clzz.getContainingFile();
+      PsiClass clazz = javaPsiFacade.findClass(namespace, GlobalSearchScope.allScope(project));
+      if (null != clazz) {
+        PsiFile file = clazz.getContainingFile();
         if (file instanceof PsiJavaFile) {
           String packageName = ((PsiJavaFile) file).getPackageName();
           PsiPackage pkg = javaPsiFacade.findPackage(packageName);

@@ -27,7 +27,7 @@ public abstract class PackageAliasResolver extends AliasResolver{
   }
 
   @NotNull @Override
-  public Set<AliasDesc> getClssAliasDescriptions(@Nullable PsiElement element) {
+  public Set<AliasDesc> getClassAliasDescriptions(@Nullable PsiElement element) {
     Set<AliasDesc> result = Sets.newHashSet();
     for (String pkgName : getPackages(element)) {
       if (null == pkgName) {
@@ -45,8 +45,8 @@ public abstract class PackageAliasResolver extends AliasResolver{
   }
 
   private void addAliasDesc(Set<AliasDesc> result, PsiPackage pkg) {
-    for (PsiClass clzz : pkg.getClasses()) {
-      addAliasDesc(result, clzz, clzz.getName());
+    for (PsiClass clazz : pkg.getClasses()) {
+      addAliasDesc(result, clazz, clazz.getName());
     }
   }
 

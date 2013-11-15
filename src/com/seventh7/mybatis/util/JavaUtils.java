@@ -40,23 +40,23 @@ public final class JavaUtils {
     throw new UnsupportedOperationException();
   }
 
-  public static boolean isModelClzz(@Nullable PsiClass clzz) {
-    return null != clzz && !clzz.isAnnotationType() && !clzz.isInterface() && !clzz.isEnum() && clzz.isValid();
+  public static boolean isModelClazz(@Nullable PsiClass clazz) {
+    return null != clazz && !clazz.isAnnotationType() && !clazz.isInterface() && !clazz.isEnum() && clazz.isValid();
   }
 
   @NotNull
-  public static Optional<PsiField> findSettablePsiField(@NotNull PsiClass clzz, @Nullable String propertyName) {
-    PsiMethod propertySetter = PropertyUtil.findPropertySetter(clzz, propertyName, false, true);
+  public static Optional<PsiField> findSettablePsiField(@NotNull PsiClass clazz, @Nullable String propertyName) {
+    PsiMethod propertySetter = PropertyUtil.findPropertySetter(clazz, propertyName, false, true);
     return null == propertySetter ? Optional.<PsiField>absent() : Optional.fromNullable(PropertyUtil.findPropertyFieldByMember(propertySetter));
   }
 
   @NotNull
-  public static PsiField[] findSettablePsiFields(@NotNull PsiClass clzz) {
-    PsiMethod[] methods = clzz.getAllMethods();
+  public static PsiField[] findSettablePsiFields(@NotNull PsiClass clazz) {
+    PsiMethod[] methods = clazz.getAllMethods();
     List<PsiField> fields = Lists.newArrayList();
     for (PsiMethod method : methods) {
       if (PropertyUtil.isSimplePropertySetter(method)) {
-        Optional<PsiField> psiField = findSettablePsiField(clzz, PropertyUtil.getPropertyName(method));
+        Optional<PsiField> psiField = findSettablePsiField(clazz, PropertyUtil.getPropertyName(method));
         if (psiField.isPresent()) {
           fields.add(psiField.get());
         }
@@ -74,18 +74,18 @@ public final class JavaUtils {
   }
 
   @NotNull
-  public static Optional<PsiClass> findClzz(@NotNull Project project, @NotNull String clzzName) {
-    return Optional.fromNullable(JavaPsiFacade.getInstance(project).findClass(clzzName, GlobalSearchScope.allScope(project)));
+  public static Optional<PsiClass> findClazz(@NotNull Project project, @NotNull String clazzName) {
+    return Optional.fromNullable(JavaPsiFacade.getInstance(project).findClass(clazzName, GlobalSearchScope.allScope(project)));
   }
 
   @NotNull
-  public static Optional<PsiMethod> findMethod(@NotNull Project project, @Nullable String clzzName, @Nullable String methodName) {
-    if (StringUtils.isBlank(clzzName) && StringUtils.isBlank(methodName)) {
+  public static Optional<PsiMethod> findMethod(@NotNull Project project, @Nullable String clazzName, @Nullable String methodName) {
+    if (StringUtils.isBlank(clazzName) && StringUtils.isBlank(methodName)) {
       return Optional.absent();
     }
-    Optional<PsiClass> clzz = findClzz(project, clzzName);
-    if (clzz.isPresent()) {
-      PsiMethod[] methods = clzz.get().findMethodsByName(methodName, true);
+    Optional<PsiClass> clazz = findClazz(project, clazzName);
+    if (clazz.isPresent()) {
+      PsiMethod[] methods = clazz.get().findMethodsByName(methodName, true);
       return ArrayUtils.isEmpty(methods) ? Optional.<PsiMethod>absent() : Optional.of(methods[0]);
     }
     return Optional.absent();
@@ -147,14 +147,14 @@ public final class JavaUtils {
     return true;
   }
 
-  public static boolean hasImportClzz(@NotNull PsiJavaFile file, @NotNull String clzzName) {
+  public static boolean hasImportClazz(@NotNull PsiJavaFile file, @NotNull String clazzName) {
     PsiImportList importList = file.getImportList();
     if (null == importList) {
       return false;
     }
     PsiImportStatement[] statements = importList.getImportStatements();
     for (PsiImportStatement tmp : statements) {
-      if (null != tmp && tmp.getQualifiedName().equals(clzzName)) {
+      if (null != tmp && tmp.getQualifiedName().equals(clazzName)) {
         return true;
       }
     }

@@ -40,20 +40,20 @@ public class ContextPsiFieldReference extends PsiReferenceBase<XmlAttributeValue
 
   @NotNull @Override
   public Object[] getVariants() {
-    Optional<PsiClass> clzz = getTargetClzz();
-    return clzz.isPresent() ? JavaUtils.findSettablePsiFields(clzz.get()) : PsiReference.EMPTY_ARRAY;
+    Optional<PsiClass> clazz = getTargetClazz();
+    return clazz.isPresent() ? JavaUtils.findSettablePsiFields(clazz.get()) : PsiReference.EMPTY_ARRAY;
   }
 
   @SuppressWarnings("unchecked")
-  private Optional<PsiClass> getTargetClzz() {
+  private Optional<PsiClass> getTargetClazz() {
     if (getElement().getValue().contains(MybatisConstants.DOT_SEPARATOR)) {
       int ind = 0 == index ? 0 : index - 1;
       Optional<PsiElement> resolved = resolver.resolve(ind);
       if (resolved.isPresent()) {
-        return JavaService.getInstance(myElement.getProject()).getReferenceClzzOfPsiField(resolved.get());
+        return JavaService.getInstance(myElement.getProject()).getReferenceClazzOfPsiField(resolved.get());
       }
     } else {
-      return MapperBacktrackingUtils.getPropertyClzz(myElement);
+      return MapperBacktrackingUtils.getPropertyClazz(myElement);
     }
     return Optional.absent();
   }

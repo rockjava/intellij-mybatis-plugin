@@ -37,7 +37,7 @@ public class AnnotationService {
     if (JavaUtils.isAnnotationPresent(parameter, annotation) || null == modifierList) {
       return;
     }
-    JavaService.getInstance(parameter.getProject()).importClzz((PsiJavaFile) parameter.getContainingFile(), annotation.getQualifiedName());
+    JavaService.getInstance(parameter.getProject()).importClazz((PsiJavaFile) parameter.getContainingFile(), annotation.getQualifiedName());
     
     PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
     PsiAnnotation psiAnnotation = elementFactory.createAnnotationFromText(annotation.toString(), parameter);
