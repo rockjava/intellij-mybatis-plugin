@@ -19,8 +19,8 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.seventh7.mybatis.template.MybatisFileTemplateDescriptorFactory;
 import com.seventh7.mybatis.service.EditorService;
+import com.seventh7.mybatis.template.MybatisFileTemplateDescriptorFactory;
 import com.seventh7.mybatis.ui.ClickableListener;
 import com.seventh7.mybatis.ui.ListSelectionListener;
 import com.seventh7.mybatis.ui.UiComponentFacade;
@@ -38,7 +38,6 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * todo refactor
  * @author yanglin
  */
 public class GenerateMapperIntention extends GenericIntention {
@@ -132,13 +131,13 @@ public class GenerateMapperIntention extends GenericIntention {
     return result.toArray(new String[result.size()]);
   }
 
-  /**
-   * TODO refactor it to official
-   */
   private Map<String, PsiDirectory> getPathMap(Collection<PsiDirectory> directories) {
     Map<String, PsiDirectory> result = Maps.newHashMap();
     for (PsiDirectory directory : directories) {
-      result.put(directory.toString().replace("PsiDirectory:", ""), directory);
+      String presentableUrl = directory.getVirtualFile().getPresentableUrl();
+      if (presentableUrl != null) {
+        result.put(presentableUrl, directory);
+      }
     }
     return result;
   }

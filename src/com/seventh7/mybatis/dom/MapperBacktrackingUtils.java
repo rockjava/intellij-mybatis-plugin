@@ -17,7 +17,6 @@ import com.seventh7.mybatis.dom.model.ResultMap;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * todo refactor
  * @author yanglin
  */
 public final class MapperBacktrackingUtils {
@@ -26,9 +25,6 @@ public final class MapperBacktrackingUtils {
     throw new UnsupportedOperationException();
   }
 
-  /**
-   * TODO refactor to make it much more applicable
-   */
   public static Optional<PsiClass> getPropertyClazz(XmlAttributeValue attributeValue) {
     DomElement domElement = DomUtil.getDomElement(attributeValue);
     if (null == domElement) {
