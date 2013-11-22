@@ -21,7 +21,7 @@ import java.util.Collection;
 public class ResultMapConverter extends IdBasedTagConverter{
 
   @NotNull @Override
-  public Collection<? extends IdDomElement> getComparables(@Nullable Mapper mapper, ConvertContext context) {
+  public Collection<? extends IdDomElement> getComparisons(@Nullable Mapper mapper, ConvertContext context) {
     DomElement invocationElement = context.getInvocationElement();
     if (isContextElementOfResultMap(mapper, invocationElement)) {
       return doFilterResultMapItself(mapper, (ResultMap)invocationElement.getParent());

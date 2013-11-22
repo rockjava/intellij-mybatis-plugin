@@ -84,7 +84,7 @@ public abstract class IdBasedTagConverter extends ConverterAdaptor<XmlAttributeV
    * @param context the dom convert context
    */
   @NotNull
-  public abstract Collection<? extends IdDomElement> getComparables(@Nullable Mapper mapper, ConvertContext context);
+  public abstract Collection<? extends IdDomElement> getComparisons(@Nullable Mapper mapper, ConvertContext context);
 
   private abstract class TraverseStrategy {
     protected ConvertContext context;
@@ -103,7 +103,7 @@ public abstract class IdBasedTagConverter extends ConverterAdaptor<XmlAttributeV
 
     @Override
     public Collection<? extends IdDomElement> getValue() {
-      return getComparables(null,  context);
+      return getComparisons(null, context);
     }
 
   }
@@ -118,7 +118,7 @@ public abstract class IdBasedTagConverter extends ConverterAdaptor<XmlAttributeV
     public Collection<? extends IdDomElement> getValue() {
       List<IdDomElement> result = Lists.newArrayList();
       for (Mapper mapper : MapperUtils.findMappers(context.getProject())) {
-        result.addAll(getComparables(mapper, context));
+        result.addAll(getComparisons(mapper, context));
       }
       return result;
     }
