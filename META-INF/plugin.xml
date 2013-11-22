@@ -24,7 +24,7 @@
           <li>Support find usage of mapper interface and mapper xml element</li>
           <li>Support generating mapper of xml</li>
           <li>Support property completion for result and id of resultMap、collection、association</li>
-          <li>Support parameter completion[ #{param} ] while editting sql(@Param based)</li>
+          <li>Support parameter completion[ #{param} ] while editing sql(@Param based)</li>
           <li>Support resultMap completion for collection and association of resultMap</li>
           <li>Auto register mapper as spring bean(Optional)</li>
           <li>Change reference strategy to support rename</li>
