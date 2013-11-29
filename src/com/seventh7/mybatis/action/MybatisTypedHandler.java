@@ -6,6 +6,7 @@ import com.intellij.codeInsight.editorActions.CompletionAutoPopupHandler;
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.intellij.sql.psi.SqlFile;
@@ -47,7 +48,9 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
     CompletionAutoPopupHandler.runLaterWithCommitted(project, editor.getDocument(), new Runnable() {
       @Override
       public void run() {
-        new CodeCompletionHandlerBase(CompletionType.BASIC).invokeCompletion(project, editor, 1);
+        if (PsiDocumentManager.getInstance(project).isCommitted(editor.getDocument())) {
+          new CodeCompletionHandlerBase(CompletionType.BASIC).invokeCompletion(project, editor, 1);
+        }
       }
     });
   }
