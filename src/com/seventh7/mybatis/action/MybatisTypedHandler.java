@@ -4,6 +4,7 @@ import com.intellij.codeInsight.completion.CodeCompletionHandlerBase;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.editorActions.CompletionAutoPopupHandler;
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
@@ -45,10 +46,12 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
   }
 
   private static void autoPopupParameter(final Project project, final Editor editor) {
-    CompletionAutoPopupHandler.runLaterWithCommitted(project, editor.getDocument(), new Runnable() {
+    final Document document = editor.getDocument();
+    CompletionAutoPopupHandler.runLaterWithCommitted(project, document, new Runnable() {
       @Override
       public void run() {
-        if (PsiDocumentManager.getInstance(project).isCommitted(editor.getDocument())) {
+        PsiDocumentManager psiDocumentManager = PsiDocumentManager.getInstance(project);
+        if (psiDocumentManager.isCommitted(document)) {
           new CodeCompletionHandlerBase(CompletionType.BASIC).invokeCompletion(project, editor, 1);
         }
       }

@@ -12,6 +12,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.patterns.XmlPatterns;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.util.ProcessingContext;
 import com.seventh7.mybatis.annotation.Annotation;
@@ -46,7 +47,11 @@ public class TestParamContributor extends CompletionContributor {
     if (null == element) {
       return;
     }
-    for (PsiParameter parameter : JavaUtils.findMethod(project, element).get().getParameterList().getParameters()) {
+    Optional<PsiMethod> method = JavaUtils.findMethod(project, element);
+    if (!method.isPresent()) {
+      return;
+    }
+    for (PsiParameter parameter : method.get().getParameterList().getParameters()) {
       Optional<String> valueText = JavaUtils.getAnnotationValueText(parameter, Annotation.PARAM);
       if (valueText.isPresent()) {
         LookupElementBuilder builder = LookupElementBuilder.create(valueText.get()).withIcon(Icons.PARAM_COMPLETION_ICON);
