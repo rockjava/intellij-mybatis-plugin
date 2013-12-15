@@ -12,7 +12,7 @@
     <change-notes><![CDATA[
       <h4>2.02</h4>
       <ul>
-          <li>Fix bug</li>
+          <li>Model and primitive parameter type support</li>
       </ul>
       <h4>2.01</h4>
       <ul>
