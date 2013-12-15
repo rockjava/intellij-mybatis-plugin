@@ -18,9 +18,12 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiParameter;
+import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
+import com.intellij.util.PlatformIcons;
 import com.intellij.util.ProcessingContext;
 import com.seventh7.mybatis.annotation.Annotation;
 import com.seventh7.mybatis.dom.model.IdDomElement;
@@ -79,27 +82,34 @@ public class TestParamContributor extends CompletionContributor {
   private abstract static class SimpleParameterLookupHandler {
 
     public void handle(@NotNull CompletionResultSet result, @NotNull PsiParameter parameter) {
-      Collection<String> parameterStrings = getParameterString(parameter);
-      if (CollectionUtils.isEmpty(parameterStrings)) {
+      Collection<?> lookupElements = getParameterLookupElements(parameter);
+      if (CollectionUtils.isEmpty(lookupElements)) {
         return;
       }
-      for (String parameterString : parameterStrings) {
-        LookupElementBuilder builder = LookupElementBuilder.create(parameterString).withIcon(Icons.PARAM_COMPLETION_ICON);
-        result.addElement(PrioritizedLookupElement.withPriority(builder, MybatisConstants.PRIORITY));
+      for (Object lookupElement : lookupElements) {
+        LookupElementBuilder builder = null;
+        if (lookupElement instanceof String) {
+          builder = LookupElementBuilder.create((String) lookupElement).withIcon(Icons.PARAM_COMPLETION_ICON);
+        } else if (lookupElement instanceof PsiNamedElement) {
+          builder = LookupElementBuilder.create((PsiNamedElement) lookupElement).withIcon(PlatformIcons.FIELD_ICON);
+        }
+        if (null != builder) {
+          result.addElement(PrioritizedLookupElement.withPriority(builder, MybatisConstants.PRIORITY));
+        }
       }
     }
 
     @NotNull
-    public abstract Collection<String> getParameterString(@NotNull PsiParameter parameter);
+    public abstract Collection<?> getParameterLookupElements(@NotNull PsiParameter parameter);
   }
 
   private final static class AnnotationParameterLookupHandler extends SimpleParameterLookupHandler {
 
     @NotNull
     @Override
-    public Collection<String> getParameterString(@NotNull PsiParameter parameter) {
+    public Collection<?> getParameterLookupElements(@NotNull PsiParameter parameter) {
       Optional<String> valueText = JavaUtils.getAnnotationValueText(parameter, Annotation.PARAM);
-      return valueText.isPresent() ? Lists.newArrayList(valueText.get()) : Collections.<String>emptyList();
+      return valueText.isPresent() ? Lists.newArrayList(valueText.get()) : Collections.emptyList();
     }
 
   }
@@ -108,21 +118,23 @@ public class TestParamContributor extends CompletionContributor {
 
     @NotNull
     @Override
-    public Collection<String> getParameterString(@NotNull PsiParameter parameter) {
+    public Collection<?> getParameterLookupElements(@NotNull PsiParameter parameter) {
       Optional<String> valueText = JavaUtils.getAnnotationValueText(parameter, Annotation.PARAM);
-      return valueText.isPresent() ? Collections.<String>emptyList() : doHandle(parameter);
+      return valueText.isPresent() ? Collections.emptyList() : doHandle(parameter);
     }
 
     @NotNull
-    public abstract Collection<String> doHandle(@NotNull PsiParameter parameter);
+    public abstract Collection<?> doHandle(@NotNull PsiParameter parameter);
   }
 
   private final static class PrimitiveParameterLookupHandler extends NoParamAnnotationPresentParameterLookupHandler {
 
     @NotNull
     @Override
-    public Collection<String> doHandle(@NotNull PsiParameter parameter) {
-      return Lists.newArrayList(parameter.getName());
+    public Collection<?> doHandle(@NotNull PsiParameter parameter) {
+      return parameter.getType() instanceof PsiPrimitiveType
+             ? Lists.newArrayList(parameter.getName())
+             : Collections.emptyList();
     }
   }
 
@@ -130,16 +142,16 @@ public class TestParamContributor extends CompletionContributor {
 
     @NotNull
     @Override
-    public Collection<String> doHandle(@NotNull PsiParameter parameter) {
+    public Collection<?> doHandle(@NotNull PsiParameter parameter) {
       PsiType type = parameter.getType();
       if (!(type instanceof PsiClassReferenceType)) { return Collections.emptyList(); }
 
       PsiClass clazz = ((PsiClassReferenceType) type).resolve();
       if (null == clazz) { return Collections.emptyList(); }
 
-      HashSet<String> res = Sets.newHashSet();
+      HashSet<PsiField> res = Sets.newHashSet();
       for (PsiField field : JavaUtils.findSettablePsiFields(clazz)) {
-        res.add(field.getName());
+        res.add(field);
       }
 
       return res;
