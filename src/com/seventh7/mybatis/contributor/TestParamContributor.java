@@ -18,7 +18,6 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
@@ -90,8 +89,8 @@ public class TestParamContributor extends CompletionContributor {
         LookupElementBuilder builder = null;
         if (lookupElement instanceof String) {
           builder = LookupElementBuilder.create((String) lookupElement).withIcon(Icons.PARAM_COMPLETION_ICON);
-        } else if (lookupElement instanceof PsiNamedElement) {
-          builder = LookupElementBuilder.create((PsiNamedElement) lookupElement).withIcon(PlatformIcons.FIELD_ICON);
+        } else if (lookupElement instanceof PsiField) {
+          builder = LookupElementBuilder.create((PsiField) lookupElement).withIcon(PlatformIcons.FIELD_ICON);
         }
         if (null != builder) {
           result.addElement(PrioritizedLookupElement.withPriority(builder, MybatisConstants.PRIORITY));
