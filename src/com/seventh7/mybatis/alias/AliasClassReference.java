@@ -3,7 +3,7 @@ package com.seventh7.mybatis.alias;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 
-import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.xml.XmlAttributeValue;
 
@@ -29,7 +29,7 @@ public class AliasClassReference extends PsiReferenceBase<XmlAttributeValue> {
   }
 
   @Nullable @Override
-  public PsiElement resolve() {
+  public PsiClass resolve() {
     XmlAttributeValue attributeValue = getElement();
     return AliasFacade.getInstance(attributeValue.getProject()).findPsiClass(attributeValue, attributeValue.getValue()).orNull();
   }
