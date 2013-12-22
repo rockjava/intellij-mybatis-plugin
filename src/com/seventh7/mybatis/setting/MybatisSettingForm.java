@@ -18,5 +18,6 @@ public class MybatisSettingForm {
   public JPanel mainPanel;
 
   public JComboBox modelComboBox;
+  public JButton clearDefaultDataSourceButton;
 
 }

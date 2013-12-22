@@ -28,4 +28,10 @@ public interface GroupFour extends DomElement {
 
   @SubTag("discriminator")
   public Discriminator getDiscriminator();
+
+  @SubTagList("id")
+  public Id addId();
+
+  @SubTagList("result")
+  public Result addResult();
 }

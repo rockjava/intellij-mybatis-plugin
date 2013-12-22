@@ -1,7 +1,6 @@
 package com.seventh7.mybatis.setting;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import com.intellij.openapi.components.PersistentStateComponent;
@@ -36,6 +35,8 @@ public class MybatisSetting implements PersistentStateComponent<Element> {
 
   private Type gsonTypeToken = new TypeToken<Set<String>>() {}.getType();
 
+  private String dlftDataSourceId = "";
+
   public MybatisSetting() {
     statementGenerateModel = GenerateModel.START_WITH_MODEL;
   }
@@ -52,6 +53,7 @@ public class MybatisSetting implements PersistentStateComponent<Element> {
     element.setAttribute(UPDATE_GENERATOR.getId(), gson.toJson(UPDATE_GENERATOR.getPatterns()));
     element.setAttribute(SELECT_GENERATOR.getId(), gson.toJson(SELECT_GENERATOR.getPatterns()));
     element.setAttribute("statementGenerateModel", String.valueOf(statementGenerateModel.getIdentifier()));
+    element.setAttribute("DefaultDataSourceId", dlftDataSourceId);
     return element;
   }
 
@@ -62,6 +64,15 @@ public class MybatisSetting implements PersistentStateComponent<Element> {
     loadState(state, UPDATE_GENERATOR);
     loadState(state, SELECT_GENERATOR);
     statementGenerateModel = GenerateModel.getInstance(state.getAttributeValue("statementGenerateModel"));
+    this.dlftDataSourceId = state.getAttributeValue("DefaultDataSourceId");
+  }
+
+  public String getDlftDataSourceId() {
+    return dlftDataSourceId;
+  }
+
+  public void setDlftDataSourceId(String dlftDataSourceId) {
+    this.dlftDataSourceId = dlftDataSourceId;
   }
 
   private void loadState(Element state, StatementGenerator generator) {

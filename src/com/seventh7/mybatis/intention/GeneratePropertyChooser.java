@@ -2,6 +2,7 @@ package com.seventh7.mybatis.intention;
 
 import com.google.common.base.Optional;
 
+import com.intellij.javaee.dataSource.DataSourceManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -28,7 +29,9 @@ public class GeneratePropertyChooser implements IntentionChooser {
     if (text == null) { return false; }
 
     Optional<IdDomElement> idDomElement = MapperUtils.findParentIdDomElement(element);
-    return idDomElement.isPresent() && idDomElement.get() instanceof ResultMap;
+    return idDomElement.isPresent() &&
+           idDomElement.get() instanceof ResultMap &&
+           !DataSourceManager.getInstance(project).getDataSources().isEmpty();
   }
 
 }

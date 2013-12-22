@@ -6,10 +6,13 @@ import com.google.common.collect.Sets;
 
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
+import com.intellij.openapi.ui.Messages;
 import com.seventh7.mybatis.generate.GenerateModel;
 
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
+
+import java.awt.event.ActionEvent;
 
 import javax.swing.*;
 
@@ -32,6 +35,8 @@ public class MybatisConfigurable implements SearchableConfigurable {
   private Splitter splitter = Splitter.on(separator).omitEmptyStrings().trimResults();
 
   private Joiner joiner = Joiner.on(separator);
+
+  private boolean clearDefaultDataSource = false;
 
   public MybatisConfigurable() {
     mybatisSetting = MybatisSetting.getInstance();
@@ -65,16 +70,24 @@ public class MybatisConfigurable implements SearchableConfigurable {
     if (null == mybatisSettingForm) {
       this.mybatisSettingForm = new MybatisSettingForm();
     }
+    this.mybatisSettingForm.clearDefaultDataSourceButton.addActionListener(new AbstractAction() {
+      @Override public void actionPerformed(ActionEvent e) {
+        mybatisSetting.setDlftDataSourceId("");
+        clearDefaultDataSource = true;
+        Messages.showInfoMessage("Action done", "Tip");
+      }
+    });
     return mybatisSettingForm.mainPanel;
   }
 
   @Override
   public boolean isModified() {
-    return mybatisSetting.getStatementGenerateModel().getIdentifier() != mybatisSettingForm.modelComboBox.getSelectedIndex()
+    return (mybatisSetting.getStatementGenerateModel().getIdentifier() != mybatisSettingForm.modelComboBox.getSelectedIndex()
            || !joiner.join(INSERT_GENERATOR.getPatterns()).equals(mybatisSettingForm.insertPatternTextField.getText())
            || !joiner.join(DELETE_GENERATOR.getPatterns()).equals(mybatisSettingForm.deletePatternTextField.getText())
            || !joiner.join(UPDATE_GENERATOR.getPatterns()).equals(mybatisSettingForm.updatePatternTextField.getText())
-           || !joiner.join(SELECT_GENERATOR.getPatterns()).equals(mybatisSettingForm.selectPatternTextField.getText());
+           || !joiner.join(SELECT_GENERATOR.getPatterns()).equals(mybatisSettingForm.selectPatternTextField.getText()))
+        && !clearDefaultDataSource;
   }
 
   @Override
