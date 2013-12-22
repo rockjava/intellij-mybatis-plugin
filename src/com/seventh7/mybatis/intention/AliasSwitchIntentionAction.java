@@ -45,18 +45,20 @@ public class AliasSwitchIntentionAction extends GenericIntention {
 
     PsiReference reference = file.findReferenceAt(offset);
 
+    boolean success = false;
+
     if (reference instanceof JavaClassReference) {
-      boolean success = setupAlias(project, attribute, (JavaClassReference) reference);
-      if (!success) {
-        HintManager.getInstance().showErrorHint(editor, "No alias found");
-      }
+      success = setupAlias(project, attribute, (JavaClassReference) reference);
     } else if (reference instanceof AliasClassReference) {
       PsiClass psiClass = ((AliasClassReference) reference).resolve();
       if (psiClass != null) {
         attribute.setValue(psiClass.getQualifiedName());
-      } else {
-        HintManager.getInstance().showErrorHint(editor, "No alias found");
+        success = true;
       }
+    }
+
+    if (!success) {
+      HintManager.getInstance().showErrorHint(editor, "No alias found");
     }
   }
 
