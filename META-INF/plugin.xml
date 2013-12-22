@@ -50,6 +50,7 @@
     <idea-version since-build="132.947"/>
     <depends optional="true">com.intellij.sql</depends>
     <depends optional="true">com.intellij.spring</depends>
+    <depends optional="true">com.intellij.persistence.database</depends>
     <extensions defaultExtensionNs="com.intellij">
         <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.MapperDescription"/>
         <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.ConfigurationDescription"/>
@@ -87,6 +88,9 @@
         </intentionAction>
         <intentionAction>
             <className>com.seventh7.mybatis.intention.AliasSwitchIntentionAction</className>
+        </intentionAction>
+        <intentionAction>
+            <className>com.seventh7.mybatis.intention.GeneratePropertyIntention</className>
         </intentionAction>
     </extensions>
 </idea-plugin>

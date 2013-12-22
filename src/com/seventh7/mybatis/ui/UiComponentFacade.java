@@ -1,5 +1,8 @@
 package com.seventh7.mybatis.ui;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
@@ -19,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
 
 /**
  * @author yanglin
@@ -86,6 +90,17 @@ public final class UiComponentFacade {
     return popup;
   }
 
+  public <T> JBPopup showListPopup(@NotNull String title,
+                               @Nullable final ListSelectionListener listener,
+                               @NotNull Collection<T> objs,
+                               @NotNull Function<T, String> fun) {
+    Collection<String> info = Collections2.transform(objs, fun);
+    PopupChooserBuilder builder = createListPopupBuilder(title, listener, info.toArray(new String[info.size()]));
+    JBPopup popup = builder.createPopup();
+    setPositionForShown(popup);
+    return popup;
+  }
+
   private void setPositionForShown(JBPopup popup) {
     Editor editor = fileEditorManager.getSelectedTextEditor();
     if (null != editor) {
@@ -115,6 +130,7 @@ public final class UiComponentFacade {
         @Override
         public void run() {
           listener.selected(list.getSelectedIndex());
+          listener.selected(list.getSelectedIndices());
         }
       };
       builder.setItemChoosenCallback(new Runnable() {
