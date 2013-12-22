@@ -12,7 +12,7 @@
     <change-notes><![CDATA[
       <h4>2.03</h4>
       <ul>
-          <li>Support switching between java type and alias</li>
+          <li>Support switching between java type and alias in mapper xml using intention keystroke</li>
       </ul>
       <h4>2.01</h4>
       <ul>
