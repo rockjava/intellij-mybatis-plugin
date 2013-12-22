@@ -13,8 +13,8 @@
       <h4>2.1</h4>
       <ul>
           <li>Support switching between java type and alias in mapper xml using intention keystroke</li>
+          <li>Support generating properties for elements of result map using intention keystroke[DataSource of intellij is required]</li>
           <li>Support completion of jdbc type in mapper xml</li>
-          <li>Support generating properties for result map, association, collection etc.</li>
       </ul>
       <h4>2.01</h4>
       <ul>

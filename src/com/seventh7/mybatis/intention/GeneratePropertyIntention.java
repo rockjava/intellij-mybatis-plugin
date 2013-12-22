@@ -6,7 +6,6 @@ import com.intellij.javaee.dataSource.DataSource;
 import com.intellij.javaee.dataSource.DataSourceManager;
 import com.intellij.javaee.dataSource.DatabaseTableData;
 import com.intellij.javaee.dataSource.DatabaseTableFieldData;
-import com.intellij.javaee.dataSource.SQLUtil;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
@@ -15,14 +14,14 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomUtil;
 import com.seventh7.mybatis.dom.model.GroupFour;
-import com.seventh7.mybatis.dom.model.PropertyGroup;
-import com.seventh7.mybatis.service.EditorService;
+import com.seventh7.mybatis.generate.PropertyGenerator;
 import com.seventh7.mybatis.setting.MybatisSetting;
-import com.seventh7.mybatis.ui.ListSelectionListener;
+import com.seventh7.mybatis.ui.ListSelectionItemListener;
 import com.seventh7.mybatis.ui.UiComponentFacade;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.List;
 
 
@@ -41,8 +40,9 @@ public class GeneratePropertyIntention extends GenericIntention {
   }
 
   @Override
-  public void invoke(@NotNull final Project project, Editor editor, PsiFile file)
-      throws IncorrectOperationException {
+  public void invoke(@NotNull final Project project,
+                     Editor editor,
+                     PsiFile file) throws IncorrectOperationException {
 
     final PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
     final DomElement domElement = DomUtil.getDomElement(element);
@@ -54,88 +54,83 @@ public class GeneratePropertyIntention extends GenericIntention {
 
     String dlftDataSourceId = MybatisSetting.getInstance().getDlftDataSourceId();
     DataSource defaultDataSource = dataSourceManager.getDataSourceByID(dlftDataSourceId);
+    final UiComponentFacade uiFacade = UiComponentFacade.getInstance(project);
     if (defaultDataSource == null) {
-      selectDataSource(project, file, dataSourceManager.getDataSources(), (GroupFour)domElement);
+      selectDataSourceAndGenerate((GroupFour) domElement, dataSourceManager, uiFacade);
     } else {
-      selectTable(project, file, defaultDataSource, (GroupFour)domElement);
+      selectTableAndGenerate(uiFacade, defaultDataSource.getTables(), (GroupFour) domElement);
     }
   }
 
-  private void selectColumns(final Project project, final PsiFile file, final List<DatabaseTableFieldData> columns, final GroupFour groupFour) {
-    final UiComponentFacade uiFacade = UiComponentFacade.getInstance(project);
-    uiFacade.showListPopup("[Select columns to generate]", new ListSelectionListener() {
-                             @Override public void selected(int[] indexes) {
-                               for (int index : indexes) {
-                                 final DatabaseTableFieldData column = columns.get(index);
-                                 PropertyGroup property = null;
-                                 if (column.isPrimary()) {
-                                   property = groupFour.addId();
-                                 } else {
-                                   property = groupFour.addResult();
-                                 }
-                                 property.getJdbcType().setStringValue(SQLUtil.getJdbcTypeName(column.getJdbcType()));
-                                 property.getProperty().setStringValue("aaaaa");
-                                 property.getColumn().setStringValue(column.getName());
-                               }
-                               EditorService.getInstance(project).format(file, groupFour.getXmlElement());
-                             }
-
-                             @Override public boolean isWriteAction() {
-                               return true;
-                             }
-                           }, columns, new Function<DatabaseTableFieldData, String>() {
-                             @Override
-                             public String apply(DatabaseTableFieldData column) {
-                               final String name = column.getName();
-                               if (column.isPrimary()) {
-                                 return name + "              [primary key]";
-                               } else if (column.isForeign()) {
-                                 return name + "              [foreign key]";
-                               } else if (column.isNullable()) {
-                                 return name + "              [not null]";
-                               } else {
-                                 return name;
-                               }
-                             }
-                           }
+  private void selectDataSourceAndGenerate(final GroupFour domElement,
+                                           DataSourceManager dataSourceManager,
+                                           final UiComponentFacade uiFacade) {
+    uiFacade.selectElements("[Select Data Source]",
+                            dataSourceManager.getDataSources(),
+                            new ListSelectionItemListener<DataSource>() {
+                              @Override public void apply(DataSource dataSource) {
+                                MybatisSetting.getInstance().setDlftDataSourceId(dataSource.getUniqueId());
+                                selectTableAndGenerate(uiFacade, dataSource.getTables(), domElement);
+                              }
+                            }, new Function<DataSource, String>() {
+                              @Override public String apply(DataSource dataSource) {
+                                return dataSource.getName();
+                              }
+                            }
     );
   }
 
-  public void selectTable(final Project project,
-                          final PsiFile file,
-                          DataSource dataSource,
-                          final GroupFour groupFour) {
-    final UiComponentFacade uiFacade = UiComponentFacade.getInstance(project);
-    final List<DatabaseTableData> tables = dataSource.getTables();
-    uiFacade.showListPopup("[Select Table]", new ListSelectionListener() {
-                             @Override public void selected(int index) {
-                               selectColumns(project, file, tables.get(index).getColumns(), groupFour);
-                             }
-                           }, tables, new Function<DatabaseTableData, String>() {
-                             @Override public String apply(DatabaseTableData table) {
-                               return table.getName();
-                             }
-                           }
+  private void selectTableAndGenerate(final UiComponentFacade uiFacade,
+                                      List<DatabaseTableData> table,
+                                      final GroupFour groupFour) {
+    uiFacade.selectElements("[Select Table]",
+                            table,
+                            new ListSelectionItemListener<DatabaseTableData>() {
+                              @Override public void apply(DatabaseTableData databaseTableData) {
+                                selectColumnsAndGenerate(uiFacade, databaseTableData.getColumns(), groupFour);
+                              }
+
+                            }, new Function<DatabaseTableData, String>() {
+                              @Override public String apply(DatabaseTableData table) {
+                                return table.getName();
+                              }
+                            }
     );
   }
 
-  private void selectDataSource(final Project project,
-                                final PsiFile file,
-                                final List<DataSource> dataSources,
-                                final GroupFour groupFour) {
-    final UiComponentFacade uiFacade = UiComponentFacade.getInstance(project);
-    uiFacade.showListPopup("[Select Data Source]", new ListSelectionListener() {
-                             @Override public void selected(int index) {
-                               DataSource dataSource = dataSources.get(index);
-                               selectTable(project, file, dataSource, groupFour);
-                               MybatisSetting.getInstance().setDlftDataSourceId(dataSource.getUniqueId());
-                             }
-                           }, dataSources, new Function<DataSource, String>() {
-                             @Override public String apply(DataSource dataSource) {
-                               return dataSource.getName();
-                             }
-                           }
+  private void selectColumnsAndGenerate(UiComponentFacade uiFacade,
+                                        List<DatabaseTableFieldData> columns,
+                                        final GroupFour groupFour) {
+    uiFacade.selectElements("[Select Columns]",
+                            columns,
+                            new ListSelectionItemListener<DatabaseTableFieldData>() {
+                              @Override
+                              public void apply(Collection<DatabaseTableFieldData> columns) {
+                                PropertyGenerator.generateProperties(columns, groupFour);
+                              }
+
+                              @Override public boolean isWriteAction() {
+                                return true;
+                              }
+                            }, new Function<DatabaseTableFieldData, String>() {
+                              @Override
+                              public String apply(DatabaseTableFieldData column) {
+                                return getColumnText(column);
+                              }
+                            }
     );
   }
 
+  private static String getColumnText(DatabaseTableFieldData column) {
+    final String name = column.getName();
+    if (column.isPrimary()) {
+      return name + "              [primary key]";
+    } else if (column.isForeign()) {
+      return name + "              [foreign key]";
+    } else if (!column.isNullable()) {
+      return name + "              [not null]";
+    } else {
+      return name;
+    }
+  }
 }

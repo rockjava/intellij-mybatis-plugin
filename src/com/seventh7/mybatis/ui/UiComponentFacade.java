@@ -2,6 +2,8 @@ package com.seventh7.mybatis.ui;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
@@ -22,7 +24,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author yanglin
@@ -143,4 +147,32 @@ public final class UiComponentFacade {
     return builder;
   }
 
+  public <T> void selectElements(@NotNull String title,
+                         @NotNull final List<T> objects,
+                         @NotNull final ListSelectionItemListener<T> listener,
+                         @NotNull final Function<T, String> function) {
+    if (objects.size() == 1) {
+      final T onlyElement = Iterables.getOnlyElement(objects, null);
+      listener.apply(onlyElement);
+      return;
+    }
+
+    showListPopup(title, new ListSelectionListener() {
+      @Override public void selected(int[] indexes) {
+        final ArrayList<T> res = Lists.newArrayList();
+        for (int index : indexes) {
+          res.add(objects.get(index));
+        }
+        listener.apply(res);
+      }
+
+      @Override public void selected(int index) {
+        listener.apply(objects.get(index));
+      }
+
+      @Override public boolean isWriteAction() {
+        return listener.isWriteAction();
+      }
+    }, objects, function);
+  }
 }
