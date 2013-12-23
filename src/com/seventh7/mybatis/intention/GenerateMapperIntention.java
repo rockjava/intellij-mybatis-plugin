@@ -100,11 +100,6 @@ public class GenerateMapperIntention extends GenericIntention {
       public void clicked() {
         handleChooseNewFolder(project, editor, clazz);
       }
-
-      @Override
-      public boolean isWriteAction() {
-        return false;
-      }
     };
   }
 

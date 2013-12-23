@@ -147,13 +147,14 @@ public final class UiComponentFacade {
     return builder;
   }
 
-  public <T> void selectElements(@NotNull String title,
-                                 @NotNull final List<T> objects,
-                                 @NotNull final ListSelectionItemListener<T> listener,
-                                 @NotNull final Function<T, String> function) {
+  public <T> void selectItems(@NotNull String title,
+                              @NotNull final List<T> objects,
+                              @NotNull final ListSelectionItemListener<T> listener,
+                              @NotNull final Function<T, String> function) {
     if (objects.size() == 1) {
       final T onlyElement = Iterables.getOnlyElement(objects, null);
       listener.apply(onlyElement);
+      listener.apply(Lists.newArrayList(onlyElement));
       return;
     }
 

@@ -65,59 +65,59 @@ public class GeneratePropertyIntention extends GenericIntention {
   private void selectDataSourceAndGenerate(final GroupFour domElement,
                                            DataSourceManager dataSourceManager,
                                            final UiComponentFacade uiFacade) {
-    uiFacade.selectElements("[Select Data Source]",
-                            dataSourceManager.getDataSources(),
-                            new ListSelectionItemListener<DataSource>() {
-                              @Override public void apply(DataSource dataSource) {
-                                MybatisSetting.getInstance().setDlftDataSourceId(dataSource.getUniqueId());
-                                selectTableAndGenerate(uiFacade, dataSource.getTables(), domElement);
-                              }
-                            }, new Function<DataSource, String>() {
-                              @Override public String apply(DataSource dataSource) {
-                                return dataSource.getName();
-                              }
-                            }
+    uiFacade.selectItems("[Select Data Source]",
+                         dataSourceManager.getDataSources(),
+                         new ListSelectionItemListener<DataSource>() {
+                           @Override public void apply(DataSource dataSource) {
+                             MybatisSetting.getInstance().setDlftDataSourceId(dataSource.getUniqueId());
+                             selectTableAndGenerate(uiFacade, dataSource.getTables(), domElement);
+                           }
+                         }, new Function<DataSource, String>() {
+                           @Override public String apply(DataSource dataSource) {
+                             return dataSource.getName();
+                           }
+                         }
     );
   }
 
   private void selectTableAndGenerate(final UiComponentFacade uiFacade,
                                       List<DatabaseTableData> table,
                                       final GroupFour groupFour) {
-    uiFacade.selectElements("[Select Table]",
-                            table,
-                            new ListSelectionItemListener<DatabaseTableData>() {
-                              @Override public void apply(DatabaseTableData databaseTableData) {
-                                selectColumnsAndGenerate(uiFacade, databaseTableData.getColumns(), groupFour);
-                              }
+    uiFacade.selectItems("[Select Table]",
+                         table,
+                         new ListSelectionItemListener<DatabaseTableData>() {
+                           @Override public void apply(DatabaseTableData databaseTableData) {
+                             selectColumnsAndGenerate(uiFacade, databaseTableData.getColumns(), groupFour);
+                           }
 
-                            }, new Function<DatabaseTableData, String>() {
-                              @Override public String apply(DatabaseTableData table) {
-                                return table.getName();
-                              }
-                            }
+                         }, new Function<DatabaseTableData, String>() {
+                           @Override public String apply(DatabaseTableData table) {
+                             return table.getName();
+                           }
+                         }
     );
   }
 
   private void selectColumnsAndGenerate(UiComponentFacade uiFacade,
                                         List<DatabaseTableFieldData> columns,
                                         final GroupFour groupFour) {
-    uiFacade.selectElements("[Select Columns]",
-                            columns,
-                            new ListSelectionItemListener<DatabaseTableFieldData>() {
-                              @Override
-                              public void apply(Collection<DatabaseTableFieldData> columns) {
-                                PropertyGenerator.generateProperties(columns, groupFour);
-                              }
+    uiFacade.selectItems("[Select Columns]",
+                         columns,
+                         new ListSelectionItemListener<DatabaseTableFieldData>() {
+                           @Override
+                           public void apply(Collection<DatabaseTableFieldData> columns) {
+                             PropertyGenerator.generateProperties(columns, groupFour);
+                           }
 
-                              @Override public boolean isWriteAction() {
-                                return true;
-                              }
-                            }, new Function<DatabaseTableFieldData, String>() {
-                              @Override
-                              public String apply(DatabaseTableFieldData column) {
-                                return getColumnText(column);
-                              }
-                            }
+                           @Override public boolean isWriteAction() {
+                             return true;
+                           }
+                         }, new Function<DatabaseTableFieldData, String>() {
+                           @Override
+                           public String apply(DatabaseTableFieldData column) {
+                             return getColumnText(column);
+                           }
+                         }
     );
   }
 
