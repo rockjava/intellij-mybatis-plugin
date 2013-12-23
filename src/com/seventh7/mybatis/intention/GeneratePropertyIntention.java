@@ -87,8 +87,8 @@ public class GeneratePropertyIntention extends GenericIntention {
     uiFacade.selectItems("[Select Table]",
                          table,
                          new ListSelectionItemListener<DatabaseTableData>() {
-                           @Override public void apply(DatabaseTableData databaseTableData) {
-                             selectColumnsAndGenerate(uiFacade, databaseTableData.getColumns(), groupFour);
+                           @Override public void apply(DatabaseTableData dataSource) {
+                             selectColumnsAndGenerate(uiFacade, dataSource.getColumns(), groupFour);
                            }
 
                          }, new Function<DatabaseTableData, String>() {
