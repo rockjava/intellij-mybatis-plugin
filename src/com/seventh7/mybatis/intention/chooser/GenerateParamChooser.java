@@ -1,4 +1,4 @@
-package com.seventh7.mybatis.intention;
+package com.seventh7.mybatis.intention.chooser;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  */
-public class GenerateParamChooser extends JavaFileIntentionChooser{
+public class GenerateParamChooser extends JavaFileIntentionChooser {
 
   public static final JavaFileIntentionChooser INSTANCE = new GenerateParamChooser();
 

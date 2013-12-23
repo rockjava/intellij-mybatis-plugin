@@ -1,4 +1,4 @@
-package com.seventh7.mybatis.intention;
+package com.seventh7.mybatis.intention.chooser;
 
 import com.google.common.base.Optional;
 

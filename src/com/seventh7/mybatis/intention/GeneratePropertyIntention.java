@@ -15,6 +15,7 @@ import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomUtil;
 import com.seventh7.mybatis.dom.model.GroupFour;
 import com.seventh7.mybatis.generate.PropertyGenerator;
+import com.seventh7.mybatis.intention.chooser.GeneratePropertyChooser;
 import com.seventh7.mybatis.setting.MybatisSetting;
 import com.seventh7.mybatis.ui.ListSelectionItemListener;
 import com.seventh7.mybatis.ui.UiComponentFacade;

@@ -19,6 +19,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import com.seventh7.mybatis.intention.chooser.GenerateMapperChooser;
 import com.seventh7.mybatis.service.EditorService;
 import com.seventh7.mybatis.template.MybatisFileTemplateDescriptorFactory;
 import com.seventh7.mybatis.ui.ClickableListener;

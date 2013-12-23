@@ -17,6 +17,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.seventh7.mybatis.alias.AliasClassReference;
 import com.seventh7.mybatis.alias.AliasDesc;
 import com.seventh7.mybatis.alias.AliasFacade;
+import com.seventh7.mybatis.intention.chooser.AliasSwitchChooser;
 
 import org.jetbrains.annotations.NotNull;
 

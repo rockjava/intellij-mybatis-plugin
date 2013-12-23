@@ -8,6 +8,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.seventh7.mybatis.generate.StatementGenerator;
+import com.seventh7.mybatis.intention.chooser.GenerateStatementChooser;
 
 import org.jetbrains.annotations.NotNull;
 
