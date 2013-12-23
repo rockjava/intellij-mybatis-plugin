@@ -15,7 +15,7 @@
           <li>Support switching between java type and alias in mapper xml using intention keystroke</li>
           <li>Support generating properties for elements of result map using intention keystroke[DataSource of intellij is required]</li>
           <li>Support completion of jdbc type in mapper xml</li>
-          <li>Support according to select statement completion in mapper xml</li>
+          <li>Support completion of according to select statement in mapper xml</li>
       </ul>
       <h4>2.01</h4>
       <ul>
