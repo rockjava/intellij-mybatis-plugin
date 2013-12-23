@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  */
-public interface Association extends GroupFour, ResultMapGroup, PropertyGroup {
+public interface Association extends GroupFour, ResultMapGroup, PropertyGroup, AccordingToSelectGroup {
 
   @NotNull
   @Attribute("javaType")

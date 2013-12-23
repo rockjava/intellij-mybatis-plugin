@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  */
-public interface Collection extends GroupFour, ResultMapGroup, PropertyGroup {
+public interface Collection extends GroupFour, ResultMapGroup, PropertyGroup, AccordingToSelectGroup {
 
   @NotNull
   @Attribute("ofType")
