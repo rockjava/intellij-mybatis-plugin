@@ -95,9 +95,9 @@ public final class UiComponentFacade {
   }
 
   public <T> JBPopup showListPopup(@NotNull String title,
-                               @Nullable final ListSelectionListener listener,
-                               @NotNull Collection<T> objs,
-                               @NotNull Function<T, String> fun) {
+                                   @Nullable final ListSelectionListener listener,
+                                   @NotNull Collection<T> objs,
+                                   @NotNull Function<T, String> fun) {
     Collection<String> info = Collections2.transform(objs, fun);
     PopupChooserBuilder builder = createListPopupBuilder(title, listener, info.toArray(new String[info.size()]));
     JBPopup popup = builder.createPopup();
@@ -148,9 +148,9 @@ public final class UiComponentFacade {
   }
 
   public <T> void selectElements(@NotNull String title,
-                         @NotNull final List<T> objects,
-                         @NotNull final ListSelectionItemListener<T> listener,
-                         @NotNull final Function<T, String> function) {
+                                 @NotNull final List<T> objects,
+                                 @NotNull final ListSelectionItemListener<T> listener,
+                                 @NotNull final Function<T, String> function) {
     if (objects.size() == 1) {
       final T onlyElement = Iterables.getOnlyElement(objects, null);
       listener.apply(onlyElement);
