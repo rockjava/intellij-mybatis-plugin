@@ -1,9 +1,9 @@
 package com.seventh7.mybatis.annotation;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
@@ -12,7 +12,6 @@ import com.intellij.psi.search.GlobalSearchScope;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -43,7 +42,7 @@ public class Annotation implements Cloneable{
 
   private final String qualifiedName;
 
-  private Map<String, AnnotationValue> attributePairs;
+  private ImmutableMap<String, AnnotationValue> attributePairs;
 
   public interface AnnotationValue {
   }
@@ -66,18 +65,16 @@ public class Annotation implements Cloneable{
   public Annotation(@NotNull String label, @NotNull String qualifiedName) {
     this.label = label;
     this.qualifiedName = qualifiedName;
-    attributePairs = Maps.newHashMap();
-  }
-
-  private Annotation addAttribute(String key, AnnotationValue value) {
-    this.attributePairs.put(key, value);
-    return this;
+    this.attributePairs = ImmutableMap.of();
   }
 
   public Annotation withAttribute(@NotNull String key, @NotNull AnnotationValue value) {
     Annotation copy = this.clone();
-    copy.attributePairs = Maps.newHashMap(this.attributePairs);
-    return copy.addAttribute(key, value);
+    copy.attributePairs = ImmutableMap.<String, AnnotationValue>builder()
+                          .putAll(this.attributePairs)
+                          .put(key, value)
+                          .build();
+    return copy;
   }
 
   public Annotation withValue(@NotNull AnnotationValue value) {
