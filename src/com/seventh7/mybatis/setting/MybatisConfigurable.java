@@ -36,8 +36,6 @@ public class MybatisConfigurable implements SearchableConfigurable {
 
   private Joiner joiner = Joiner.on(separator);
 
-  private boolean clearDefaultDataSource = false;
-
   public MybatisConfigurable() {
     mybatisSetting = MybatisSetting.getInstance();
   }
@@ -72,8 +70,7 @@ public class MybatisConfigurable implements SearchableConfigurable {
     }
     this.mybatisSettingForm.clearDefaultDataSourceButton.addActionListener(new AbstractAction() {
       @Override public void actionPerformed(ActionEvent e) {
-        mybatisSetting.setDlftDataSourceId("");
-        clearDefaultDataSource = true;
+        mybatisSetting.setDefaultDataSourceId("");
         Messages.showInfoMessage("Action done", "Tip");
       }
     });
@@ -86,8 +83,7 @@ public class MybatisConfigurable implements SearchableConfigurable {
            || !joiner.join(INSERT_GENERATOR.getPatterns()).equals(mybatisSettingForm.insertPatternTextField.getText())
            || !joiner.join(DELETE_GENERATOR.getPatterns()).equals(mybatisSettingForm.deletePatternTextField.getText())
            || !joiner.join(UPDATE_GENERATOR.getPatterns()).equals(mybatisSettingForm.updatePatternTextField.getText())
-           || !joiner.join(SELECT_GENERATOR.getPatterns()).equals(mybatisSettingForm.selectPatternTextField.getText()))
-        && !clearDefaultDataSource;
+           || !joiner.join(SELECT_GENERATOR.getPatterns()).equals(mybatisSettingForm.selectPatternTextField.getText()));
   }
 
   @Override

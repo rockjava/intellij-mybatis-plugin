@@ -53,7 +53,7 @@ public class GeneratePropertyIntention extends GenericIntention {
 
     DataSourceManager dataSourceManager = DataSourceManager.getInstance(project);
 
-    String dlftDataSourceId = MybatisSetting.getInstance().getDlftDataSourceId();
+    String dlftDataSourceId = MybatisSetting.getInstance().getDefaultDataSourceId();
     DataSource defaultDataSource = dataSourceManager.getDataSourceByID(dlftDataSourceId);
     final UiComponentFacade uiFacade = UiComponentFacade.getInstance(project);
     if (defaultDataSource == null) {
@@ -70,7 +70,7 @@ public class GeneratePropertyIntention extends GenericIntention {
                          dataSourceManager.getDataSources(),
                          new ListSelectionItemListener<DataSource>() {
                            @Override public void apply(DataSource dataSource) {
-                             MybatisSetting.getInstance().setDlftDataSourceId(dataSource.getUniqueId());
+                             MybatisSetting.getInstance().setDefaultDataSourceId(dataSource.getUniqueId());
                              selectTableAndGenerate(uiFacade, dataSource.getTables(), domElement);
                            }
                          }, new Function<DataSource, String>() {

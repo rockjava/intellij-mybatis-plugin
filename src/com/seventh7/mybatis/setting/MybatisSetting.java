@@ -29,13 +29,13 @@ import static com.seventh7.mybatis.generate.StatementGenerator.UPDATE_GENERATOR;
     storages = @Storage(id = "other", file = "$APP_CONFIG$/mybatis.xml"))
 public class MybatisSetting implements PersistentStateComponent<Element> {
 
+  private static final String STATEMENT_GENERATE_MODEL_SETTING_ID = "StatementGenerateModel";
+  private static final String DEFAULT_SOURCE_SETTING_ID = "DefaultDataSourceId";
+  private static final Type SETTING_TYPE_TOKEN = new TypeToken<Set<String>>() {}.getType();
+
   private GenerateModel statementGenerateModel;
-
+  private String defaultDataSourceId = "";
   private Gson gson = new Gson();
-
-  private Type gsonTypeToken = new TypeToken<Set<String>>() {}.getType();
-
-  private String dlftDataSourceId = "";
 
   public MybatisSetting() {
     statementGenerateModel = GenerateModel.START_WITH_MODEL;
@@ -52,8 +52,8 @@ public class MybatisSetting implements PersistentStateComponent<Element> {
     element.setAttribute(DELETE_GENERATOR.getId(), gson.toJson(DELETE_GENERATOR.getPatterns()));
     element.setAttribute(UPDATE_GENERATOR.getId(), gson.toJson(UPDATE_GENERATOR.getPatterns()));
     element.setAttribute(SELECT_GENERATOR.getId(), gson.toJson(SELECT_GENERATOR.getPatterns()));
-    element.setAttribute("statementGenerateModel", String.valueOf(statementGenerateModel.getIdentifier()));
-    element.setAttribute("DefaultDataSourceId", dlftDataSourceId);
+    element.setAttribute(STATEMENT_GENERATE_MODEL_SETTING_ID, String.valueOf(statementGenerateModel.getIdentifier()));
+    element.setAttribute(DEFAULT_SOURCE_SETTING_ID, defaultDataSourceId);
     return element;
   }
 
@@ -63,22 +63,23 @@ public class MybatisSetting implements PersistentStateComponent<Element> {
     loadState(state, DELETE_GENERATOR);
     loadState(state, UPDATE_GENERATOR);
     loadState(state, SELECT_GENERATOR);
-    statementGenerateModel = GenerateModel.getInstance(state.getAttributeValue("statementGenerateModel"));
-    this.dlftDataSourceId = state.getAttributeValue("DefaultDataSourceId");
+    final String model = state.getAttributeValue(STATEMENT_GENERATE_MODEL_SETTING_ID);
+    statementGenerateModel = GenerateModel.getInstance(model);
+    this.defaultDataSourceId = state.getAttributeValue(DEFAULT_SOURCE_SETTING_ID);
   }
 
-  public String getDlftDataSourceId() {
-    return dlftDataSourceId;
+  public String getDefaultDataSourceId() {
+    return defaultDataSourceId;
   }
 
-  public void setDlftDataSourceId(String dlftDataSourceId) {
-    this.dlftDataSourceId = dlftDataSourceId;
+  public void setDefaultDataSourceId(String defaultDataSourceId) {
+    this.defaultDataSourceId = defaultDataSourceId;
   }
 
   private void loadState(Element state, StatementGenerator generator) {
     String attribute = state.getAttributeValue(generator.getId());
     if (null != attribute) {
-      generator.setPatterns((Set<String>) gson.fromJson(attribute, gsonTypeToken));
+      generator.setPatterns((Set<String>) gson.fromJson(attribute, SETTING_TYPE_TOKEN));
     }
   }
 
