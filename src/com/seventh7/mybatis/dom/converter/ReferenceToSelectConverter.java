@@ -12,7 +12,7 @@ import java.util.Collection;
 /**
  * @author yanglin
  */
-public class AccordingToSelectConverter extends IdBasedTagConverter {
+public class ReferenceToSelectConverter extends IdBasedTagConverter {
 
   @NotNull @Override
   public Collection<? extends IdDomElement> getComparisons(@Nullable Mapper mapper, ConvertContext context) {

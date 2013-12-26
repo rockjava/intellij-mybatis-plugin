@@ -5,9 +5,7 @@ import com.google.common.collect.Sets;
 import com.intellij.javaee.dataSource.SQLUtil;
 import com.intellij.util.xml.ConvertContext;
 
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.sql.Types;
 import java.util.Collection;
@@ -16,7 +14,7 @@ import java.util.Set;
 /**
  * @author yanglin
  */
-public class JdbcTypeConverter extends ConverterAdaptor<String> {
+public class JdbcTypeConverter extends PlainTextConverter {
 
   private static final Set<String> TYPE_NAMES = Sets.newHashSet();
 
@@ -42,13 +40,4 @@ public class JdbcTypeConverter extends ConverterAdaptor<String> {
     return TYPE_NAMES;
   }
 
-  @Nullable @Override
-  public  String toString(@Nullable String s, ConvertContext context) {
-    return s;
-  }
-
-  @Nullable @Override
-  public String fromString(@Nullable @NonNls String s, ConvertContext context) {
-    return s;
-  }
 }

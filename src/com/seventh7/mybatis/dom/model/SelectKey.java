@@ -3,6 +3,6 @@ package com.seventh7.mybatis.dom.model;
 /**
  * @author yanglin
  */
-public interface SelectKey extends GroupTwo{
+public interface SelectKey extends GroupTwo, ResultTypeGroup {
 
 }

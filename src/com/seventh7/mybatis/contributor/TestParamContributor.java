@@ -52,15 +52,19 @@ public class TestParamContributor extends CompletionContributor {
 
   @SuppressWarnings("unchecked")
   public TestParamContributor() {
+    final CompletionProvider<CompletionParameters> provider = new CompletionProvider<CompletionParameters>() {
+      @Override
+      protected void addCompletions(@NotNull CompletionParameters parameters,
+                                    ProcessingContext context,
+                                    @NotNull CompletionResultSet result) {
+        PsiElement position = parameters.getPosition();
+        addElementForPsiParameter(position.getProject(), result, MapperUtils.findParentIdDomElement(position).orNull());
+      }
+    };
     extend(CompletionType.BASIC,
-           XmlPatterns.psiElement().inside(XmlPatterns.xmlAttributeValue().inside(XmlPatterns.xmlAttribute().withName("test"))),
-           new CompletionProvider<CompletionParameters>() {
-              @Override
-              protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-                PsiElement position = parameters.getPosition();
-                addElementForPsiParameter(position.getProject(), result, MapperUtils.findParentIdDomElement(position).orNull());
-              }
-    });
+           XmlPatterns.psiElement().inside(XmlPatterns.xmlAttributeValue().inside(XmlPatterns.xmlAttribute().withName("test"))), provider);
+    extend(CompletionType.BASIC,
+           XmlPatterns.psiElement().inside(XmlPatterns.xmlAttributeValue().inside(XmlPatterns.xmlAttribute().withName("item"))), provider);
   }
 
   public static void addElementForPsiParameter(@NotNull Project project, @NotNull CompletionResultSet result, @Nullable IdDomElement element) {
