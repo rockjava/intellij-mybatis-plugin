@@ -65,6 +65,8 @@ public class TestParamContributor extends CompletionContributor {
            XmlPatterns.psiElement().inside(XmlPatterns.xmlAttributeValue().inside(XmlPatterns.xmlAttribute().withName("test"))), provider);
     extend(CompletionType.BASIC,
            XmlPatterns.psiElement().inside(XmlPatterns.xmlAttributeValue().inside(XmlPatterns.xmlAttribute().withName("item"))), provider);
+    extend(CompletionType.BASIC,
+           XmlPatterns.psiElement().inside(XmlPatterns.xmlAttributeValue().inside(XmlPatterns.xmlAttribute().withName("collection"))), provider);
   }
 
   public static void addElementForPsiParameter(@NotNull Project project, @NotNull CompletionResultSet result, @Nullable IdDomElement element) {
