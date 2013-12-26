@@ -6,9 +6,8 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
+import com.seventh7.mybatis.util.JavaUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -111,7 +110,7 @@ public class Annotation implements Cloneable{
 
   @NotNull
   public Optional<PsiClass> toPsiClass(@NotNull Project project) {
-    return Optional.fromNullable(JavaPsiFacade.getInstance(project).findClass(getQualifiedName(), GlobalSearchScope.allScope(project)));
+    return JavaUtils.findClazz(project, getQualifiedName());
   }
 
   private Optional<String> getSingleValue() {

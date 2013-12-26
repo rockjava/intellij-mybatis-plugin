@@ -1,5 +1,6 @@
 package com.seventh7.mybatis.locator;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 
 import com.intellij.openapi.project.Project;
@@ -8,8 +9,8 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiPackage;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.seventh7.mybatis.dom.model.Mapper;
+import com.seventh7.mybatis.util.JavaUtils;
 import com.seventh7.mybatis.util.MapperUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -30,9 +31,9 @@ public class MapperXmlPackageProvider extends PackageProvider{
     JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(project);
     for (Mapper mapper : mappers) {
       String namespace = MapperUtils.getNamespace(mapper);
-      PsiClass clazz = javaPsiFacade.findClass(namespace, GlobalSearchScope.allScope(project));
-      if (null != clazz) {
-        PsiFile file = clazz.getContainingFile();
+      final Optional<PsiClass> clazz = JavaUtils.findClazz(project, namespace);
+      if (clazz.isPresent()) {
+        PsiFile file = clazz.get().getContainingFile();
         if (file instanceof PsiJavaFile) {
           String packageName = ((PsiJavaFile) file).getPackageName();
           PsiPackage pkg = javaPsiFacade.findPackage(packageName);
