@@ -1,7 +1,6 @@
 package com.seventh7.mybatis.dom.model;
 
 import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.SubTag;
 import com.intellij.util.xml.SubTagList;
 
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.List;
  */
 public interface GroupFour extends DomElement {
 
-  @SubTag("constructor")
+  @SubTagList("constructor")
   public Constructor getConstructor();
 
   @SubTagList("id")
@@ -26,7 +25,7 @@ public interface GroupFour extends DomElement {
   @SubTagList("collection")
   public List<Collection> getCollections();
 
-  @SubTag("discriminator")
+  @SubTagList("discriminator")
   public Discriminator getDiscriminator();
 
   @SubTagList("id")
