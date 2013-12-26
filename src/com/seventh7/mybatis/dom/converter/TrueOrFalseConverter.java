@@ -12,7 +12,7 @@ import java.util.Set;
 /**
  * @author yanglin
  */
-public class TrueAndFalseConverter extends PlainTextConverter {
+public class TrueOrFalseConverter extends PlainTextConverter {
 
   private static final Set<String> RESULTS = ImmutableSet.of("true", "false");
 

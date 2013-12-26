@@ -9,7 +9,7 @@ import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.GenericAttributeValue;
 import com.intellij.util.xml.SubTagList;
 import com.seventh7.mybatis.dom.converter.PlainTextConverter;
-import com.seventh7.mybatis.dom.converter.TrueAndFalseConverter;
+import com.seventh7.mybatis.dom.converter.TrueOrFalseConverter;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +30,7 @@ public interface Cache extends DomElement {
 
   @NotNull
   @Attribute("readOnly")
-  @Convert(TrueAndFalseConverter.class)
+  @Convert(TrueOrFalseConverter.class)
   public GenericAttributeValue<String> getReadOnly();
 
   public static class CacheEvictionConverter extends PlainTextConverter{
