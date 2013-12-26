@@ -64,8 +64,6 @@ public class TestParamContributor extends CompletionContributor {
     extend(CompletionType.BASIC,
            XmlPatterns.psiElement().inside(XmlPatterns.xmlAttributeValue().inside(XmlPatterns.xmlAttribute().withName("test"))), provider);
     extend(CompletionType.BASIC,
-           XmlPatterns.psiElement().inside(XmlPatterns.xmlAttributeValue().inside(XmlPatterns.xmlAttribute().withName("item"))), provider);
-    extend(CompletionType.BASIC,
            XmlPatterns.psiElement().inside(XmlPatterns.xmlAttributeValue().inside(XmlPatterns.xmlAttribute().withName("collection"))), provider);
   }
 
