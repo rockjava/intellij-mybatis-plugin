@@ -63,7 +63,7 @@ public class GeneratePropertyIntention extends GenericIntention {
     }
   }
 
-  private void selectDataSourceAndGenerate(final GroupFour domElement,
+  private static void selectDataSourceAndGenerate(final GroupFour domElement,
                                            DataSourceManager dataSourceManager,
                                            final UiComponentFacade uiFacade) {
     uiFacade.selectItems("[Select Data Source]",
@@ -81,7 +81,7 @@ public class GeneratePropertyIntention extends GenericIntention {
     );
   }
 
-  private void selectTableAndGenerate(final UiComponentFacade uiFacade,
+  private static void selectTableAndGenerate(final UiComponentFacade uiFacade,
                                       List<DatabaseTableData> table,
                                       final GroupFour groupFour) {
     uiFacade.selectItems("[Select Table]",
@@ -99,7 +99,7 @@ public class GeneratePropertyIntention extends GenericIntention {
     );
   }
 
-  private void selectColumnsAndGenerate(UiComponentFacade uiFacade,
+  private static void selectColumnsAndGenerate(UiComponentFacade uiFacade,
                                         List<DatabaseTableFieldData> columns,
                                         final GroupFour groupFour) {
     uiFacade.selectItems("[Select Columns]",
