@@ -1,6 +1,5 @@
 package com.seventh7.mybatis.dom.model;
 
-import com.intellij.psi.PsiClass;
 import com.intellij.util.xml.Attribute;
 import com.intellij.util.xml.Convert;
 import com.intellij.util.xml.DomElement;
@@ -17,6 +16,6 @@ public interface JdbcGroup extends DomElement {
   @NotNull
   @Attribute("jdbcType")
   @Convert(JdbcTypeConverter.class)
-  public GenericAttributeValue<PsiClass> getJdbcType();
+  public GenericAttributeValue<String> getJdbcType();
 
 }
