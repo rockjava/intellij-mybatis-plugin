@@ -53,8 +53,15 @@ public class MybatisSetting implements PersistentStateComponent<Element> {
     element.setAttribute(UPDATE_GENERATOR.getId(), gson.toJson(UPDATE_GENERATOR.getPatterns()));
     element.setAttribute(SELECT_GENERATOR.getId(), gson.toJson(SELECT_GENERATOR.getPatterns()));
     element.setAttribute(STATEMENT_GENERATE_MODEL_SETTING_ID, String.valueOf(statementGenerateModel.getIdentifier()));
+    setDefaultDataSourceIdIfNull();
     element.setAttribute(DEFAULT_SOURCE_SETTING_ID, defaultDataSourceId);
     return element;
+  }
+
+  private void setDefaultDataSourceIdIfNull() {
+    if (this.defaultDataSourceId == null) {
+      this.defaultDataSourceId = "";
+    }
   }
 
   @Override
@@ -66,6 +73,7 @@ public class MybatisSetting implements PersistentStateComponent<Element> {
     final String model = state.getAttributeValue(STATEMENT_GENERATE_MODEL_SETTING_ID);
     statementGenerateModel = GenerateModel.getInstance(model);
     this.defaultDataSourceId = state.getAttributeValue(DEFAULT_SOURCE_SETTING_ID);
+    setDefaultDataSourceIdIfNull();
   }
 
   public String getDefaultDataSourceId() {
