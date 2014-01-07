@@ -31,12 +31,19 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
 
   @Override
   public Result charTyped(char c, final Project project, @NotNull final Editor editor, @NotNull PsiFile file) {
+    if (c != '{') {
+      return Result.CONTINUE;
+    }
     int index = editor.getCaretModel().getOffset() - 2;
+    if (index < 0) {
+      return Result.CONTINUE;
+    }
+    char beginningChar = editor.getDocument().getText().charAt(index);
+    if (beginningChar != '#' && beginningChar != '$') {
+      return Result.CONTINUE;
+    }
     PsiFile topLevelFile = InjectedLanguageUtil.getTopLevelFile(file);
-    boolean parameterCase = c == '{' &&
-                            index >= 0 &&
-                            editor.getDocument().getText().charAt(index) == '#' &&
-                            file instanceof SqlFile &&
+    boolean parameterCase = file instanceof SqlFile &&
                             DomUtils.isMybatisFile(topLevelFile);
     if (parameterCase) {
       autoPopupParameter(project, editor);
