@@ -22,7 +22,7 @@ public class PropertyGenerator {
   public static void generateProperties(@NotNull Collection<DatabaseTableFieldData> columns,
                                         @NotNull GroupFour groupFour) {
     final XmlElement element = groupFour.getXmlElement();
-    if (element == null) { return; }
+    if (columns.isEmpty() || element == null) { return; }
 
     for (DatabaseTableFieldData column : columns) {
       PropertyGroup property;
