@@ -36,6 +36,10 @@ public class MapperMethodInspection extends MapperInspection{
 
   @Nullable @Override
   public ProblemDescriptor[] checkMethod(@NotNull PsiMethod method, @NotNull InspectionManager manager, boolean isOnTheFly) {
+    PsiClass containingClass = method.getContainingClass();
+    if (!containingClass.isPhysical() || !containingClass.isInterface()) {
+      return EMPTY_ARRAY;
+    }
     if (!MapperLocator.getInstance(method.getProject()).process(method) ||
         JavaUtils.isAnyAnnotationPresent(method, Annotation.STATEMENT_SYMMETRIES) ||
         isResultHandlerPresent(method))
@@ -101,9 +105,6 @@ public class MapperMethodInspection extends MapperInspection{
 
   private Optional<ProblemDescriptor> checkStatementExists(PsiMethod method, InspectionManager manager, boolean isOnTheFly) {
     PsiIdentifier ide = method.getNameIdentifier();
-    if (!method.getContainingClass().isInterface()) {
-      return Optional.absent();
-    }
     if (!JavaService.getInstance(method.getProject()).findStatement(method).isPresent() && null != ide) {
       return  Optional.of(manager.createProblemDescriptor(ide, "Statement with id=\"#ref\" not defined in mapper xml",
                                                           new StatementNotExistsQuickFix(method), ProblemHighlightType.GENERIC_ERROR, isOnTheFly));
