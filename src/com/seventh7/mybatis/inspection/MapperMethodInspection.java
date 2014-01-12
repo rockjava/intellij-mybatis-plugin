@@ -10,6 +10,9 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiIdentifier;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiParameter;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.util.xml.DomElement;
 import com.seventh7.mybatis.annotation.Annotation;
 import com.seventh7.mybatis.dom.model.Select;
@@ -29,12 +32,35 @@ import java.util.List;
  */
 public class MapperMethodInspection extends MapperInspection{
 
+  private static final String RESULT_HANDLER_CLASS = "org.apache.ibatis.session.ResultHandler";
+
   @Nullable @Override
   public ProblemDescriptor[] checkMethod(@NotNull PsiMethod method, @NotNull InspectionManager manager, boolean isOnTheFly) {
-    if (!MapperLocator.getInstance(method.getProject()).process(method) || JavaUtils.isAnyAnnotationPresent(method, Annotation.STATEMENT_SYMMETRIES))
+    if (!MapperLocator.getInstance(method.getProject()).process(method) ||
+        JavaUtils.isAnyAnnotationPresent(method, Annotation.STATEMENT_SYMMETRIES) ||
+        isResultHandlerPresent(method))
       return EMPTY_ARRAY;
     List<ProblemDescriptor> res = createProblemDescriptors(method, manager, isOnTheFly);
     return res.toArray(new ProblemDescriptor[res.size()]);
+  }
+
+  private boolean isResultHandlerPresent(PsiMethod method) {
+    Optional<PsiClass> handlerClazz = JavaUtils.findClazz(method.getProject(), RESULT_HANDLER_CLASS);
+    if (!handlerClazz.isPresent()) {
+      return false;
+    }
+    PsiClass handlerPsiClass = handlerClazz.get();
+    PsiParameter[] params = method.getParameterList().getParameters();
+    for (PsiParameter param : params) {
+      PsiType type = param.getType();
+      if (type instanceof PsiClassReferenceType) {
+        PsiClass psiClass = ((PsiClassReferenceType) type).resolve();
+        if (psiClass.equals(handlerPsiClass) || psiClass.isInheritor(handlerPsiClass, true)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   private List<ProblemDescriptor> createProblemDescriptors(PsiMethod method, InspectionManager manager, boolean isOnTheFly) {
