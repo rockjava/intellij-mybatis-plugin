@@ -101,6 +101,9 @@ public class MapperMethodInspection extends MapperInspection{
 
   private Optional<ProblemDescriptor> checkStatementExists(PsiMethod method, InspectionManager manager, boolean isOnTheFly) {
     PsiIdentifier ide = method.getNameIdentifier();
+    if (!method.getContainingClass().isInterface()) {
+      return Optional.absent();
+    }
     if (!JavaService.getInstance(method.getProject()).findStatement(method).isPresent() && null != ide) {
       return  Optional.of(manager.createProblemDescriptor(ide, "Statement with id=\"#ref\" not defined in mapper xml",
                                                           new StatementNotExistsQuickFix(method), ProblemHighlightType.GENERIC_ERROR, isOnTheFly));
