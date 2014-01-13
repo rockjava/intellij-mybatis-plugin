@@ -59,7 +59,7 @@ public class MapperMethodInspection extends MapperInspection{
       PsiType type = param.getType();
       if (type instanceof PsiClassReferenceType) {
         PsiClass psiClass = ((PsiClassReferenceType) type).resolve();
-        if (psiClass.equals(handlerPsiClass) || psiClass.isInheritor(handlerPsiClass, true)) {
+        if (psiClass != null && (psiClass.equals(handlerPsiClass) || psiClass.isInheritor(handlerPsiClass, true))) {
           return true;
         }
       }
