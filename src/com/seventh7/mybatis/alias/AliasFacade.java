@@ -25,7 +25,7 @@ public class AliasFacade {
 
   private List<AliasResolver> resolvers;
 
-  public static final AliasFacade getInstance(@NotNull Project project) {
+  public static AliasFacade getInstance(@NotNull Project project) {
     return ServiceManager.getService(project, AliasFacade.class);
   }
 
@@ -39,7 +39,7 @@ public class AliasFacade {
     try {
       Class.forName("com.intellij.spring.model.utils.SpringModelUtils");
       this.registerResolver(AliasResolverFactory.createBeanResolver(project));
-    } catch (ClassNotFoundException e) {
+    } catch (ClassNotFoundException ignored) {
     }
     this.registerResolver(AliasResolverFactory.createSingleAliasResolver(project));
     this.registerResolver(AliasResolverFactory.createConfigPackageResolver(project));

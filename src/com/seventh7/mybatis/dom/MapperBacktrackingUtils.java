@@ -55,7 +55,7 @@ public final class MapperBacktrackingUtils {
 
   public static boolean isWithinSameTag(@NotNull DomElement domElement, @NotNull XmlElement xmlElement) {
     XmlTag xmlTag = PsiTreeUtil.getParentOfType(xmlElement, XmlTag.class);
-    return null != xmlElement && domElement.getXmlTag().equals(xmlTag);
+    return domElement.getXmlTag().equals(xmlTag);
   }
 
 }

@@ -10,6 +10,7 @@ import com.intellij.util.xml.highlighting.DomHighlightingHelper;
  */
 public class MapperXmlInspection extends BasicDomElementsInspection<DomElement> {
 
+  @SuppressWarnings("unchecked")
   public MapperXmlInspection() {
     super(DomElement.class);
   }

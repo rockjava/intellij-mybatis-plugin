@@ -84,6 +84,7 @@ public class MybatisSetting implements PersistentStateComponent<Element> {
     this.defaultDataSourceId = defaultDataSourceId;
   }
 
+  @SuppressWarnings("unchecked")
   private void loadState(Element state, StatementGenerator generator) {
     String attribute = state.getAttributeValue(generator.getId());
     if (null != attribute) {

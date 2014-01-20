@@ -37,6 +37,9 @@ public class MapperMethodInspection extends MapperInspection{
   @Nullable @Override
   public ProblemDescriptor[] checkMethod(@NotNull PsiMethod method, @NotNull InspectionManager manager, boolean isOnTheFly) {
     PsiClass containingClass = method.getContainingClass();
+    if (containingClass == null) {
+      return EMPTY_ARRAY;
+    }
     if (!containingClass.isPhysical() || !containingClass.isInterface()) {
       return EMPTY_ARRAY;
     }

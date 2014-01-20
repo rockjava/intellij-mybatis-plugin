@@ -84,7 +84,10 @@ public final class MapperUtils {
   }
 
   @NotNull @NonNls
-  public static Collection<Mapper> findMappers(@NotNull Project project, @NotNull String namespace) {
+  public static Collection<Mapper> findMappers(@NotNull Project project, @Nullable String namespace) {
+    if (namespace == null) {
+      return Collections.emptyList();
+    }
     List<Mapper> result = Lists.newArrayList();
     for (Mapper mapper : findMappers(project)) {
       if (getNamespace(mapper).equals(namespace)) {

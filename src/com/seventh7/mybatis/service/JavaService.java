@@ -56,6 +56,9 @@ public class JavaService {
   }
 
   public Optional<DomElement> findStatement(@Nullable PsiMethod method) {
+    if (method == null) {
+      return Optional.absent();
+    }
     CommonProcessors.FindFirstProcessor<DomElement> processor = new CommonProcessors.FindFirstProcessor<DomElement>();
     process(method, processor);
     return processor.isFound() ? Optional.fromNullable(processor.getFoundValue()) : Optional.<DomElement>absent();
@@ -85,6 +88,7 @@ public class JavaService {
     }
   }
 
+  @SuppressWarnings("unchecked")
   public void process(@NotNull PsiElement target, @NotNull Processor processor) {
     if (target instanceof PsiMethod) {
       process((PsiMethod) target, processor);

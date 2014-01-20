@@ -147,6 +147,7 @@ public final class UiComponentFacade {
     return builder;
   }
 
+  @SuppressWarnings("unchecked")
   public <T> void selectItems(@NotNull String title,
                               @NotNull final List<T> objects,
                               @NotNull final ListSelectionItemListener<T> listener,

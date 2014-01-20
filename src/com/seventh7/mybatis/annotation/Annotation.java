@@ -116,10 +116,7 @@ public class Annotation implements Cloneable{
   private Optional<String> getSingleValue() {
     try {
       String value = Iterables.getOnlyElement(attributePairs.keySet());
-      StringBuilder builder = new StringBuilder("(");
-      builder.append(attributePairs.get(value).toString());
-      builder.append(")");
-      return Optional.of(builder.toString());
+      return Optional.of("(" + attributePairs.get(value).toString() + ")");
     } catch (Exception e) {
       return Optional.absent();
     }
