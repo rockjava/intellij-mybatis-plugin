@@ -61,7 +61,7 @@ public final class DomUtils {
     return null != rootTag && rootTag.getName().equals("beans");
   }
 
-  static boolean isXmlFile(@NotNull PsiFile file) {
+  static boolean isXmlFile(@Nullable PsiFile file) {
     return file instanceof XmlFile;
   }
 
