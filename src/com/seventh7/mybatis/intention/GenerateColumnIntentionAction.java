@@ -60,6 +60,7 @@ public class GenerateColumnIntentionAction extends GenericIntention {
       alias = alias.substring(0, alias.length() - 1);
     }
 
+    /** Avoid that the input is ',,' */
     if (StringUtils.isBlank(alias)) {
       return;
     }

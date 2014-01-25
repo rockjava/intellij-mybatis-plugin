@@ -30,13 +30,11 @@ public class MapperXmlPackageProvider extends PackageProvider{
     Collection<Mapper> mappers = MapperUtils.findMappers(project);
     JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(project);
     for (Mapper mapper : mappers) {
-      String namespace = MapperUtils.getNamespace(mapper);
-      final Optional<PsiClass> clazz = JavaUtils.findClazz(project, namespace);
+      final Optional<PsiClass> clazz = JavaUtils.findClazz(project, MapperUtils.getNamespace(mapper));
       if (clazz.isPresent()) {
         PsiFile file = clazz.get().getContainingFile();
         if (file instanceof PsiJavaFile) {
-          String packageName = ((PsiJavaFile) file).getPackageName();
-          PsiPackage pkg = javaPsiFacade.findPackage(packageName);
+          PsiPackage pkg = javaPsiFacade.findPackage(((PsiJavaFile) file).getPackageName());
           if (null != pkg) {
             res.add(pkg);
           }

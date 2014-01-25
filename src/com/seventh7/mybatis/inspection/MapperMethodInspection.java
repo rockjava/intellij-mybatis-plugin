@@ -43,10 +43,17 @@ public class MapperMethodInspection extends MapperInspection{
     if (!containingClass.isPhysical() || !containingClass.isInterface()) {
       return EMPTY_ARRAY;
     }
-    if (!MapperLocator.getInstance(method.getProject()).process(method) ||
-        JavaUtils.isAnyAnnotationPresent(method, Annotation.STATEMENT_SYMMETRIES) ||
-        isResultHandlerPresent(method))
+    /** Correct when:
+     *  1. Method of interface are defined in the package where most other mapper interfaces are defined
+     *  2. No id based statement defined with annotation
+     *  3. No custom result handler is present
+     */
+    boolean correctResultTypeCase = MapperLocator.getInstance(method.getProject()).process(method) &&
+                                    !JavaUtils.isAnyAnnotationPresent(method, Annotation.STATEMENT_SYMMETRIES) &&
+                                    !isResultHandlerPresent(method);
+    if (!correctResultTypeCase) {
       return EMPTY_ARRAY;
+    }
     List<ProblemDescriptor> res = createProblemDescriptors(method, manager, isOnTheFly);
     return res.toArray(new ProblemDescriptor[res.size()]);
   }

@@ -20,7 +20,7 @@ public class SelectGenerator extends StatementGenerator {
   }
 
   @NotNull @Override
-  protected GroupTwo getTarget(@NotNull Mapper mapper, @NotNull PsiMethod method) {
+  protected GroupTwo getComparableTarget(@NotNull Mapper mapper, @NotNull PsiMethod method) {
     Select select = mapper.addSelect();
     setupResultType(method, select);
     return select;

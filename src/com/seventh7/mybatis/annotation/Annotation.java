@@ -102,8 +102,8 @@ public class Annotation implements Cloneable{
       builder.append(attributePairs.get(key).toString());
       builder.append(", ");
     }
-    builder.deleteCharAt(builder.length() - 1);
-    builder.deleteCharAt(builder.length() - 1);
+    int length = builder.length();
+    builder.delete(length - 2, length);
     builder.append(")");
     return builder.toString();
   }

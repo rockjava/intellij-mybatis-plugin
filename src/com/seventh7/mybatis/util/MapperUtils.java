@@ -68,6 +68,7 @@ public final class MapperUtils {
     return Collections2.transform(findMappers(project), new Function<Mapper, PsiDirectory>() {
       @Override
       public PsiDirectory apply(Mapper input) {
+        /** The containing file of a mapper should never return null */
         return input.getXmlElement().getContainingFile().getContainingDirectory();
       }
     });
@@ -153,9 +154,10 @@ public final class MapperUtils {
     return null != mapper && null != target && getNamespace(mapper).equals(getNamespace(target));
   }
 
-  @Nullable @NonNls
+  @NotNull @NonNls
   public static <T extends IdDomElement> String getId(@NotNull T domElement) {
-    return domElement.getId().getRawText();
+    String rawText = domElement.getId().getRawText();
+    return rawText == null ? "" : rawText;
   }
 
   @NotNull @NonNls

@@ -52,7 +52,9 @@ public abstract class StatementGenerator {
     @Override
     public String  apply(Mapper mapper) {
       VirtualFile vf = mapper.getXmlTag().getContainingFile().getVirtualFile();
-      if (null == vf) return "";
+      if (null == vf) {
+        return "";
+      }
       return vf.getCanonicalPath();
     }
   };
@@ -119,9 +121,11 @@ public abstract class StatementGenerator {
 
   public void execute(@NotNull final PsiMethod method) {
     PsiClass psiClass = method.getContainingClass();
-    if (null == psiClass) return;
+    if (null == psiClass) {
+      return;
+    }
     CommonProcessors.CollectProcessor<Mapper> processor = new CommonProcessors.CollectProcessor<Mapper>();
-    JavaService.getInstance(method.getProject()).process(psiClass, processor);
+    JavaService.getInstance(method.getProject()).processMapperInterfaces(psiClass, processor);
     final List<Mapper> mappers = Lists.newArrayList(processor.getResults());
     if (1 == mappers.size()) {
       setupTag(method, Iterables.getOnlyElement(mappers, null));
@@ -142,7 +146,7 @@ public abstract class StatementGenerator {
   }
 
   private void setupTag(PsiMethod method, Mapper mapper) {
-    GroupTwo target = getTarget(mapper, method);
+    GroupTwo target = getComparableTarget(mapper, method);
     target.getId().setStringValue(method.getName());
     target.setValue(" ");
     XmlTag tag = target.getXmlTag();
@@ -158,7 +162,7 @@ public abstract class StatementGenerator {
   }
 
   @NotNull
-  protected abstract GroupTwo getTarget(@NotNull Mapper mapper, @NotNull PsiMethod method);
+  protected abstract GroupTwo getComparableTarget(@NotNull Mapper mapper, @NotNull PsiMethod method);
 
   @NotNull
   public abstract String getId();

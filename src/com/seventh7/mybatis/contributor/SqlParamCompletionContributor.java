@@ -51,7 +51,9 @@ public class SqlParamCompletionContributor extends CompletionContributor {
     String text = file.getText();
     for (int i = offset - 1; i > 0; i--) {
       char c = text.charAt(i);
-      if (c == '{' && (text.charAt(i - 1) == '#' || text.charAt(i - 1) == '$')) return true;
+      if (c == '{' && (text.charAt(i - 1) == '#' || text.charAt(i - 1) == '$')) {
+        return true;
+      }
     }
     return false;
   }

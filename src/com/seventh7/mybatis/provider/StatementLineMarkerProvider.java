@@ -66,6 +66,7 @@ public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag
 
   @NotNull @Override
   public String getTooltip(@NotNull XmlTag from, @NotNull PsiMethod target) {
+    /** target.getContainingClass() should never return null */
     return "Data access object found - " + target.getContainingClass().getQualifiedName();
   }
 

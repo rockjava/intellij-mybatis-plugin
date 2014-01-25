@@ -42,7 +42,9 @@ public class AliasSwitchIntentionAction extends GenericIntention {
     int offset = editor.getCaretModel().getOffset();
     PsiElement element = file.findElementAt(offset);
     XmlAttribute attribute = PsiTreeUtil.getParentOfType(element, XmlAttribute.class);
-    if (attribute == null) { return; }
+    if (attribute == null) {
+      return;
+    }
 
     PsiReference reference = file.findReferenceAt(offset);
 
@@ -65,9 +67,13 @@ public class AliasSwitchIntentionAction extends GenericIntention {
 
   private boolean setupAlias(Project project, XmlAttribute attribute, JavaClassReference reference) {
     JavaClassReferenceSet set = reference.getJavaClassReferenceSet();
-    if (set == null) { return false; }
+    if (set == null) {
+      return false;
+    }
     PsiReference[] references = set.getReferences();
-    if (references == null) { return false; }
+    if (references == null || references.length == 0) {
+      return false;
+    }
 
     PsiElement ele = references[references.length - 1].resolve();
     if (ele instanceof PsiClass) {

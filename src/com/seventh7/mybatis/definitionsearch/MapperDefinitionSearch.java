@@ -32,6 +32,6 @@ public class MapperDefinitionSearch extends QueryExecutorBase<XmlElement, PsiEle
       }
     };
 
-    JavaService.getInstance(element.getProject()).process(element, processor);
+    JavaService.getInstance(element.getProject()).processMapperInterfaceElements(element, processor);
   }
 }

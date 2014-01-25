@@ -22,10 +22,12 @@ public class PropertyGenerator {
   public static void generateProperties(@NotNull Collection<DatabaseTableFieldData> columns,
                                         @NotNull GroupFour groupFour) {
     final XmlElement element = groupFour.getXmlElement();
-    if (columns.isEmpty() || element == null) { return; }
+    if (columns.isEmpty() || element == null)  {
+      return;
+    }
 
+    PropertyGroup property;
     for (DatabaseTableFieldData column : columns) {
-      PropertyGroup property;
       if (column.isPrimary()) {
         property = groupFour.addId();
       } else {
@@ -47,6 +49,7 @@ public class PropertyGenerator {
     String apply(String columnName);
   }
 
+  /** The only strategy till now */
   public static class HumpStrategy implements PropertyNameStrategy {
 
     @Override public String apply(String columnName) {
