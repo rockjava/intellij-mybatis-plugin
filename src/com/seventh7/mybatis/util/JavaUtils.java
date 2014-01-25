@@ -70,12 +70,14 @@ public final class JavaUtils {
       return true;
     }
     PsiClass type = PsiTreeUtil.getParentOfType(element, PsiClass.class);
-    return Optional.fromNullable(type).isPresent() && type.isInterface();
+    return type != null && type.isInterface();
   }
 
   @NotNull
-  public static Optional<PsiClass> findClazz(@NotNull Project project, @NotNull String clazzName) {
-    return Optional.fromNullable(JavaPsiFacade.getInstance(project).findClass(clazzName, GlobalSearchScope.allScope(project)));
+  public static Optional<PsiClass> findClazz(@NotNull Project project, @Nullable String clazzName) {
+    return clazzName == null
+           ? Optional.<PsiClass>absent()
+           : Optional.fromNullable(JavaPsiFacade.getInstance(project).findClass(clazzName, GlobalSearchScope.allScope(project)));
   }
 
   @NotNull
@@ -147,14 +149,16 @@ public final class JavaUtils {
     return true;
   }
 
-  public static boolean hasImportClazz(@NotNull PsiJavaFile file, @NotNull String clazzName) {
+  public static boolean hasImportClazz(@NotNull PsiJavaFile file, @Nullable String clazzName) {
     PsiImportList importList = file.getImportList();
-    if (null == importList) {
+    if (null == importList || clazzName == null) {
       return false;
     }
     PsiImportStatement[] statements = importList.getImportStatements();
     for (PsiImportStatement tmp : statements) {
-      if (null != tmp && tmp.getQualifiedName().equals(clazzName)) {
+      if (null != tmp &&
+          tmp.getQualifiedName() != null &&
+          tmp.getQualifiedName().equals(clazzName)) {
         return true;
       }
     }
