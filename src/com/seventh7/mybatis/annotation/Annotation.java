@@ -83,7 +83,7 @@ public class Annotation implements Cloneable{
   @Override
   public String toString() {
     StringBuilder builder = new StringBuilder(label);
-    if (!Iterables.isEmpty(attributePairs.entrySet())) {
+    if (!attributePairs.isEmpty()) {
       builder.append(setupAttributeText());
     }
     return builder.toString();
