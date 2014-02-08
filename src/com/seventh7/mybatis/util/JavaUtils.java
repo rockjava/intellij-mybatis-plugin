@@ -1,7 +1,6 @@
 package com.seventh7.mybatis.util;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
@@ -9,7 +8,6 @@ import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiAnnotationMemberValue;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiImportList;
 import com.intellij.psi.PsiImportStatement;
 import com.intellij.psi.PsiJavaFile;
@@ -18,7 +16,6 @@ import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PropertyUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.seventh7.mybatis.annotation.Annotation;
 import com.seventh7.mybatis.dom.model.IdDomElement;
@@ -28,7 +25,6 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -42,27 +38,6 @@ public final class JavaUtils {
 
   public static boolean isModelClazz(@Nullable PsiClass clazz) {
     return null != clazz && !clazz.isAnnotationType() && !clazz.isInterface() && !clazz.isEnum() && clazz.isValid();
-  }
-
-  @NotNull
-  public static Optional<PsiField> findSettablePsiField(@NotNull PsiClass clazz, @Nullable String propertyName) {
-    PsiMethod propertySetter = PropertyUtil.findPropertySetter(clazz, propertyName, false, true);
-    return null == propertySetter ? Optional.<PsiField>absent() : Optional.fromNullable(PropertyUtil.findPropertyFieldByMember(propertySetter));
-  }
-
-  @NotNull
-  public static PsiField[] findSettablePsiFields(@NotNull PsiClass clazz) {
-    PsiMethod[] methods = clazz.getAllMethods();
-    List<PsiField> fields = Lists.newArrayList();
-    for (PsiMethod method : methods) {
-      if (PropertyUtil.isSimplePropertySetter(method)) {
-        Optional<PsiField> psiField = findSettablePsiField(clazz, PropertyUtil.getPropertyName(method));
-        if (psiField.isPresent()) {
-          fields.add(psiField.get());
-        }
-      }
-    }
-    return fields.toArray(new PsiField[fields.size()]);
   }
 
   public static boolean isElementWithinInterface(@Nullable PsiElement element) {

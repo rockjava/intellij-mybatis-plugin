@@ -153,7 +153,7 @@ public class TestParamContributor extends CompletionContributor {
       if (null == clazz) { return Collections.emptyList(); }
 
       HashSet<PsiField> res = Sets.newHashSet();
-      Collections.addAll(res, JavaUtils.findSettablePsiFields(clazz));
+      Collections.addAll(res, clazz.getAllFields());
       return res;
     }
 

@@ -8,7 +8,6 @@ import com.intellij.psi.PsiType;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.seventh7.mybatis.dom.MapperBacktrackingUtils;
-import com.seventh7.mybatis.util.JavaUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,9 +31,7 @@ public class PsiFieldReferenceSetResolver extends ContextReferenceSetResolver<Xm
     PsiType type = current.getType();
     if (type instanceof PsiClassReferenceType && !((PsiClassReferenceType) type).hasParameters()) {
       PsiClass clazz = ((PsiClassReferenceType) type).resolve();
-      if (null != clazz) {
-        return JavaUtils.findSettablePsiField(clazz, text);
-      }
+      return findPropertyField(clazz, text);
     }
     return Optional.absent();
   }
@@ -42,7 +39,12 @@ public class PsiFieldReferenceSetResolver extends ContextReferenceSetResolver<Xm
   @NotNull @Override
   public Optional<PsiField> getStartElement(@Nullable String firstText) {
     Optional<PsiClass> clazz = MapperBacktrackingUtils.getPropertyClazz(getElement());
-    return clazz.isPresent() ? JavaUtils.findSettablePsiField(clazz.get(), firstText) : Optional.<PsiField>absent();
+    return findPropertyField(clazz.orNull(), firstText);
   }
 
+  private Optional<PsiField> findPropertyField(@Nullable PsiClass psiClass, @Nullable String propertyName) {
+    return psiClass != null && propertyName != null
+           ? Optional.fromNullable(psiClass.findFieldByName(propertyName, true))
+           : Optional.<PsiField>absent();
+  }
 }
