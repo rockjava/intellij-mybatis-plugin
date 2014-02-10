@@ -16,7 +16,7 @@ public abstract class GenerateModel {
   public static GenerateModel getInstance(String identifier) {
     try {
       return getInstance(Integer.valueOf(identifier));
-    } catch (Exception e) {
+    } catch (Throwable e) {
       return START_WITH_MODEL;
     }
   }
