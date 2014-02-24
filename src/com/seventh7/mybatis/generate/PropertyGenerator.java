@@ -57,9 +57,9 @@ public class PropertyGenerator {
       final String[] split = columnName.split("_");
       for (int i = 0; i < split.length; i++) {
         if (i == 0) {
-          sb.append(WordUtils.uncapitalize(split[i].toLowerCase()));
+          sb.append(WordUtils.uncapitalize(split[i]));
         } else {
-          sb.append(WordUtils.capitalize(split[i].toLowerCase()));
+          sb.append(WordUtils.capitalize(split[i]));
         }
       }
       return sb.toString();
