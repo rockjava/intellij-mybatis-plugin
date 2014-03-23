@@ -1,6 +1,8 @@
 package com.seventh7.mybatis.intention;
 
 import com.intellij.javaee.dataSource.DatabaseTableFieldData;
+import com.intellij.openapi.application.Result;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
@@ -9,7 +11,6 @@ import com.intellij.util.IncorrectOperationException;
 import com.seventh7.mybatis.db.ColumnsSelector;
 import com.seventh7.mybatis.intention.chooser.ColumnIntentionChooser;
 import com.seventh7.mybatis.ui.ListSelectionItemListener;
-
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +22,7 @@ import java.util.regex.Pattern;
  */
 public class GenerateColumnIntentionAction extends GenericIntention {
 
-  private static final Pattern PATTERN = Pattern.compile("\\s*");;
+  private static final Pattern PATTERN = Pattern.compile("\\s*");
 
   public GenerateColumnIntentionAction() {
     super(ColumnIntentionChooser.INSTANCE);
@@ -37,10 +38,15 @@ public class GenerateColumnIntentionAction extends GenericIntention {
                      final Editor editor,
                      final PsiFile file) throws IncorrectOperationException {
     ColumnsSelector.selectColumns(project, new ListSelectionItemListener<DatabaseTableFieldData>() {
-      @Override public void apply(Collection<DatabaseTableFieldData> columns) {
-        String alias = Messages.showInputDialog(project, "Select a alias", "Generate Columns", Messages.getQuestionIcon());
+      @Override public void apply(final Collection<DatabaseTableFieldData> columns) {
+        final String alias = Messages.showInputDialog(project, "Select a alias", "Generate Columns", Messages.getQuestionIcon());
         if (StringUtils.isNotBlank(alias)) {
-          generateColumns(editor, alias, columns);
+            new WriteCommandAction(project, file) {
+                @Override
+                protected void run(@NotNull Result result) throws Throwable {
+                    generateColumns(editor, alias, columns);
+                }
+            }.execute();
         }
       }
     });

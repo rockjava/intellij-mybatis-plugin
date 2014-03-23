@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="https://github.com/seventh7/intellij-mybatis-plugin">
     <id>com.seventh7.plugin.mybatis</id>
     <name>MyBatis plugin</name>
-    <version>2.235</version>
+    <version>2.236</version>
     <vendor email="insist.day@gmail.com" url="https://github.com/seventh7">Yanglin</vendor>
 
     <description><![CDATA[
@@ -10,6 +10,10 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      <h4>2.236</h4>
+      <ul>
+          <li>Fix issue#17</li>
+      </ul>
       <h4>2.235</h4>
       <ul>
           <li>Support generate columns with alias for sql element in mapper xml</li>
