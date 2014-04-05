@@ -8,6 +8,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
@@ -83,12 +84,12 @@ public abstract class StatementGenerator {
     if (null == method) return;
     final StatementGenerator[] generators = getGenerators(method);
     if (1 == generators.length) {
-      generators[0].execute(method);
+        doGenerate(generators[0], method);
     } else {
       UiComponentFacade.getInstance(method.getProject()).showListPopup("[ Select target statement ]", new ListSelectionListener() {
         @Override
         public void selected(int index) {
-          generators[index].execute(method);
+            doGenerate(generators[index], method);
         }
 
         @Override
@@ -99,6 +100,14 @@ public abstract class StatementGenerator {
       }, generators);
     }
   }
+
+    private static void doGenerate(@NotNull final StatementGenerator generator, @NotNull final PsiMethod method) {
+        new WriteCommandAction.Simple(method.getProject(), method.getContainingFile()) {
+            @Override protected void run() throws Throwable {
+                generator.execute(method);
+            }
+        }.execute();
+    }
 
   @NotNull
   public static StatementGenerator[] getGenerators(@NotNull PsiMethod method) {
