@@ -7,6 +7,7 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import com.intellij.sql.psi.SqlLanguage;
 import com.seventh7.mybatis.generate.GenerateModel;
 import com.seventh7.mybatis.generate.StatementGenerator;
 
@@ -35,6 +36,7 @@ public class MybatisSetting implements PersistentStateComponent<Element> {
 
   private GenerateModel statementGenerateModel;
   private String defaultDataSourceId = "";
+  private String mapperDialectName = SqlLanguage.getInstance().getDisplayName();
   private Gson gson = new Gson();
 
   public MybatisSetting() {
@@ -98,5 +100,13 @@ public class MybatisSetting implements PersistentStateComponent<Element> {
 
   public void setStatementGenerateModel(GenerateModel statementGenerateModel) {
     this.statementGenerateModel = statementGenerateModel;
+  }
+
+  public String getMapperDialectName() {
+    return mapperDialectName;
+  }
+
+  public void setMapperDialectName(String mapperDialectName) {
+    this.mapperDialectName = mapperDialectName;
   }
 }

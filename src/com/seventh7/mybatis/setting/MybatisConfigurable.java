@@ -10,6 +10,7 @@ import com.intellij.openapi.ui.Messages;
 import com.seventh7.mybatis.generate.GenerateModel;
 
 import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.event.ActionEvent;
@@ -40,6 +41,7 @@ public class MybatisConfigurable implements SearchableConfigurable {
     mybatisSetting = MybatisSetting.getInstance();
   }
 
+  @NotNull
   @Override
   public String getId() {
     return "Mybatis";
@@ -74,6 +76,7 @@ public class MybatisConfigurable implements SearchableConfigurable {
         Messages.showInfoMessage("Action done", "Tip");
       }
     });
+
     return mybatisSettingForm.mainPanel;
   }
 
