@@ -1,8 +1,8 @@
 <idea-plugin version="2" url="https://github.com/seventh7/intellij-mybatis-plugin">
     <id>com.seventh7.plugin.mybatis</id>
     <name>MyBatis plugin</name>
-    <version>2.238</version>
-    <vendor email="insist.day@gmail.com" url="https://github.com/seventh7">Yanglin</vendor>
+    <version>2.239</version>
+    <vendor email="seventh7.me@gmail.com" url="https://github.com/seventh7">Yanglin</vendor>
 
     <description><![CDATA[
           Plugin for mybatis <br/>
@@ -10,6 +10,10 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      <h4>2.239</h4>
+      <ul>
+          <li>Update plugin.xml</li>
+      </ul>
       <h4>2.238</h4>
       <ul>
           <li>Auto inject sql language in mapper xml</li>
