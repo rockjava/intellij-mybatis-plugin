@@ -12,6 +12,7 @@
     <change-notes><![CDATA[
       <h4>2.239</h4>
       <ul>
+          <li>Fix bug</li>
           <li>Update plugin.xml</li>
       </ul>
       <h4>2.238</h4>
@@ -135,9 +136,6 @@
         <intentionAction>
             <className>com.seventh7.mybatis.intention.GeneratePropertyIntention</className>
         </intentionAction>
-        <!--<intentionAction>-->
-            <!--<className>com.seventh7.mybatis.intention.GenerateColumnIntentionAction</className>-->
-        <!--</intentionAction>-->
-        <languageInjector implementation="com.seventh7.mybatis.xml.SqlLanguageInjector"/>
+        <multiHostInjector implementation="com.seventh7.mybatis.xml.SqlLanguageInjector"/>
     </extensions>
 </idea-plugin>
