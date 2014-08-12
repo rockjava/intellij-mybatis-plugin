@@ -4,11 +4,9 @@ import com.intellij.codeInsight.completion.CodeCompletionHandlerBase;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.editorActions.CompletionAutoPopupHandler;
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
-import com.intellij.diagnostic.LogEventException;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.intellij.sql.psi.SqlFile;
@@ -58,14 +56,7 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
     CompletionAutoPopupHandler.runLaterWithCommitted(project, document, new Runnable() {
       @Override
       public void run() {
-        PsiDocumentManager psiDocumentManager = PsiDocumentManager.getInstance(project);
-        if (psiDocumentManager.isCommitted(document)) {
-          try {
-            new CodeCompletionHandlerBase(CompletionType.BASIC).invokeCompletion(project, editor, 1);
-          } catch (LogEventException ignored) {
-            //ignored "commit unsuccessful" error
-          }
-        }
+        new CodeCompletionHandlerBase(CompletionType.BASIC).invokeCompletion(project, editor, 1);
       }
     });
   }
