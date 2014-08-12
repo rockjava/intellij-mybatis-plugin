@@ -4,6 +4,7 @@ import com.intellij.codeInsight.completion.CodeCompletionHandlerBase;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.editorActions.CompletionAutoPopupHandler;
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
+import com.intellij.diagnostic.LogEventException;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -56,7 +57,10 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
     CompletionAutoPopupHandler.runLaterWithCommitted(project, document, new Runnable() {
       @Override
       public void run() {
-        new CodeCompletionHandlerBase(CompletionType.BASIC).invokeCompletion(project, editor, 1);
+        try {
+          new CodeCompletionHandlerBase(CompletionType.BASIC).invokeCompletion(project, editor, 1);
+        } catch (LogEventException ignored) {
+        }
       }
     });
   }
