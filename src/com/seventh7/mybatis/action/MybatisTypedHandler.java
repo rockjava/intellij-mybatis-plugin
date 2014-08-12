@@ -4,6 +4,7 @@ import com.intellij.codeInsight.completion.CodeCompletionHandlerBase;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.editorActions.CompletionAutoPopupHandler;
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
+import com.intellij.diagnostic.LogEventException;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -59,7 +60,11 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
       public void run() {
         PsiDocumentManager psiDocumentManager = PsiDocumentManager.getInstance(project);
         if (psiDocumentManager.isCommitted(document)) {
-          new CodeCompletionHandlerBase(CompletionType.BASIC).invokeCompletion(project, editor, 1);
+          try {
+            new CodeCompletionHandlerBase(CompletionType.BASIC).invokeCompletion(project, editor, 1);
+          } catch (LogEventException ignored) {
+            //ignored "commit unsuccessful" error
+          }
         }
       }
     });
