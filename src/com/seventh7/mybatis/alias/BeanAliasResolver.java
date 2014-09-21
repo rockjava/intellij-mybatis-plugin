@@ -51,7 +51,9 @@ public class BeanAliasResolver extends PackageAliasResolver{
       if (basePackages != null) {
         final String value = basePackages.getValueElement().getStringValue();
         if (value != null) {
-          res.add(value);
+          for (String v : value.split(",|;")) {
+	    res.add(v);
+	  }
         }
       }
     }
