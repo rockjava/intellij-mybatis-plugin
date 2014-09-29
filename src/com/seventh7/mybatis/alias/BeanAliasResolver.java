@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -46,12 +47,16 @@ public class BeanAliasResolver extends PackageAliasResolver{
   }
 
   private void addPackages(Set<String> res, CommonSpringModel springModel) {
-    for (SpringBeanPointer springBaseBeanPointer : springModel.findBeansByPsiClassWithInheritance(MAPPER_ALIAS_PACKAGE_CLASS)) {
-      SpringPropertyDefinition basePackages = SpringPropertyUtils.findPropertyByName(springBaseBeanPointer.getSpringBean(), MAPPER_ALIAS_PROPERTY);
+    for (SpringBeanPointer springBaseBeanPointer : springModel.findBeansByPsiClassWithInheritance(
+        MAPPER_ALIAS_PACKAGE_CLASS)) {
+      SpringPropertyDefinition
+          basePackages =
+          SpringPropertyUtils.findPropertyByName(springBaseBeanPointer.getSpringBean(),
+                                                 MAPPER_ALIAS_PROPERTY);
       if (basePackages != null) {
         final String value = basePackages.getValueElement().getStringValue();
         if (value != null) {
-          res.add(value);
+          Collections.addAll(res, value.split(",|;"));
         }
       }
     }
