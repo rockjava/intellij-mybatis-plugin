@@ -2,8 +2,8 @@ package com.seventh7.mybatis.dom.converter;
 
 import com.google.common.collect.Sets;
 
-import com.intellij.javaee.dataSource.SQLUtil;
 import com.intellij.util.xml.ConvertContext;
+import com.seventh7.mybatis.util.SQLUtil;
 
 import org.jetbrains.annotations.NotNull;
 

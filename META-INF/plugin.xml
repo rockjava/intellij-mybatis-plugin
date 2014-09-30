@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="https://github.com/seventh7/intellij-mybatis-plugin">
     <id>com.seventh7.plugin.mybatis</id>
     <name>MyBatis plugin</name>
-    <version>2.3</version>
+    <version>2.3.beta</version>
     <vendor email="seventh7.me@gmail.com" url="https://github.com/seventh7">Yanglin</vendor>
 
     <description><![CDATA[
@@ -10,9 +10,9 @@
       ]]></description>
 
     <change-notes><![CDATA[
-      <h4>2.3</h4>
+      <h4>2.3.beta</h4>
       <ul>
-          <li>Support inherit of mapper interface</li>
+          <li>Improve for intellij 14</li>
           <li>Fix issues</li>
       </ul>
       <h4>2.240</h4>
@@ -100,10 +100,8 @@
       ]]>
     </change-notes>
 
-    <idea-version since-build="132.947"/>
-    <depends optional="false">com.intellij.sql</depends>
+    <idea-version since-build="138.2458"/>
     <depends optional="true">com.intellij.spring</depends>
-    <depends optional="false">com.intellij.persistence.database</depends>
     <extensions defaultExtensionNs="com.intellij">
         <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.MapperDescription"/>
         <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.ConfigurationDescription"/>
@@ -141,9 +139,6 @@
         </intentionAction>
         <intentionAction>
             <className>com.seventh7.mybatis.intention.AliasSwitchIntentionAction</className>
-        </intentionAction>
-        <intentionAction>
-            <className>com.seventh7.mybatis.intention.GeneratePropertyIntention</className>
         </intentionAction>
         <multiHostInjector implementation="com.seventh7.mybatis.xml.SqlLanguageInjector"/>
     </extensions>

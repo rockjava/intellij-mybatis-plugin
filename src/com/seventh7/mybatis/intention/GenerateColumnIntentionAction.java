@@ -1,6 +1,6 @@
 package com.seventh7.mybatis.intention;
 
-import com.intellij.javaee.dataSource.DatabaseTableFieldData;
+import com.intellij.database.dataSource.DatabaseTableFieldData;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
@@ -11,6 +11,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.seventh7.mybatis.db.ColumnsSelector;
 import com.seventh7.mybatis.intention.chooser.ColumnIntentionChooser;
 import com.seventh7.mybatis.ui.ListSelectionItemListener;
+
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 

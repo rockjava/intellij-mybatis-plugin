@@ -1,11 +1,11 @@
 package com.seventh7.mybatis.generate;
 
-import com.intellij.javaee.dataSource.DatabaseTableFieldData;
-import com.intellij.javaee.dataSource.SQLUtil;
+import com.intellij.database.dataSource.DatabaseTableFieldData;
 import com.intellij.psi.xml.XmlElement;
 import com.seventh7.mybatis.dom.model.GroupFour;
 import com.seventh7.mybatis.dom.model.PropertyGroup;
 import com.seventh7.mybatis.service.EditorService;
+import com.seventh7.mybatis.util.SQLUtil;
 
 import org.apache.commons.lang.WordUtils;
 import org.jetbrains.annotations.NotNull;

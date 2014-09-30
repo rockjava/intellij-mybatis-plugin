@@ -2,10 +2,10 @@ package com.seventh7.mybatis.db;
 
 import com.google.common.base.Function;
 
-import com.intellij.javaee.dataSource.DataSource;
-import com.intellij.javaee.dataSource.DataSourceManager;
-import com.intellij.javaee.dataSource.DatabaseTableData;
-import com.intellij.javaee.dataSource.DatabaseTableFieldData;
+import com.intellij.database.dataSource.DataSource;
+import com.intellij.database.dataSource.DataSourceManager;
+import com.intellij.database.dataSource.DatabaseTableData;
+import com.intellij.database.dataSource.DatabaseTableFieldData;
 import com.intellij.openapi.project.Project;
 import com.seventh7.mybatis.setting.MybatisSetting;
 import com.seventh7.mybatis.ui.ListSelectionItemListener;
@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
+
 
 /**
  * @author yanglin
