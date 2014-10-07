@@ -4,3 +4,5 @@ log.roo
 .idea/
 out/
 .DS_Store
+.floo
+.flooignore
