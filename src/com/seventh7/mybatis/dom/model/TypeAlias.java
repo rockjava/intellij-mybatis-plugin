@@ -2,7 +2,6 @@ package com.seventh7.mybatis.dom.model;
 
 import com.intellij.psi.PsiClass;
 import com.intellij.util.xml.Attribute;
-import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.GenericAttributeValue;
 
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  */
-public interface TypeAlias extends DomElement {
+public interface TypeAlias extends MyBatisElement {
 
   @NotNull
   @Attribute("type")

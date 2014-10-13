@@ -3,14 +3,13 @@ package com.seventh7.mybatis.dom.model;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.xml.Attribute;
 import com.intellij.util.xml.Convert;
-import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.GenericAttributeValue;
 import com.seventh7.mybatis.dom.converter.SqlConverter;
 
 /**
  * @author yanglin
  */
-public interface Include extends DomElement {
+public interface Include extends MyBatisElement {
 
   @Attribute("refid")
   @Convert(SqlConverter.class)

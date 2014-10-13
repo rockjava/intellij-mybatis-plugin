@@ -9,6 +9,7 @@ import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.FileTemplateUtil;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -18,16 +19,20 @@ import com.intellij.psi.xml.XmlElement;
 import com.intellij.util.Processor;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomUtil;
+import com.intellij.util.xml.ElementPresentationManager;
 import com.seventh7.mybatis.dom.model.Configuration;
 import com.seventh7.mybatis.dom.model.IdDomElement;
 import com.seventh7.mybatis.dom.model.Mapper;
+import com.seventh7.mybatis.dom.model.MyBatisElement;
 import com.seventh7.mybatis.dom.model.TypeAlias;
 import com.seventh7.mybatis.dom.model.TypeAliases;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.generate.tostring.util.StringUtil;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -200,4 +205,37 @@ public final class MapperUtils {
       }
     }
   }
+
+  @NotNull
+  public static List<? extends MyBatisElement> findDuplicateElements(@Nullable DomElement element) {
+    if (!(element instanceof MyBatisElement)) {
+      return Collections.emptyList();
+    }
+    final String elementName = ElementPresentationManager.getElementName(element);
+    if (StringUtil.isEmpty(elementName)) {
+      return Collections.emptyList();
+    }
+    List<? extends DomElement> identitySiblings = DomUtil.getIdentitySiblings(element);
+    ArrayList<MyBatisElement> duplicateElements = Lists.newArrayList();
+    for (DomElement ele : identitySiblings) {
+      boolean duplicated = (ele instanceof MyBatisElement) &&
+                           Comparing.equal(elementName, ElementPresentationManager.getElementName( ele), true) &&
+                           hasSameDatabaseId((MyBatisElement)element, (MyBatisElement)ele);
+      if (duplicated) {
+        duplicateElements.add((MyBatisElement) ele);
+      }
+    }
+    return duplicateElements;
+  }
+
+  public static boolean hasSameDatabaseId(@Nullable MyBatisElement ele1, @Nullable MyBatisElement ele2) {
+    if (ele1 == null || ele2 == null) {
+      return false;
+    }
+
+    String databaseId1 = ele1.getDatabaseId().getStringValue();
+    String databaseId2 = ele2.getDatabaseId().getStringValue();
+    return Comparing.equal(databaseId1, databaseId2, false);
+  }
+
 }

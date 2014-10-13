@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableSet;
 import com.intellij.util.xml.Attribute;
 import com.intellij.util.xml.Convert;
 import com.intellij.util.xml.ConvertContext;
-import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.GenericAttributeValue;
 import com.intellij.util.xml.SubTagList;
 import com.seventh7.mybatis.dom.converter.PlainTextConverter;
@@ -18,7 +17,7 @@ import java.util.List;
 /**
  * @author yanglin
  */
-public interface Cache extends DomElement {
+public interface Cache extends MyBatisElement {
 
   @SubTagList("property")
   public List<Property> getProperties();

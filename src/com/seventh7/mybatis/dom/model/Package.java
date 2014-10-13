@@ -1,7 +1,6 @@
 package com.seventh7.mybatis.dom.model;
 
 import com.intellij.util.xml.Attribute;
-import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.GenericAttributeValue;
 
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  */
-public interface Package extends DomElement {
+public interface Package extends MyBatisElement {
 
   @NotNull
   @Attribute("name")

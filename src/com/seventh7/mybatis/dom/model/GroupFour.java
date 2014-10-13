@@ -1,6 +1,5 @@
 package com.seventh7.mybatis.dom.model;
 
-import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.SubTagList;
 
 import java.util.List;
@@ -8,7 +7,7 @@ import java.util.List;
 /**
  * @author yanglin
  */
-public interface GroupFour extends DomElement {
+public interface GroupFour extends MyBatisElement {
 
   @SubTagList("constructor")
   public Constructor getConstructor();
