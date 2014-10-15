@@ -17,6 +17,8 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifier;
+import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
@@ -153,7 +155,20 @@ public class TestParamContributor extends CompletionContributor {
 
       List<Object> res = Lists.newArrayList();
       res.add(parameter.getName());
-      Collections.addAll(res, clazz.getAllFields());
+      PsiField[] psiFields = clazz.getAllFields();
+      for (PsiField psiField : psiFields) {
+        PsiModifierList modifierList = psiField.getModifierList();
+        if (modifierList == null) {
+          continue;
+        }
+        boolean propSettable = !modifierList.hasModifierProperty(PsiModifier.STATIC) &&
+                              !modifierList.hasModifierProperty(PsiModifier.NATIVE) &&
+                              !modifierList.hasModifierProperty(PsiModifier.TRANSIENT) &&
+                              !modifierList.hasModifierProperty(PsiModifier.FINAL);
+        if (propSettable) {
+          res.add(psiField);
+        }
+      }
       return res;
     }
 
