@@ -3,7 +3,6 @@ package com.seventh7.mybatis.contributor;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
@@ -37,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.List;
 
 /**
  * @author yanglin
@@ -152,7 +151,8 @@ public class TestParamContributor extends CompletionContributor {
       PsiClass clazz = ((PsiClassReferenceType) type).resolve();
       if (null == clazz) { return Collections.emptyList(); }
 
-      HashSet<PsiField> res = Sets.newHashSet();
+      List<Object> res = Lists.newArrayList();
+      res.add(parameter.getName());
       Collections.addAll(res, clazz.getAllFields());
       return res;
     }
