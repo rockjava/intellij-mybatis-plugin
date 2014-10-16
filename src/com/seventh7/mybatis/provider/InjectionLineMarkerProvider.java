@@ -62,7 +62,7 @@ public class InjectionLineMarkerProvider extends RelatedItemLineMarkerProvider {
       if (nameValue != null) {
         name = nameValue.getText().replaceAll("\"", "");
       }
-      return StringUtils.isBlank(name) || (name != null && name.equals(field.getName()));
+      return StringUtils.isBlank(name) || name.equals(field.getName());
     }
     return false;
   }
