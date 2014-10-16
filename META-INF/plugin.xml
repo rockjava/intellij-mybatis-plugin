@@ -21,13 +21,6 @@
           <li>To run the sql: Press intention key, choose the "Run Query in Console" option [Supported by Jetbrains]</li>
           <li>Disable generating columns in mapper xml</li>
       </ul>
-      <h4>2.232</h4>
-      <ul>
-          <li>Generate columns of single table with specified alias using intention keystroke</li>
-          <li>To insert a ',' at the beginning of the generated columns, set the alias like ',yourAlias' (Quote is not required)</li>
-          <li>To insert a ',' at the end of the generated the columns, set the alias like 'yourAlias,' (Quote is not required)</li>
-          <li>Add '$' as the beginning char of popup parameter completion</li>
-      </ul>
       <h4>2.21</h4>
       <ul>
           <li>Rebuild mapper model</li>
@@ -61,11 +54,6 @@
           <li>Parameter map support</li>
           <li>Parameter type support</li>
           <li>Alias support</li>
-      </ul>
-      <h4>1.46</h4>
-      <ul>
-          <li>Rewrite</li>
-          <li>Change the keystroke for generate @Param and new statement with Alt + Enter(Windows) | Option + Enter(Mac)</li>
       </ul>
       ]]>
     </change-notes>
