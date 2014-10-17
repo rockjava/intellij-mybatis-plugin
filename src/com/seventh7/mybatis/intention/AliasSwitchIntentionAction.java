@@ -71,7 +71,7 @@ public class AliasSwitchIntentionAction extends GenericIntention {
       return false;
     }
     PsiReference[] references = set.getReferences();
-    if (references == null || references.length == 0) {
+    if (references.length == 0) {
       return false;
     }
 
