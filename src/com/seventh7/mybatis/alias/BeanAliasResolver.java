@@ -53,11 +53,12 @@ public class BeanAliasResolver extends PackageAliasResolver {
   }
 
   private void addPackages(Set<String> res, CommonSpringModel springModel) {
-    Optional<PsiClass> aliasPackageClazz = JavaUtils.findClazz(project, MAPPER_ALIAS_PACKAGE_CLASS);
-    if (!aliasPackageClazz.isPresent()) {
+    Optional<PsiClass> aliasPackageClazzOp = JavaUtils.findClazz(project, MAPPER_ALIAS_PACKAGE_CLASS);
+    if (!aliasPackageClazzOp.isPresent()) {
       return;
     }
     Collection<SpringBeanPointer> domBeans = springModel.getAllDomBeans();
+    PsiClass aliasPackageClazz = aliasPackageClazzOp.get();
     for (SpringBeanPointer pointer : domBeans) {
       PsiClass beanClass = pointer.getBeanClass();
       if (beanClass == null || !beanClass.equals(aliasPackageClazz)) {
