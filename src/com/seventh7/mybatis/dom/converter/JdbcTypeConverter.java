@@ -3,11 +3,10 @@ package com.seventh7.mybatis.dom.converter;
 import com.google.common.collect.Sets;
 
 import com.intellij.util.xml.ConvertContext;
-import com.seventh7.mybatis.util.SQLUtil;
+import com.seventh7.mybatis.util.SQLConstants;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.Types;
 import java.util.Collection;
 import java.util.Set;
 
@@ -18,20 +17,9 @@ public class JdbcTypeConverter extends PlainTextConverter {
 
   private static final Set<String> TYPE_NAMES = Sets.newHashSet();
 
-  private static final int[] TYPES = {
-      Types.BIT,          Types.TINYINT,        Types.SMALLINT,         Types.INTEGER,          Types.BIGINT,
-      Types.FLOAT,        Types.REAL,           Types.DOUBLE,           Types.NUMERIC,          Types.DECIMAL,
-      Types.CHAR,         Types.VARCHAR,        Types.LONGVARCHAR,      Types.DATE,             Types.TIME,
-      Types.TIMESTAMP,    Types.BINARY,         Types.VARBINARY,        Types.LONGVARBINARY,    Types.NULL,
-      Types.OTHER,        Types.JAVA_OBJECT,    Types.DISTINCT,         Types.STRUCT,           Types.ARRAY,
-      Types.BLOB,         Types.CLOB,           Types.REF,              Types.DATALINK,         Types.BOOLEAN,
-      Types.ROWID,        Types.NCHAR,          Types.NVARCHAR,         Types.LONGNVARCHAR,     Types.NCLOB,
-      Types.SQLXML
-  };
-
   static {
-    for (int type : TYPES) {
-      TYPE_NAMES.add(SQLUtil.getJdbcTypeName(type));
+    for (int type : SQLConstants.sqlTypes()) {
+      TYPE_NAMES.add(SQLConstants.getJdbcTypeName(type));
     }
   }
 

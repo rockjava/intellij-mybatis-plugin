@@ -5,7 +5,7 @@ import com.intellij.psi.xml.XmlElement;
 import com.seventh7.mybatis.dom.model.GroupFour;
 import com.seventh7.mybatis.dom.model.PropertyGroup;
 import com.seventh7.mybatis.service.EditorService;
-import com.seventh7.mybatis.util.SQLUtil;
+import com.seventh7.mybatis.util.SQLConstants;
 
 import org.apache.commons.lang.WordUtils;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +39,7 @@ public class PropertyGenerator {
   }
 
   private static void setupProperties(DatabaseTableFieldData column, PropertyGroup property) {
-    property.getJdbcType().setStringValue(SQLUtil.getJdbcTypeName(column.getJdbcType()));
+    property.getJdbcType().setStringValue(SQLConstants.getJdbcTypeName(column.getJdbcType()));
     final String columnName = column.getName();
     property.getProperty().setStringValue(PROPERTY_NAME_STRATEGY.apply(columnName));
     property.getColumn().setStringValue(columnName);

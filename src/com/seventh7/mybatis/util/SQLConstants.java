@@ -4,14 +4,30 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Types;
+import java.util.Arrays;
 
 /**
  * @author yanglin
  */
-public final class SQLUtil {
+public final class SQLConstants {
 
-  private SQLUtil() {
+  private SQLConstants() {
     throw new UnsupportedOperationException();
+  }
+
+  private static final int[] SQL_TYPES = {
+      Types.BIT,          Types.TINYINT,        Types.SMALLINT,         Types.INTEGER,          Types.BIGINT,
+      Types.FLOAT,        Types.REAL,           Types.DOUBLE,           Types.NUMERIC,          Types.DECIMAL,
+      Types.CHAR,         Types.VARCHAR,        Types.LONGVARCHAR,      Types.DATE,             Types.TIME,
+      Types.TIMESTAMP,    Types.BINARY,         Types.VARBINARY,        Types.LONGVARBINARY,    Types.NULL,
+      Types.OTHER,        Types.JAVA_OBJECT,    Types.DISTINCT,         Types.STRUCT,           Types.ARRAY,
+      Types.BLOB,         Types.CLOB,           Types.REF,              Types.DATALINK,         Types.BOOLEAN,
+      Types.ROWID,        Types.NCHAR,          Types.NVARCHAR,         Types.LONGNVARCHAR,     Types.NCLOB,
+      Types.SQLXML
+  };
+
+  public static int[] sqlTypes() {
+    return Arrays.copyOf(SQL_TYPES, SQL_TYPES.length);
   }
 
   @NotNull
