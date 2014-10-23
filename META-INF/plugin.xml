@@ -61,6 +61,7 @@
 
     <idea-version since-build="138.2458"/>
     <depends optional="true">com.intellij.spring</depends>
+    <depends optional="false">com.intellij.database</depends>
     <extensions defaultExtensionNs="com.intellij">
         <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.MapperDescription"/>
         <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.ConfigurationDescription"/>
