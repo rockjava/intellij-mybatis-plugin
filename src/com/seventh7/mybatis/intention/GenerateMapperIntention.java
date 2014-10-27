@@ -131,9 +131,7 @@ public class GenerateMapperIntention extends GenericIntention {
     Map<String, PsiDirectory> result = Maps.newHashMap();
     for (PsiDirectory directory : directories) {
       String presentableUrl = directory.getVirtualFile().getPresentableUrl();
-      if (presentableUrl != null) {
-        result.put(presentableUrl, directory);
-      }
+      result.put(presentableUrl, directory);
     }
     return result;
   }
