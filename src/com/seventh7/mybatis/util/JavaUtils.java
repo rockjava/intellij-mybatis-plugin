@@ -1,6 +1,7 @@
 package com.seventh7.mybatis.util;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
@@ -25,6 +26,9 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -46,6 +50,22 @@ public final class JavaUtils {
     }
     PsiClass type = PsiTreeUtil.getParentOfType(element, PsiClass.class);
     return type != null && type.isInterface();
+  }
+
+  public static List<PsiMethod> findAllMethodsWithoutRootParent(@NotNull PsiClass clazz) {
+    Optional<PsiClass> objClazzOpt = findClazz(clazz.getProject(), "java.lang.Object");
+    if (!objClazzOpt.isPresent()) {
+      return Collections.emptyList();
+    }
+    PsiClass objClazz = objClazzOpt.get();
+    PsiMethod[] methods = clazz.getAllMethods();
+    ArrayList<PsiMethod> res = Lists.newArrayList();
+    for (int i = 0; i < methods.length; i++) {
+      if (objClazz.findMethodsByName(methods[i].getName(), false).length == 0) {
+        res.add(methods[i]);
+      }
+    }
+    return res;
   }
 
   @NotNull

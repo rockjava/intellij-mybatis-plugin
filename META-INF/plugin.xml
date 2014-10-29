@@ -15,51 +15,10 @@
           <li>Improve for intellij 14</li>
           <li>Fix bugs</li>
       </ul>
-      <h4>2.238</h4>
-      <ul>
-          <li>Auto inject sql language in mapper xml</li>
-          <li>To configure sql dialect: Press intention key, choose the "Change dialect to..." option [Supported by Jetbrains]</li>
-          <li>To run the sql: Press intention key, choose the "Run Query in Console" option [Supported by Jetbrains]</li>
-          <li>Disable generating columns in mapper xml</li>
-      </ul>
-      <h4>2.21</h4>
-      <ul>
-          <li>Rebuild mapper model</li>
-          <li>Support more completion popup</li>
-          <li>Support switching between java type and alias in mapper xml using intention keystroke</li>
-          <li>Support generating properties for elements of result map using intention keystroke[DataSource of intellij is required]</li>
-          <li>Support completion of jdbc type in mapper xml</li>
-          <li>Support completion of referencing to select statement in mapper xml</li>
-      </ul>
-      <h4>2.01</h4>
-      <ul>
-          <li>Improve for intellij 13</li>
-      </ul>
-      <h4>1.56</h4>
-      <ul>
-          <li>Support correct result type for select statement in mapper xml</li>
-          <li>Support correct unresolved attribute value of mapper xml</li>
-          <li>Highlight conflicting element of mapper xml as errors</li>
-          <li>Support refactor for id based tag in mapper xml</li>
-          <li>Support refactor the name of mapper xml file when rename the mapper interface</li>
-          <li>Support find usage of mapper interface and mapper xml element</li>
-          <li>Support generating mapper of xml</li>
-          <li>Support property completion for result and id of resultMap、collection、association</li>
-          <li>Support parameter completion[ #{param} ] while editing sql(@Param based)</li>
-          <li>Support resultMap completion for collection and association of resultMap</li>
-          <li>Auto register mapper as spring bean(Optional)</li>
-          <li>Change reference strategy to support rename</li>
-          <li>Brace completion while editing sql</li>
-          <li>Support surround with CDATA section for sql</li>
-          <li>Support resultType</li>
-          <li>Parameter map support</li>
-          <li>Parameter type support</li>
-          <li>Alias support</li>
-      </ul>
       ]]>
     </change-notes>
 
-    <idea-version since-build="138.2458"/>
+    <idea-version since-build="139.224"/>
     <depends optional="true">com.intellij.spring</depends>
     <depends optional="false">com.intellij.database</depends>
     <extensions defaultExtensionNs="com.intellij">
@@ -85,14 +44,14 @@
         <localInspection language="JAVA" shortName="MybatisMapperMethodInspection" displayName="Mapper method inspection"
                          groupName="Mybatis" enabledByDefault="true" level="ERROR"
                          implementationClass="com.seventh7.mybatis.inspection.MapperMethodInspection"/>
+        <localInspection language="JAVA" shortName="MybatisMapperInXmlInspection" displayName="Mapper in xml inspection"
+                         groupName="Mybatis" enabledByDefault="true" level="ERROR"
+                         implementationClass="com.seventh7.mybatis.inspection.MapperInXmlInspection"/>
         <localInspection language="XML" shortName="MybatisMapperXmlInspection"  enabledByDefault="true" level="ERROR" displayName="Mapper xml inspection"
                          groupName="Mybatis"
                          implementationClass="com.seventh7.mybatis.inspection.MapperXmlInspection"/>
         <intentionAction>
             <className>com.seventh7.mybatis.intention.GenerateParamAnnotationIntention</className>
-        </intentionAction>
-        <intentionAction>
-            <className>com.seventh7.mybatis.intention.GenerateStatementIntention</className>
         </intentionAction>
         <intentionAction order="first">
             <className>com.seventh7.mybatis.intention.GenerateMapperIntention</className>

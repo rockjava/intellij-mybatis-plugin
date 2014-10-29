@@ -26,6 +26,8 @@ import com.seventh7.mybatis.util.MapperUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 /**
  * @author yanglin
  */
@@ -65,13 +67,41 @@ public class JavaService {
   }
 
   @SuppressWarnings("unchecked")
-  public void processMapperMethods(@NotNull PsiMethod psiMethod, @NotNull Processor<IdDomElement> processor) {
+  public void processMapperMethods(@NotNull PsiMethod psiMethod, @NotNull final Processor<IdDomElement> processor) {
     PsiClass psiClass = psiMethod.getContainingClass();
     if (null == psiClass) {
       return;
     }
-    String id = psiClass.getQualifiedName() + "." + psiMethod.getName();
-    for (Mapper mapper : MapperUtils.findMappers(psiMethod.getProject())) {
+    final String methodName = psiMethod.getName();
+    processMapperMethod(psiClass, methodName, processor);
+    processSubMapperClazz(psiClass, new Processor<PsiClass>() {
+      @Override
+      public boolean process(PsiClass clazz) {
+        processMapperMethod(clazz, methodName, processor);
+        return true;
+      }
+    });
+  }
+
+  private void processSubMapperClazz(PsiClass parentClazz, Processor<PsiClass> action) {
+    Collection<Mapper> mappers = MapperUtils.findMappers(project);
+    for (Mapper mapper : mappers) {
+      String ns = mapper.getNamespace().getStringValue();
+      if (ns == null) { continue; }
+
+      Optional<PsiClass> clazz = JavaUtils.findClazz(project, ns);
+      if (!clazz.isPresent()) { continue; }
+
+      PsiClass psiClass = clazz.get();
+      if (psiClass.isInheritor(parentClazz, true)) {
+        action.process(psiClass);
+      }
+    }
+  }
+
+  private void processMapperMethod(PsiClass psiClass, String methodName, Processor<IdDomElement> processor) {
+    String id = psiClass.getQualifiedName() + "." + methodName;
+    for (Mapper mapper : MapperUtils.findMappers(project)) {
       for (IdDomElement idDomElement : mapper.getDaoElements()) {
         if (MapperUtils.getIdSignature(idDomElement).equals(id)) {
           processor.process(idDomElement);
@@ -81,9 +111,20 @@ public class JavaService {
   }
 
   @SuppressWarnings("unchecked")
-  public void processMapperInterfaces(@NotNull PsiClass clazz, @NotNull Processor<Mapper> processor) {
+  public void processMapperInterfaces(@NotNull PsiClass clazz, @NotNull final Processor<Mapper> processor) {
+    processMapper(clazz, processor);
+    processSubMapperClazz(clazz, new Processor<PsiClass>() {
+      @Override
+      public boolean process(PsiClass psiClass) {
+        processMapper(psiClass, processor);
+        return true;
+      }
+    });
+  }
+
+  private void processMapper(PsiClass clazz, Processor<Mapper> processor) {
     String ns = clazz.getQualifiedName();
-    for (Mapper mapper : MapperUtils.findMappers(clazz.getProject())) {
+    for (Mapper mapper : MapperUtils.findMappers(project)) {
       if (MapperUtils.getNamespace(mapper).equals(ns)) {
         processor.process(mapper);
       }

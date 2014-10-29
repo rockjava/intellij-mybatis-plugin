@@ -25,7 +25,7 @@ public class StatementNotExistsQuickFix extends GenericQuickFix {
 
   @Override
   public void applyFix(@NotNull Project project, @NotNull ProblemDescriptor descriptor) {
-    StatementGenerator.applyGenerate(method);
+    StatementGenerator.applyGenerate(method, true);
   }
 
   @NotNull

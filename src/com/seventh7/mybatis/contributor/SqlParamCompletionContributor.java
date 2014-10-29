@@ -14,6 +14,8 @@ import com.seventh7.mybatis.dom.model.IdDomElement;
 import com.seventh7.mybatis.util.DomUtils;
 import com.seventh7.mybatis.util.MapperUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 
 /**
  * @author yanglin
@@ -21,7 +23,7 @@ import com.seventh7.mybatis.util.MapperUtils;
 public class SqlParamCompletionContributor extends CompletionContributor {
 
   @Override
-  public void fillCompletionVariants(CompletionParameters parameters, final CompletionResultSet result) {
+  public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull final CompletionResultSet result) {
     if (parameters.getCompletionType() != CompletionType.BASIC) {
       return;
     }

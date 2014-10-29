@@ -5,3 +5,5 @@ out/
 .DS_Store
 .floo
 .flooignore
+
+META-INF/plugin.xml

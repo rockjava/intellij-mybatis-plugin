@@ -80,16 +80,16 @@ public abstract class StatementGenerator {
     return Optional.absent();
   }
 
-  public static void applyGenerate(@Nullable final PsiMethod method) {
+  public static void applyGenerate(@Nullable final PsiMethod method, final boolean scroll) {
     if (null == method) return;
     final StatementGenerator[] generators = getGenerators(method);
     if (1 == generators.length) {
-        doGenerate(generators[0], method);
+        doGenerate(generators[0], method, scroll);
     } else {
-      UiComponentFacade.getInstance(method.getProject()).showListPopup("[ Select target statement ]", new ListSelectionListener() {
+      UiComponentFacade.getInstance(method.getProject()).showListPopup("[ Statement type for method: " + method.getName() + "]", new ListSelectionListener() {
         @Override
         public void selected(int index) {
-            doGenerate(generators[index], method);
+            doGenerate(generators[index], method, scroll);
         }
 
         @Override
@@ -101,10 +101,10 @@ public abstract class StatementGenerator {
     }
   }
 
-    private static void doGenerate(@NotNull final StatementGenerator generator, @NotNull final PsiMethod method) {
+    private static void doGenerate(@NotNull final StatementGenerator generator, @NotNull final PsiMethod method, final boolean scroll) {
         new WriteCommandAction.Simple(method.getProject(), method.getContainingFile()) {
             @Override protected void run() throws Throwable {
-                generator.execute(method);
+                generator.execute(method, scroll);
             }
         }.execute();
     }
@@ -128,7 +128,7 @@ public abstract class StatementGenerator {
     this.patterns = Sets.newHashSet(patterns);
   }
 
-  public void execute(@NotNull final PsiMethod method) {
+  public void execute(@NotNull final PsiMethod method, final boolean scroll) {
     PsiClass psiClass = method.getContainingClass();
     if (null == psiClass) {
       return;
@@ -137,13 +137,13 @@ public abstract class StatementGenerator {
     JavaService.getInstance(method.getProject()).processMapperInterfaces(psiClass, processor);
     final List<Mapper> mappers = Lists.newArrayList(processor.getResults());
     if (1 == mappers.size()) {
-      setupTag(method, Iterables.getOnlyElement(mappers, null));
+      setupTag(method, Iterables.getOnlyElement(mappers, null), scroll);
     } else if (mappers.size() > 1) {
       Collection<String> paths = Collections2.transform(mappers, FUN);
       UiComponentFacade.getInstance(method.getProject()).showListPopup("Choose target mapper xml to generate", new ListSelectionListener() {
         @Override
         public void selected(int index) {
-          setupTag(method, mappers.get(index));
+          setupTag(method, mappers.get(index), scroll);
         }
 
         @Override
@@ -154,15 +154,17 @@ public abstract class StatementGenerator {
     }
   }
 
-  private void setupTag(PsiMethod method, Mapper mapper) {
+  private void setupTag(PsiMethod method, Mapper mapper, boolean scroll) {
     GroupTwo target = getComparableTarget(mapper, method);
     target.getId().setStringValue(method.getName());
     target.setValue(" ");
     XmlTag tag = target.getXmlTag();
     int offset = tag.getTextOffset() + tag.getTextLength() - tag.getName().length() + 1;
-    EditorService editorService = EditorService.getInstance(method.getProject());
-    editorService.format(tag.getContainingFile(), tag);
-    editorService.scrollTo(tag, offset);
+    if (scroll) {
+      EditorService editorService = EditorService.getInstance(method.getProject());
+      editorService.format(tag.getContainingFile(), tag);
+      editorService.scrollTo(tag, offset);
+    }
   }
 
   @Override

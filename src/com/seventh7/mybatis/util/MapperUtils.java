@@ -26,6 +26,7 @@ import com.seventh7.mybatis.dom.model.Mapper;
 import com.seventh7.mybatis.dom.model.MyBatisElement;
 import com.seventh7.mybatis.dom.model.TypeAlias;
 import com.seventh7.mybatis.dom.model.TypeAliases;
+import com.seventh7.mybatis.service.JavaService;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -46,6 +47,10 @@ public final class MapperUtils {
 
   private MapperUtils() {
     throw new UnsupportedOperationException();
+  }
+
+  public static boolean isTargetPresentInMapperXml(@NotNull PsiElement element) {
+    return JavaService.getInstance(element.getProject()).findWithFindFirstProcessor(element).isPresent();
   }
 
   @NotNull

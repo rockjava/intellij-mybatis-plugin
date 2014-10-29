@@ -8,9 +8,8 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
-import com.seventh7.mybatis.intention.chooser.IntentionChooser;
-import com.seventh7.mybatis.service.JavaService;
 import com.seventh7.mybatis.util.JavaUtils;
+import com.seventh7.mybatis.util.MapperUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -42,7 +41,7 @@ public abstract class JavaFileIntentionChooser implements IntentionChooser {
   }
 
   public boolean isTargetPresentInXml(@NotNull PsiElement element) {
-    return JavaService.getInstance(element.getProject()).findWithFindFirstProcessor(element).isPresent();
+    return MapperUtils.isTargetPresentInMapperXml(element);
   }
 
 }

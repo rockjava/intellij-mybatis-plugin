@@ -20,6 +20,7 @@ import com.seventh7.mybatis.generate.StatementGenerator;
 import com.seventh7.mybatis.locator.MapperLocator;
 import com.seventh7.mybatis.service.JavaService;
 import com.seventh7.mybatis.util.JavaUtils;
+import com.seventh7.mybatis.util.MapperUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,14 +38,12 @@ public class MapperMethodInspection extends MapperInspection{
   @Nullable @Override
   public ProblemDescriptor[] checkMethod(@NotNull PsiMethod method, @NotNull InspectionManager manager, boolean isOnTheFly) {
     PsiClass containingClass = method.getContainingClass();
-    if (containingClass == null) {
-      return EMPTY_ARRAY;
-    }
+    if (containingClass == null) { return EMPTY_ARRAY; }
     if (!containingClass.isPhysical() || !containingClass.isInterface()) {
       return EMPTY_ARRAY;
     }
     /** Correct when:
-     *  1. Method of interface are defined in the package where most other mapper interfaces are defined
+     *  1. Method interface are not defined in the package where most other mapper interfaces are defined
      *  2. No id based statement defined with annotation
      *  3. No custom result handler is present
      */
@@ -114,6 +113,13 @@ public class MapperMethodInspection extends MapperInspection{
   }
 
   private Optional<ProblemDescriptor> checkStatementExists(PsiMethod method, InspectionManager manager, boolean isOnTheFly) {
+    PsiClass clazz = method.getContainingClass();
+    if (clazz == null) {
+      return Optional.absent();
+    }
+    if (!MapperUtils.findFirstMapper(clazz.getProject(), clazz).isPresent()) {
+      return Optional.absent();
+    }
     PsiIdentifier ide = method.getNameIdentifier();
     if (!JavaService.getInstance(method.getProject()).findStatement(method).isPresent() && null != ide) {
       return  Optional.of(manager.createProblemDescriptor(ide, "Statement with id=\"#ref\" not defined in mapper xml",
