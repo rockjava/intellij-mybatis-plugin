@@ -29,6 +29,11 @@ public final class DomUtils {
   @NotNull @NonNls
   public static <T extends DomElement> Collection<T> findDomElements(@NotNull Project project, Class<T> clazz) {
     GlobalSearchScope scope = GlobalSearchScopesCore.projectProductionScope(project);
+    return findDomElements(project, scope, clazz);
+  }
+
+  @NotNull @NonNls
+  public static <T extends DomElement> Collection<T> findDomElements(@NotNull Project project, @NotNull GlobalSearchScope scope, Class<T> clazz) {
     List<DomFileElement<T>> elements = DomService.getInstance().getFileElements(clazz, project, scope);
     return Collections2.transform(elements, new Function<DomFileElement<T>, T>() {
       @Override

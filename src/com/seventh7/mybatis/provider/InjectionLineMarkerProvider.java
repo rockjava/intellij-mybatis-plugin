@@ -27,6 +27,7 @@ import java.util.Collection;
 /**
  * @author yanglin
  */
+@Deprecated
 public class InjectionLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
   @Override

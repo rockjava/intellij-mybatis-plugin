@@ -15,6 +15,7 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.xml.XmlElement;
 import com.intellij.util.Processor;
 import com.intellij.util.xml.DomElement;
@@ -92,6 +93,11 @@ public final class MapperUtils {
   @NotNull @NonNls
   public static Collection<Mapper> findMappers(@NotNull Project project) {
     return DomUtils.findDomElements(project, Mapper.class);
+  }
+
+  @NotNull @NonNls
+  public static Collection<Mapper> findMappers(@NotNull Project project, @NotNull GlobalSearchScope scope) {
+    return DomUtils.findDomElements(project, scope, Mapper.class);
   }
 
   @NotNull @NonNls

@@ -1,19 +1,16 @@
 package com.seventh7.mybatis.alias;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.spring.CommonSpringModel;
 import com.intellij.spring.SpringManager;
-import com.intellij.spring.model.SpringBeanPointer;
-import com.intellij.spring.model.utils.SpringPropertyUtils;
 import com.intellij.spring.model.xml.beans.SpringPropertyDefinition;
-import com.seventh7.mybatis.util.JavaUtils;
+import com.intellij.util.Processor;
+import com.seventh7.mybatis.util.SpringUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,27 +49,18 @@ public class BeanAliasResolver extends PackageAliasResolver {
     return res;
   }
 
-  private void addPackages(Set<String> res, CommonSpringModel springModel) {
-    Optional<PsiClass> aliasPackageClazzOp = JavaUtils.findClazz(project, MAPPER_ALIAS_PACKAGE_CLASS);
-    if (!aliasPackageClazzOp.isPresent()) {
-      return;
-    }
-    Collection<SpringBeanPointer> domBeans = springModel.getAllDomBeans();
-    PsiClass aliasPackageClazz = aliasPackageClazzOp.get();
-    for (SpringBeanPointer pointer : domBeans) {
-      PsiClass beanClass = pointer.getBeanClass();
-      if (beanClass == null || !beanClass.equals(aliasPackageClazz)) {
-        continue;
-      }
-      SpringPropertyDefinition basePackages = SpringPropertyUtils.findPropertyByName(pointer.getSpringBean(),
-                                                                                     MAPPER_ALIAS_PROPERTY);
-      if (basePackages != null) {
-        final String value = basePackages.getValueElement().getStringValue();
+  private void addPackages(final Set<String> res, CommonSpringModel springModel) {
+    Processor<SpringPropertyDefinition> processor = new Processor<SpringPropertyDefinition>() {
+      @Override
+      public boolean process(SpringPropertyDefinition def) {
+        final String value = def.getValueElement().getStringValue();
         if (value != null) {
           Collections.addAll(res, value.split(",|;"));
         }
+        return true;
       }
-    }
+    };
+    SpringUtils.processSpringConfig(project, springModel, MAPPER_ALIAS_PACKAGE_CLASS, MAPPER_ALIAS_PROPERTY, processor);
   }
 
 }
