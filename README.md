@@ -1,3 +1,7 @@
+# Supported By
+
+![Thanks to the support of JetBrains](http://www.jetbrains.com/company/docs/logo_jetbrains.png)
+
 #Download
 
 * http://plugins.jetbrains.com/plugin/7293
