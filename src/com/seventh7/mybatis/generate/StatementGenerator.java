@@ -71,7 +71,8 @@ public abstract class StatementGenerator {
       PsiClassReferenceType type = (PsiClassReferenceType)returnType;
       if (type.hasParameters()) {
         PsiType[] parameters = type.getParameters();
-        if (parameters.length == 1) {
+        // Fix issue#35[https://github.com/seventh7/intellij-mybatis-plugin/issues/35]
+        if (parameters.length == 1 && parameters[0] instanceof PsiClassReferenceType) {
           type = (PsiClassReferenceType)parameters[0];
         }
       }
