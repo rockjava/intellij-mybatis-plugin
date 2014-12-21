@@ -20,8 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.*;
 
 /**
  * @author yanglin
@@ -31,6 +30,7 @@ public class MybatisBeanProvider extends SpringImplicitBeansProviderBase {
   private static final String SCANNER_BEAN_CLAZZ_NAME = "org.mybatis.spring.mapper.MapperScannerConfigurer";
   private static final String SCANNER_PROP_NAME = "basePackage";
   private static final String MY_NAME = "Mybatis bean provider";
+  private static final String CONFIG_LOCATION_DELIMITERS = ",; \t\n";
 
   @Override
   protected boolean accepts(@NotNull CommonSpringModel springModel, @NotNull Module module) {
@@ -52,12 +52,34 @@ public class MybatisBeanProvider extends SpringImplicitBeansProviderBase {
       PsiClass clazz = findClassInDependenciesAndLibraries(module, MapperUtils.getNamespace(mapper));
       if (clazz != null) {
         String qualifiedName = clazz.getQualifiedName();
-        if (qualifiedName != null && qualifiedName.startsWith(basePackage)) {
-          this.addImplicitBean(res, module, qualifiedName, WordUtils.uncapitalize(clazz.getName()));
+        for (String basePackageItem : tokenizeToStringArray(basePackage, CONFIG_LOCATION_DELIMITERS)) {
+          if (qualifiedName != null && qualifiedName.startsWith(basePackageItem)) {
+            this.addImplicitBean(res, module, qualifiedName, WordUtils.uncapitalize(clazz.getName()));
+          }
         }
       }
     }
     return res;
+  }
+
+  public static List<String> tokenizeToStringArray(String str, String delimiters) {
+    if(str == null) {
+      return Collections.emptyList();
+    } else {
+      StringTokenizer st = new StringTokenizer(str, delimiters);
+      List<String> tokens = new ArrayList<String>();
+
+      while(st.hasMoreTokens()) {
+        String token = st.nextToken();
+          token = token.trim();
+
+        if(token.length() > 0) {
+          tokens.add(token);
+        }
+      }
+
+      return tokens;
+    }
   }
 
   public static String findMapperScannerPackage(@NotNull Project project, @NotNull CommonSpringModel model) {
