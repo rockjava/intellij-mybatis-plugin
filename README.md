@@ -1,3 +1,7 @@
+# Ad - 强势推荐
+
+翻墙利器: http://honx.in/i/VJ6-U86vD0s1XqbE  
+
 # Supported By
 
 ![Thanks to the support of JetBrains](http://www.jetbrains.com/company/docs/logo_jetbrains.png)
