@@ -27,7 +27,7 @@ public class EditorService {
 
   public EditorService(Project project) {
     this.project = project;
-    this.codeFormatterFacade = new CodeFormatterFacade(new CodeStyleSettings());
+    this.codeFormatterFacade = new CodeFormatterFacade(new CodeStyleSettings(), null);
     this.fileEditorManager = FileEditorManager.getInstance(project);
   }
 
