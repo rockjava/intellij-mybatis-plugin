@@ -41,12 +41,13 @@ public class AnnotationAliasResolver extends AliasResolver {
     super(project);
   }
 
-  public static final AnnotationAliasResolver getInstance(@NotNull Project project) {
+  public static AnnotationAliasResolver getInstance(@NotNull Project project) {
     return project.getComponent(AnnotationAliasResolver.class);
   }
 
   @NotNull
   @Override
+  @SuppressWarnings("unchecked")
   public Set<AliasDesc> getClassAliasDescriptions(@Nullable PsiElement element) {
     Optional<PsiClass> clazz = Annotation.ALIAS.toPsiClass(project);
     if (clazz.isPresent()) {

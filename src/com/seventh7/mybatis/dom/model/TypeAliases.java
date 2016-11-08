@@ -1,6 +1,5 @@
 package com.seventh7.mybatis.dom.model;
 
-import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.SubTagList;
 
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +9,7 @@ import java.util.List;
 /**
  * @author yanglin
  */
-public interface TypeAliases extends DomElement {
+public interface TypeAliases extends MyBatisElement {
 
   @NotNull
   @SubTagList("typeAlias")

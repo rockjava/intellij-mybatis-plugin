@@ -55,11 +55,8 @@ public class AliasDesc {
     if (alias != null ? !alias.equals(aliasDesc.alias) : aliasDesc.alias != null) {
       return false;
     }
-    if (clazz != null ? !clazz.equals(aliasDesc.clazz) : aliasDesc.clazz != null) {
-      return false;
-    }
 
-    return true;
+    return !(clazz != null ? !clazz.equals(aliasDesc.clazz) : aliasDesc.clazz != null);
   }
 
   @Override

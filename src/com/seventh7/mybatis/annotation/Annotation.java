@@ -1,18 +1,16 @@
 package com.seventh7.mybatis.annotation;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
+import com.seventh7.mybatis.util.JavaUtils;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -43,7 +41,7 @@ public class Annotation implements Cloneable{
 
   private final String qualifiedName;
 
-  private Map<String, AnnotationValue> attributePairs;
+  private ImmutableMap<String, AnnotationValue> attributePairs;
 
   public interface AnnotationValue {
   }
@@ -66,18 +64,16 @@ public class Annotation implements Cloneable{
   public Annotation(@NotNull String label, @NotNull String qualifiedName) {
     this.label = label;
     this.qualifiedName = qualifiedName;
-    attributePairs = Maps.newHashMap();
-  }
-
-  private Annotation addAttribute(String key, AnnotationValue value) {
-    this.attributePairs.put(key, value);
-    return this;
+    this.attributePairs = ImmutableMap.of();
   }
 
   public Annotation withAttribute(@NotNull String key, @NotNull AnnotationValue value) {
     Annotation copy = this.clone();
-    copy.attributePairs = Maps.newHashMap(this.attributePairs);
-    return copy.addAttribute(key, value);
+    copy.attributePairs = ImmutableMap.<String, AnnotationValue>builder()
+                          .putAll(this.attributePairs)
+                          .put(key, value)
+                          .build();
+    return copy;
   }
 
   public Annotation withValue(@NotNull AnnotationValue value) {
@@ -87,7 +83,7 @@ public class Annotation implements Cloneable{
   @Override
   public String toString() {
     StringBuilder builder = new StringBuilder(label);
-    if (!Iterables.isEmpty(attributePairs.entrySet())) {
+    if (!attributePairs.isEmpty()) {
       builder.append(setupAttributeText());
     }
     return builder.toString();
@@ -106,24 +102,21 @@ public class Annotation implements Cloneable{
       builder.append(attributePairs.get(key).toString());
       builder.append(", ");
     }
-    builder.deleteCharAt(builder.length() - 1);
-    builder.deleteCharAt(builder.length() - 1);
+    int length = builder.length();
+    builder.delete(length - 2, length);
     builder.append(")");
     return builder.toString();
   }
 
   @NotNull
   public Optional<PsiClass> toPsiClass(@NotNull Project project) {
-    return Optional.fromNullable(JavaPsiFacade.getInstance(project).findClass(getQualifiedName(), GlobalSearchScope.allScope(project)));
+    return JavaUtils.findClazz(project, getQualifiedName());
   }
 
   private Optional<String> getSingleValue() {
     try {
       String value = Iterables.getOnlyElement(attributePairs.keySet());
-      StringBuilder builder = new StringBuilder("(");
-      builder.append(attributePairs.get(value).toString());
-      builder.append(")");
-      return Optional.of(builder.toString());
+      return Optional.of("(" + attributePairs.get(value).toString() + ")");
     } catch (Exception e) {
       return Optional.absent();
     }

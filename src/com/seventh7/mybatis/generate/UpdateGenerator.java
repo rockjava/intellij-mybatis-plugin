@@ -16,7 +16,7 @@ public class UpdateGenerator extends StatementGenerator{
   }
 
   @NotNull @Override
-  protected GroupTwo getTarget(@NotNull Mapper mapper, @NotNull PsiMethod method) {
+  protected GroupTwo getComparableTarget(@NotNull Mapper mapper, @NotNull PsiMethod method) {
     return mapper.addUpdate();
   }
 

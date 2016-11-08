@@ -10,7 +10,6 @@ import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.seventh7.mybatis.dom.MapperBacktrackingUtils;
 import com.seventh7.mybatis.service.JavaService;
-import com.seventh7.mybatis.util.JavaUtils;
 import com.seventh7.mybatis.util.MybatisConstants;
 
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +40,7 @@ public class ContextPsiFieldReference extends PsiReferenceBase<XmlAttributeValue
   @NotNull @Override
   public Object[] getVariants() {
     Optional<PsiClass> clazz = getTargetClazz();
-    return clazz.isPresent() ? JavaUtils.findSettablePsiFields(clazz.get()) : PsiReference.EMPTY_ARRAY;
+    return clazz.isPresent() ? clazz.get().getAllFields() : PsiReference.EMPTY_ARRAY;
   }
 
   @SuppressWarnings("unchecked")

@@ -9,25 +9,32 @@ import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.FileTemplateUtil;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.xml.XmlElement;
 import com.intellij.util.Processor;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomUtil;
+import com.intellij.util.xml.ElementPresentationManager;
 import com.seventh7.mybatis.dom.model.Configuration;
 import com.seventh7.mybatis.dom.model.IdDomElement;
 import com.seventh7.mybatis.dom.model.Mapper;
+import com.seventh7.mybatis.dom.model.MyBatisElement;
 import com.seventh7.mybatis.dom.model.TypeAlias;
 import com.seventh7.mybatis.dom.model.TypeAliases;
+import com.seventh7.mybatis.service.JavaService;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.generate.tostring.util.StringUtil;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -41,6 +48,10 @@ public final class MapperUtils {
 
   private MapperUtils() {
     throw new UnsupportedOperationException();
+  }
+
+  public static boolean isTargetPresentInMapperXml(@NotNull PsiElement element) {
+    return JavaService.getInstance(element.getProject()).findWithFindFirstProcessor(element).isPresent();
   }
 
   @NotNull
@@ -68,6 +79,7 @@ public final class MapperUtils {
     return Collections2.transform(findMappers(project), new Function<Mapper, PsiDirectory>() {
       @Override
       public PsiDirectory apply(Mapper input) {
+        /** The containing file of a mapper should never return null */
         return input.getXmlElement().getContainingFile().getContainingDirectory();
       }
     });
@@ -84,7 +96,15 @@ public final class MapperUtils {
   }
 
   @NotNull @NonNls
-  public static Collection<Mapper> findMappers(@NotNull Project project, @NotNull String namespace) {
+  public static Collection<Mapper> findMappers(@NotNull Project project, @NotNull GlobalSearchScope scope) {
+    return DomUtils.findDomElements(project, scope, Mapper.class);
+  }
+
+  @NotNull @NonNls
+  public static Collection<Mapper> findMappers(@NotNull Project project, @Nullable String namespace) {
+    if (namespace == null) {
+      return Collections.emptyList();
+    }
     List<Mapper> result = Lists.newArrayList();
     for (Mapper mapper : findMappers(project)) {
       if (getNamespace(mapper).equals(namespace)) {
@@ -150,9 +170,10 @@ public final class MapperUtils {
     return null != mapper && null != target && getNamespace(mapper).equals(getNamespace(target));
   }
 
-  @Nullable @NonNls
+  @NotNull @NonNls
   public static <T extends IdDomElement> String getId(@NotNull T domElement) {
-    return domElement.getId().getRawText();
+    String rawText = domElement.getId().getRawText();
+    return rawText == null ? "" : rawText;
   }
 
   @NotNull @NonNls
@@ -195,4 +216,37 @@ public final class MapperUtils {
       }
     }
   }
+
+  @NotNull
+  public static List<? extends MyBatisElement> findDuplicateElements(@Nullable DomElement element) {
+    if (!(element instanceof MyBatisElement)) {
+      return Collections.emptyList();
+    }
+    final String elementName = ElementPresentationManager.getElementName(element);
+    if (StringUtil.isEmpty(elementName)) {
+      return Collections.emptyList();
+    }
+    List<? extends DomElement> identitySiblings = DomUtil.getIdentitySiblings(element);
+    ArrayList<MyBatisElement> duplicateElements = Lists.newArrayList();
+    for (DomElement ele : identitySiblings) {
+      boolean duplicated = (ele instanceof MyBatisElement) &&
+                           Comparing.equal(elementName, ElementPresentationManager.getElementName( ele), true) &&
+                           hasSameDatabaseId((MyBatisElement)element, (MyBatisElement)ele);
+      if (duplicated) {
+        duplicateElements.add((MyBatisElement) ele);
+      }
+    }
+    return duplicateElements;
+  }
+
+  public static boolean hasSameDatabaseId(@Nullable MyBatisElement ele1, @Nullable MyBatisElement ele2) {
+    if (ele1 == null || ele2 == null) {
+      return false;
+    }
+
+    String databaseId1 = ele1.getDatabaseId().getStringValue();
+    String databaseId2 = ele2.getDatabaseId().getStringValue();
+    return Comparing.equal(databaseId1, databaseId2, false);
+  }
+
 }

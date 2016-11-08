@@ -4,9 +4,10 @@ import com.intellij.codeInsight.completion.CodeCompletionHandlerBase;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.editorActions.CompletionAutoPopupHandler;
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
+import com.intellij.diagnostic.LogEventException;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.intellij.sql.psi.SqlFile;
@@ -30,12 +31,19 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
 
   @Override
   public Result charTyped(char c, final Project project, @NotNull final Editor editor, @NotNull PsiFile file) {
+    if (c != '{') {
+      return Result.CONTINUE;
+    }
     int index = editor.getCaretModel().getOffset() - 2;
+    if (index < 0) {
+      return Result.CONTINUE;
+    }
+    char beginningChar = editor.getDocument().getText().charAt(index);
+    if (beginningChar != '#' && beginningChar != '$') {
+      return Result.CONTINUE;
+    }
     PsiFile topLevelFile = InjectedLanguageUtil.getTopLevelFile(file);
-    boolean parameterCase = c == '{' &&
-                            index >= 0 &&
-                            editor.getDocument().getText().charAt(index) == '#' &&
-                            file instanceof SqlFile &&
+    boolean parameterCase = file instanceof SqlFile &&
                             DomUtils.isMybatisFile(topLevelFile);
     if (parameterCase) {
       autoPopupParameter(project, editor);
@@ -45,11 +53,13 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
   }
 
   private static void autoPopupParameter(final Project project, final Editor editor) {
-    CompletionAutoPopupHandler.runLaterWithCommitted(project, editor.getDocument(), new Runnable() {
+    final Document document = editor.getDocument();
+    CompletionAutoPopupHandler.runLaterWithCommitted(project, document, new Runnable() {
       @Override
       public void run() {
-        if (PsiDocumentManager.getInstance(project).isCommitted(editor.getDocument())) {
+        try {
           new CodeCompletionHandlerBase(CompletionType.BASIC).invokeCompletion(project, editor, 1);
+        } catch (LogEventException ignored) {
         }
       }
     });

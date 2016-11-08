@@ -9,7 +9,7 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
+import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.impl.source.codeStyle.CodeFormatterFacade;
 
 import org.jetbrains.annotations.NotNull;
@@ -23,11 +23,9 @@ public class EditorService {
 
   private FileEditorManager fileEditorManager;
 
-  private CodeFormatterFacade codeFormatterFacade;
 
   public EditorService(Project project) {
     this.project = project;
-    this.codeFormatterFacade = new CodeFormatterFacade(new CodeStyleSettings());
     this.fileEditorManager = FileEditorManager.getInstance(project);
   }
 
@@ -36,6 +34,10 @@ public class EditorService {
   }
 
   public void format(@NotNull PsiFile file, @NotNull PsiElement element) {
+    CodeFormatterFacade
+        codeFormatterFacade =
+        new CodeFormatterFacade(CodeStyleSettingsManager.getSettings(element.getProject()),
+                                element.getLanguage());
     codeFormatterFacade.processText(file, new FormatTextRanges(element.getTextRange(), true), true);
   }
 

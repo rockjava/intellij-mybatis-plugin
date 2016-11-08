@@ -1,7 +1,6 @@
 package com.seventh7.mybatis.dom.model;
 
 import com.intellij.util.xml.Attribute;
-import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.GenericAttributeValue;
 import com.intellij.util.xml.NameValue;
 import com.intellij.util.xml.Required;
@@ -15,7 +14,7 @@ import java.util.List;
 /**
  * @author yanglin
  */
-public interface Mapper extends DomElement {
+public interface Mapper extends MyBatisElement {
 
   @NotNull
   @SubTagsList({"insert", "update", "delete", "select"})
@@ -54,6 +53,14 @@ public interface Mapper extends DomElement {
   @NotNull
   @SubTagList("select")
   public List<Select> getSelects();
+
+  @NotNull
+  @SubTagList("cache")
+  public List<Cache> getCaches();
+
+  @NotNull
+  @SubTagList("cache-ref")
+  public List<CacheRef> getCacheRefs();
 
   @SubTagList("select")
   public Select addSelect();

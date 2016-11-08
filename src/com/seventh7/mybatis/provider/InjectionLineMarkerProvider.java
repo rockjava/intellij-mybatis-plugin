@@ -27,17 +27,16 @@ import java.util.Collection;
 /**
  * @author yanglin
  */
+@Deprecated
 public class InjectionLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
   @Override
   protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
     if (!(element instanceof PsiField))  return;
     PsiField field = (PsiField) element;
-    if (!isTargetField(field))  return;
-
+    if (!isSimpleNamedBean(field))  return;
     PsiType type = field.getType();
     if (!(type instanceof PsiClassReferenceType)) return;
-
     Optional<PsiClass> clazz = JavaUtils.findClazz(element.getProject(), type.getCanonicalText());
     if (!clazz.isPresent()) return;
 
@@ -53,14 +52,17 @@ public class InjectionLineMarkerProvider extends RelatedItemLineMarkerProvider {
     result.add(builder.createLineMarkerInfo(field.getNameIdentifier()));
   }
 
-  private boolean isTargetField(PsiField field) {
+  private boolean isSimpleNamedBean(PsiField field) {
     if (JavaUtils.isAnnotationPresent(field, Annotation.AUTOWIRED)) {
       return true;
     }
-    Optional<PsiAnnotation> resourceAnno = JavaUtils.getPsiAnnotation(field, Annotation.RESOURCE);
-    if (resourceAnno.isPresent()) {
-      PsiAnnotationMemberValue nameValue = resourceAnno.get().findAttributeValue("name");
-      String name = nameValue.getText().replaceAll("\"", "");
+    Optional<PsiAnnotation> resourceAnnotation = JavaUtils.getPsiAnnotation(field, Annotation.RESOURCE);
+    if (resourceAnnotation.isPresent()) {
+      PsiAnnotationMemberValue nameValue = resourceAnnotation.get().findAttributeValue("name");
+      String name = null;
+      if (nameValue != null) {
+        name = nameValue.getText().replaceAll("\"", "");
+      }
       return StringUtils.isBlank(name) || name.equals(field.getName());
     }
     return false;

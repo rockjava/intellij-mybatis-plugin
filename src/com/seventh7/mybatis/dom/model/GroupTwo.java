@@ -5,7 +5,6 @@ import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.xml.Attribute;
 import com.intellij.util.xml.Convert;
 import com.intellij.util.xml.GenericAttributeValue;
-import com.intellij.util.xml.Required;
 import com.intellij.util.xml.SubTagList;
 import com.seventh7.mybatis.dom.converter.AliasConverter;
 import com.seventh7.mybatis.dom.converter.DaoMethodConverter;
@@ -18,7 +17,7 @@ import java.util.List;
 /**
  * @author yanglin
  */
-public interface GroupTwo extends GroupOne, IdDomElement{
+public interface GroupTwo extends GroupOne, IdDomElement, LangGroup{
 
   @SubTagList("bind")
   public List<Bind> getBinds();
@@ -36,4 +35,5 @@ public interface GroupTwo extends GroupOne, IdDomElement{
   @Attribute("parameterType")
   @Convert(AliasConverter.class)
   public GenericAttributeValue<PsiClass> getParameterType();
+
 }

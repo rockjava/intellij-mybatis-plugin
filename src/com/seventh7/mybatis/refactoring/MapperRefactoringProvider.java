@@ -50,7 +50,7 @@ public class MapperRefactoringProvider implements RefactoringElementListenerProv
           vf.rename(MapperRefactoringProvider.this, newClazz.getName() + "." + vf.getExtension());
         }
       }
-    } catch (IOException e) {
+    } catch (IOException ignored) {
     }
   }
 

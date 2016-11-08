@@ -6,6 +6,7 @@ import com.google.common.collect.Collections2;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.search.GlobalSearchScopesCore;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.xml.DomElement;
@@ -27,7 +28,12 @@ public final class DomUtils {
 
   @NotNull @NonNls
   public static <T extends DomElement> Collection<T> findDomElements(@NotNull Project project, Class<T> clazz) {
-    GlobalSearchScope scope = GlobalSearchScope.allScope(project);
+    GlobalSearchScope scope = GlobalSearchScopesCore.projectProductionScope(project);
+    return findDomElements(project, scope, clazz);
+  }
+
+  @NotNull @NonNls
+  public static <T extends DomElement> Collection<T> findDomElements(@NotNull Project project, @NotNull GlobalSearchScope scope, Class<T> clazz) {
     List<DomFileElement<T>> elements = DomService.getInstance().getFileElements(clazz, project, scope);
     return Collections2.transform(elements, new Function<DomFileElement<T>, T>() {
       @Override
@@ -61,7 +67,7 @@ public final class DomUtils {
     return null != rootTag && rootTag.getName().equals("beans");
   }
 
-  static boolean isXmlFile(@NotNull PsiFile file) {
+  static boolean isXmlFile(@Nullable PsiFile file) {
     return file instanceof XmlFile;
   }
 

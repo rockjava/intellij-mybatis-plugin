@@ -8,6 +8,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
@@ -52,7 +53,9 @@ public abstract class StatementGenerator {
     @Override
     public String  apply(Mapper mapper) {
       VirtualFile vf = mapper.getXmlTag().getContainingFile().getVirtualFile();
-      if (null == vf) return "";
+      if (null == vf) {
+        return "";
+      }
       return vf.getCanonicalPath();
     }
   };
@@ -68,7 +71,8 @@ public abstract class StatementGenerator {
       PsiClassReferenceType type = (PsiClassReferenceType)returnType;
       if (type.hasParameters()) {
         PsiType[] parameters = type.getParameters();
-        if (parameters.length == 1) {
+        // Fix issue#35[https://github.com/seventh7/intellij-mybatis-plugin/issues/35]
+        if (parameters.length == 1 && parameters[0] instanceof PsiClassReferenceType) {
           type = (PsiClassReferenceType)parameters[0];
         }
       }
@@ -77,16 +81,16 @@ public abstract class StatementGenerator {
     return Optional.absent();
   }
 
-  public static void applyGenerate(@Nullable final PsiMethod method) {
+  public static void applyGenerate(@Nullable final PsiMethod method, final boolean scroll) {
     if (null == method) return;
     final StatementGenerator[] generators = getGenerators(method);
     if (1 == generators.length) {
-      generators[0].execute(method);
+        doGenerate(generators[0], method, scroll);
     } else {
-      UiComponentFacade.getInstance(method.getProject()).showListPopup("[ Select target statement ]", new ListSelectionListener() {
+      UiComponentFacade.getInstance(method.getProject()).showListPopup("[ Statement type for method: " + method.getName() + "]", new ListSelectionListener() {
         @Override
         public void selected(int index) {
-          generators[index].execute(method);
+            doGenerate(generators[index], method, scroll);
         }
 
         @Override
@@ -97,6 +101,14 @@ public abstract class StatementGenerator {
       }, generators);
     }
   }
+
+    private static void doGenerate(@NotNull final StatementGenerator generator, @NotNull final PsiMethod method, final boolean scroll) {
+        new WriteCommandAction.Simple(method.getProject(), method.getContainingFile()) {
+            @Override protected void run() throws Throwable {
+                generator.execute(method, scroll);
+            }
+        }.execute();
+    }
 
   @NotNull
   public static StatementGenerator[] getGenerators(@NotNull PsiMethod method) {
@@ -117,20 +129,22 @@ public abstract class StatementGenerator {
     this.patterns = Sets.newHashSet(patterns);
   }
 
-  public void execute(@NotNull final PsiMethod method) {
+  public void execute(@NotNull final PsiMethod method, final boolean scroll) {
     PsiClass psiClass = method.getContainingClass();
-    if (null == psiClass) return;
+    if (null == psiClass) {
+      return;
+    }
     CommonProcessors.CollectProcessor<Mapper> processor = new CommonProcessors.CollectProcessor<Mapper>();
-    JavaService.getInstance(method.getProject()).process(psiClass, processor);
+    JavaService.getInstance(method.getProject()).processMapperInterfaces(psiClass, processor);
     final List<Mapper> mappers = Lists.newArrayList(processor.getResults());
     if (1 == mappers.size()) {
-      setupTag(method, Iterables.getOnlyElement(mappers, null));
+      setupTag(method, Iterables.getOnlyElement(mappers, null), scroll);
     } else if (mappers.size() > 1) {
       Collection<String> paths = Collections2.transform(mappers, FUN);
       UiComponentFacade.getInstance(method.getProject()).showListPopup("Choose target mapper xml to generate", new ListSelectionListener() {
         @Override
         public void selected(int index) {
-          setupTag(method, mappers.get(index));
+          setupTag(method, mappers.get(index), scroll);
         }
 
         @Override
@@ -141,15 +155,17 @@ public abstract class StatementGenerator {
     }
   }
 
-  private void setupTag(PsiMethod method, Mapper mapper) {
-    GroupTwo target = getTarget(mapper, method);
+  private void setupTag(PsiMethod method, Mapper mapper, boolean scroll) {
+    GroupTwo target = getComparableTarget(mapper, method);
     target.getId().setStringValue(method.getName());
     target.setValue(" ");
     XmlTag tag = target.getXmlTag();
     int offset = tag.getTextOffset() + tag.getTextLength() - tag.getName().length() + 1;
-    EditorService editorService = EditorService.getInstance(method.getProject());
-    editorService.format(tag.getContainingFile(), tag);
-    editorService.scrollTo(tag, offset);
+    if (scroll) {
+      EditorService editorService = EditorService.getInstance(method.getProject());
+      editorService.format(tag.getContainingFile(), tag);
+      editorService.scrollTo(tag, offset);
+    }
   }
 
   @Override
@@ -158,7 +174,7 @@ public abstract class StatementGenerator {
   }
 
   @NotNull
-  protected abstract GroupTwo getTarget(@NotNull Mapper mapper, @NotNull PsiMethod method);
+  protected abstract GroupTwo getComparableTarget(@NotNull Mapper mapper, @NotNull PsiMethod method);
 
   @NotNull
   public abstract String getId();

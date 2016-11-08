@@ -4,6 +4,7 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
+import com.seventh7.mybatis.intention.chooser.IntentionChooser;
 
 import org.jetbrains.annotations.NotNull;
 

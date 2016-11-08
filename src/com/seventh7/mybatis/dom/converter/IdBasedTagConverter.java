@@ -67,7 +67,10 @@ public abstract class IdBasedTagConverter extends ConverterAdaptor<XmlAttributeV
 
   @Nullable @Override
   public String toString(@Nullable XmlAttributeValue xmlAttribute, ConvertContext context) {
-    DomElement domElement = DomUtil.getDomElement(xmlAttribute.getParent().getParent());
+    if (xmlAttribute == null || xmlAttribute.getParent() == null) {
+      return null;
+    }
+    DomElement domElement = DomUtil.getDomElement(xmlAttribute.getParent());
     if (!(domElement instanceof IdDomElement)) {
       return null;
     }
@@ -149,6 +152,7 @@ public abstract class IdBasedTagConverter extends ConverterAdaptor<XmlAttributeV
       List<PsiReference> refs = Lists.newArrayList(super.getReferencesByString(text, position, offsetInPosition));
       ValueReference vr = new ValueReference(position, getTextRange(position), context, text);
       if (!refs.isEmpty() && 0 != vr.getVariants().length) {
+        /** Just 'hack' the last reference */
         refs.remove(refs.size() - 1);
         refs.add(vr);
       }

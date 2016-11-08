@@ -1,5 +1,10 @@
 package com.seventh7.mybatis.ui;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
@@ -19,6 +24,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author yanglin
@@ -86,6 +94,17 @@ public final class UiComponentFacade {
     return popup;
   }
 
+  public <T> JBPopup showListPopup(@NotNull String title,
+                                   @Nullable final ListSelectionListener listener,
+                                   @NotNull Collection<T> objs,
+                                   @NotNull Function<T, String> fun) {
+    Collection<String> info = Collections2.transform(objs, fun);
+    PopupChooserBuilder builder = createListPopupBuilder(title, listener, info.toArray(new String[info.size()]));
+    JBPopup popup = builder.createPopup();
+    setPositionForShown(popup);
+    return popup;
+  }
+
   private void setPositionForShown(JBPopup popup) {
     Editor editor = fileEditorManager.getSelectedTextEditor();
     if (null != editor) {
@@ -115,6 +134,7 @@ public final class UiComponentFacade {
         @Override
         public void run() {
           listener.selected(list.getSelectedIndex());
+          listener.selected(list.getSelectedIndices());
         }
       };
       builder.setItemChoosenCallback(new Runnable() {
@@ -127,4 +147,34 @@ public final class UiComponentFacade {
     return builder;
   }
 
+  @SuppressWarnings("unchecked")
+  public <T> void selectItems(@NotNull String title,
+                              @NotNull final List<T> objects,
+                              @NotNull final ListSelectionItemListener<T> listener,
+                              @NotNull final Function<T, String> function) {
+    if (objects.size() == 1) {
+      final T onlyElement = Iterables.getOnlyElement(objects, null);
+      listener.apply(onlyElement);
+      listener.apply(Lists.newArrayList(onlyElement));
+      return;
+    }
+
+    showListPopup(title, new ListSelectionListener() {
+      @Override public void selected(int[] indexes) {
+        final ArrayList<T> res = Lists.newArrayList();
+        for (int index : indexes) {
+          res.add(objects.get(index));
+        }
+        listener.apply(res);
+      }
+
+      @Override public void selected(int index) {
+        listener.apply(objects.get(index));
+      }
+
+      @Override public boolean isWriteAction() {
+        return listener.isWriteAction();
+      }
+    }, objects, function);
+  }
 }

@@ -9,7 +9,6 @@ import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiAnnotationMemberValue;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiImportList;
 import com.intellij.psi.PsiImportStatement;
 import com.intellij.psi.PsiJavaFile;
@@ -18,7 +17,6 @@ import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PropertyUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.seventh7.mybatis.annotation.Annotation;
 import com.seventh7.mybatis.dom.model.IdDomElement;
@@ -28,6 +26,8 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -44,38 +44,35 @@ public final class JavaUtils {
     return null != clazz && !clazz.isAnnotationType() && !clazz.isInterface() && !clazz.isEnum() && clazz.isValid();
   }
 
-  @NotNull
-  public static Optional<PsiField> findSettablePsiField(@NotNull PsiClass clazz, @Nullable String propertyName) {
-    PsiMethod propertySetter = PropertyUtil.findPropertySetter(clazz, propertyName, false, true);
-    return null == propertySetter ? Optional.<PsiField>absent() : Optional.fromNullable(PropertyUtil.findPropertyFieldByMember(propertySetter));
-  }
-
-  @NotNull
-  public static PsiField[] findSettablePsiFields(@NotNull PsiClass clazz) {
-    PsiMethod[] methods = clazz.getAllMethods();
-    List<PsiField> fields = Lists.newArrayList();
-    for (PsiMethod method : methods) {
-      if (PropertyUtil.isSimplePropertySetter(method)) {
-        Optional<PsiField> psiField = findSettablePsiField(clazz, PropertyUtil.getPropertyName(method));
-        if (psiField.isPresent()) {
-          fields.add(psiField.get());
-        }
-      }
-    }
-    return fields.toArray(new PsiField[fields.size()]);
-  }
-
   public static boolean isElementWithinInterface(@Nullable PsiElement element) {
     if (element instanceof PsiClass && ((PsiClass) element).isInterface()) {
       return true;
     }
     PsiClass type = PsiTreeUtil.getParentOfType(element, PsiClass.class);
-    return Optional.fromNullable(type).isPresent() && type.isInterface();
+    return type != null && type.isInterface();
+  }
+
+  public static List<PsiMethod> findAllMethodsWithoutRootParent(@NotNull PsiClass clazz) {
+    Optional<PsiClass> objClazzOpt = findClazz(clazz.getProject(), "java.lang.Object");
+    if (!objClazzOpt.isPresent()) {
+      return Collections.emptyList();
+    }
+    PsiClass objClazz = objClazzOpt.get();
+    PsiMethod[] methods = clazz.getAllMethods();
+    ArrayList<PsiMethod> res = Lists.newArrayList();
+    for (int i = 0; i < methods.length; i++) {
+      if (objClazz.findMethodsByName(methods[i].getName(), false).length == 0) {
+        res.add(methods[i]);
+      }
+    }
+    return res;
   }
 
   @NotNull
-  public static Optional<PsiClass> findClazz(@NotNull Project project, @NotNull String clazzName) {
-    return Optional.fromNullable(JavaPsiFacade.getInstance(project).findClass(clazzName, GlobalSearchScope.allScope(project)));
+  public static Optional<PsiClass> findClazz(@NotNull Project project, @Nullable String clazzName) {
+    return clazzName == null
+           ? Optional.<PsiClass>absent()
+           : Optional.fromNullable(JavaPsiFacade.getInstance(project).findClass(clazzName, GlobalSearchScope.allScope(project)));
   }
 
   @NotNull
@@ -147,14 +144,16 @@ public final class JavaUtils {
     return true;
   }
 
-  public static boolean hasImportClazz(@NotNull PsiJavaFile file, @NotNull String clazzName) {
+  public static boolean hasImportClazz(@NotNull PsiJavaFile file, @Nullable String clazzName) {
     PsiImportList importList = file.getImportList();
-    if (null == importList) {
+    if (null == importList || clazzName == null) {
       return false;
     }
     PsiImportStatement[] statements = importList.getImportStatements();
     for (PsiImportStatement tmp : statements) {
-      if (null != tmp && tmp.getQualifiedName().equals(clazzName)) {
+      if (null != tmp &&
+          tmp.getQualifiedName() != null &&
+          tmp.getQualifiedName().equals(clazzName)) {
         return true;
       }
     }

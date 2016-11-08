@@ -1,6 +1,5 @@
 package com.seventh7.mybatis.dom.model;
 
-import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.Required;
 import com.intellij.util.xml.SubTag;
 import com.intellij.util.xml.SubTagList;
@@ -12,7 +11,7 @@ import java.util.List;
 /**
  * @author yanglin
  */
-public interface Choose extends DomElement {
+public interface Choose extends MyBatisElement {
 
   @NotNull
   @Required
